@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase db;
+    int a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
