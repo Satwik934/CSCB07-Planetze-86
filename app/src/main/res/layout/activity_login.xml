@@ -2,9 +2,75 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    android:background="#a9bcd0">
 
+    <EditText
+        android:id="@+id/editTextText"
+        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+        android:layout_width="328dp"
+        android:layout_height="69dp"
+        android:background="@drawable/edittext_background"
+        android:backgroundTintMode="src_in"
+        android:cursorVisible="true"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Username, email address or mobile number"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColorLink="@color/black"
+        tools:layout_editor_absoluteX="35dp"
+        tools:layout_editor_absoluteY="282dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="326dp"
+        android:layout_height="63dp"
+        android:background="@drawable/edittext_background"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="#100F0F"
+        android:textSize="14sp"
+        tools:layout_editor_absoluteX="37dp"
+        tools:layout_editor_absoluteY="359dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="205dp"
+        android:layout_height="66dp"
+        android:background="@drawable/edittext_background"
+        android:text="Log in"
+        android:textAlignment="center"
+        android:textColorLink="#1B1616"
+        android:textSize="20sp"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="103dp"
+        tools:layout_editor_absoluteY="635dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="267dp"
+        android:layout_height="34dp"
+        android:background="#a9bcd0"
+        android:clickable="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:fontFamily="sans-serif-black"
+        android:text="Forgotten Password?"
+        android:textDirection="firstStrongRtl"
+        tools:layout_editor_absoluteX="47dp"
+        tools:layout_editor_absoluteY="428dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="180dp"
+        android:layout_height="173dp"
+        android:background="#a9bcd0"
+        app:srcCompat="@drawable/baseline_account_circle_24"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="86dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
