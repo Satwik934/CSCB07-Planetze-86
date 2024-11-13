@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_login);
 
         // Initialize Firebase Auth
@@ -42,11 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.loginPassword);
         loginButton = findViewById(R.id.loginButton);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
 
         // Set up login button click listener
         loginButton.setOnClickListener(new View.OnClickListener() {
