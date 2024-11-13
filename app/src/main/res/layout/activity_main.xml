@@ -8,26 +8,33 @@
     android:background="#009999"
     tools:context=".MainActivity">
 
+    <!-- Logo ImageView -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="380dp"
+        android:layout_height="288dp"
+        android:contentDescription="Planetze Logo"
+        android:src="@drawable/planetze_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/loginButton"
+        app:layout_constraintVertical_bias="0.3" />
 
     <!-- Login Button -->
-
-
-    <!-- Register Button -->
-
-
     <Button
         android:id="@+id/loginButton"
         android:layout_width="102dp"
         android:layout_height="62dp"
-        android:layout_marginTop="448dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="#373F51"
         android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/logo" />
 
-
+    <!-- Register Button -->
     <Button
         android:id="@+id/registerButton"
         android:layout_width="111dp"
@@ -39,17 +46,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginButton" />
 
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="380dp"
-        android:layout_height="288dp"
-        android:contentDescription="Planetze Logo"
-        android:src="@drawable/planetze_logo"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="97dp" />
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
