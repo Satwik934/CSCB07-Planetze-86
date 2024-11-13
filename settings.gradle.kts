@@ -20,4 +20,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Planetze86"
-include ':app'
+include(":app")
