@@ -7,7 +7,7 @@
     android:background="#a9bcd0">
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/loginEmail"
         style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
         android:layout_width="328dp"
         android:layout_height="69dp"
@@ -16,7 +16,7 @@
         android:cursorVisible="true"
         android:ems="10"
         android:fontFamily="sans-serif-condensed"
-        android:hint="Username, email address or mobile number"
+        android:hint="Email"
         android:inputType="text"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -25,7 +25,7 @@
         tools:layout_editor_absoluteY="282dp" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/loginPassword"
         android:layout_width="326dp"
         android:layout_height="63dp"
         android:background="@drawable/edittext_background"
@@ -39,7 +39,7 @@
         tools:layout_editor_absoluteY="359dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/loginButton"
         android:layout_width="205dp"
         android:layout_height="66dp"
         android:background="@drawable/edittext_background"

@@ -96,7 +96,7 @@
 
 
         <EditText
-            android:id="@+id/editTextTextEmailAddress"
+            android:id="@+id/registerEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -117,13 +117,13 @@
             android:layout_height="wrap_content"
             android:text="Password"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextTextEmailAddress"
+            app:layout_constraintTop_toBottomOf="@id/registerEmail"
             android:layout_marginTop="20dp"
             android:layout_marginStart="30dp" />
 
 
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/registerPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -144,13 +144,13 @@
             android:layout_height="wrap_content"
             android:text="Confirm Password"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextPassword"
+            app:layout_constraintTop_toBottomOf="@id/registerPassword"
             android:layout_marginTop="20dp"
             android:layout_marginStart="30dp" />
 
 
         <EditText
-            android:id="@+id/editTextConfirmPassword"
+            android:id="@+id/registerConfirmPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -175,7 +175,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextConfirmPassword" />
+            app:layout_constraintTop_toBottomOf="@id/registerConfirmPassword" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
