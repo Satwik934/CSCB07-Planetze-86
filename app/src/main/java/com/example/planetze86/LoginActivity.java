@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
+    private Button forgotPasswordButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -41,6 +42,17 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.loginEmail);
         passwordEditText = findViewById(R.id.loginPassword);
         loginButton = findViewById(R.id.loginButton);
+
+        forgotPasswordButton = findViewById(R.id.forgotPasswordButton);
+
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to ForgotPassActivity
+                Intent intent = new Intent(LoginActivity.this, forgetPass.class);
+                startActivity(intent);
+            }
+        });
 
 
 
