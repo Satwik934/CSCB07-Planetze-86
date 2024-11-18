@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,24 +8,46 @@
     android:background="#a9bcd0"
     tools:context=".LoginActivity">
 
+    <!-- Back Button -->
+
+    <!-- Profile Image -->
+
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="2dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+
+        android:contentDescription="Back to Main Page"
+        android:src="@drawable/backarrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="180dp"
-        android:layout_height="173dp"
+        android:layout_width="172dp"
+        android:layout_height="141dp"
+        android:layout_marginTop="32dp"
         android:background="#a9bcd0"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/loginEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_account_circle_24" />
 
+    <!-- Email Input -->
     <EditText
         android:id="@+id/loginEmail"
         style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
         android:layout_width="328dp"
         android:layout_height="69dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/edittext_background"
-        android:backgroundTintMode="src_in"
         android:cursorVisible="true"
         android:ems="10"
         android:fontFamily="sans-serif-condensed"
@@ -33,16 +56,17 @@
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColorLink="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+    <!-- Password Input -->
     <EditText
         android:id="@+id/loginPassword"
         android:layout_width="328dp"
         android:layout_height="63dp"
+        android:layout_marginTop="48dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
         android:fontFamily="sans-serif-condensed"
@@ -50,44 +74,43 @@
         android:inputType="textPassword"
         android:textColor="#100F0F"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@+id/loginEmail"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginEmail" />
 
+    <!-- Login Button -->
     <Button
         android:id="@+id/loginButton"
         android:layout_width="205dp"
         android:layout_height="66dp"
+        android:layout_marginTop="96dp"
         android:background="@drawable/edittext_background"
         android:text="Log in"
         android:textAlignment="center"
         android:textColorLink="#1B1616"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/loginPassword"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
 
+    <!-- Forgotten Password Button -->
     <Button
         android:id="@+id/forgotPasswordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:background="#a9bcd0"
+        android:clickable="true"
+        android:fontFamily="sans-serif-black"
         android:minWidth="48dp"
         android:minHeight="48dp"
-        android:background="#a9bcd0"
         android:text="Forgotten Password?"
-        android:textSize="16sp"
         android:textColor="#000000"
-        android:fontFamily="sans-serif-black"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

@@ -8,6 +8,20 @@
     android:background="#d8dbe2"
     tools:context="forgetPass" >
 
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="2dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+
+        android:contentDescription="Back to Main Page"
+        android:src="@drawable/backarrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!-- Header Text -->
     <TextView
         android:id="@+id/forgotPasswordHeader"
