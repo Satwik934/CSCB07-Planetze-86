@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private ImageButton backButton;
     private EditText emailEditText, passwordEditText, confirmPasswordEditText;
 
     @Override
@@ -28,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Link UI elements
         emailEditText = findViewById(R.id.registerEmail);
+        backButton = findViewById(R.id.backButton);
         passwordEditText = findViewById(R.id.registerPassword);
         confirmPasswordEditText = findViewById(R.id.registerConfirmPassword);
         Button submitButton = findViewById(R.id.buttonSubmit);
@@ -37,6 +41,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 registerUser();
+            }
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }

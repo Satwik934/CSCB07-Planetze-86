@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ImageButton;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -26,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
+    private ImageButton backButton;
     private Button forgotPasswordButton;
 
     @SuppressLint("MissingInflatedId")
@@ -42,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.loginEmail);
         passwordEditText = findViewById(R.id.loginPassword);
         loginButton = findViewById(R.id.loginButton);
+        backButton = findViewById(R.id.backButton);
+
 
         forgotPasswordButton = findViewById(R.id.forgotPasswordButton);
 
@@ -50,6 +55,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Navigate to ForgotPassActivity
                 Intent intent = new Intent(LoginActivity.this, forgetPass.class);
+                startActivity(intent);
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
