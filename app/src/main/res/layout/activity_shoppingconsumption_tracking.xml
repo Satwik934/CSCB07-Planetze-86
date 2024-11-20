@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D8DBE2">
+
+    <!-- Header: Daily Carbon Footprint Tracking -->
+    <TextView
+        android:id="@+id/header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="DAILY CARBON FOOTPRINT TRACKING"
+        android:textColor="#1B1B1E"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Subheader: Transportation Activities -->
+    <TextView
+        android:id="@+id/subheader_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="CONSUMPTION AND SHOPPING ACTIVITIES"
+        android:textColor="#1B1B1E"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_text" />
+
+    <!-- Button: Personal Vehicle -->
+
+    <!-- Button: Public Transportation -->
+
+    <!-- Button: Cycling -->
+
+    <!-- Button: Walking -->
+
+    <Button
+        android:id="@+id/button_personal_vehicle"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="#009999"
+        android:text="BUY NEW CLOTHES"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subheader_text" />
+
+    <Button
+        android:id="@+id/button_public_transportation"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#009999"
+        android:text="BUY ELECTRONICS"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_personal_vehicle" />
+
+    <Button
+        android:id="@+id/button_cycling"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="#009999"
+        android:text="OTHER PURCHASES"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_public_transportation" />
+
+    <Button
+        android:id="@+id/button_walking"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="#009999"
+        android:text="ENERGY BILLS"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_cycling" />
+
+    <!-- Button: Flight -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
