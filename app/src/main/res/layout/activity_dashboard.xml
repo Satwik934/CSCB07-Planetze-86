@@ -1,10 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".dashboard">
+    android:background="#E8F5E9"
+    tools:context=".MainActivity">
+
+    <!-- Header: Eco Tracker -->
+    <TextView
+        android:id="@+id/daily_emissions_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ECO TRACKER"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#1B1B1E"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp" />
+
+    <!-- Box: Total CO2e Emissions for the Current Day -->
+    <TextView
+        android:id="@+id/total_emissions_box"
+        android:layout_width="351dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="20dp"
+        android:background="#D8DBE2"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Total CO2e emissions for the current day is"
+        android:textColor="#1B1B1E"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/daily_emissions_label" />
+
+    <!-- Daily Emissions Value -->
+    <TextView
+        android:id="@+id/daily_emissions_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00 kg CO2e"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#4CAF50"
+        app:layout_constraintTop_toBottomOf="@id/total_emissions_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp" />
+
+    <!-- Transportation Button -->
+    <Button
+        android:id="@+id/transportation_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Transportation"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/daily_emissions_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp" />
+
+    <!-- Food Consumption Button -->
+    <Button
+        android:id="@+id/food_consumption_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Food Consumption"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/transportation_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Shopping Button -->
+    <Button
+        android:id="@+id/shopping_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Shopping"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/food_consumption_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Energy Bills Button -->
+    <Button
+        android:id="@+id/energy_bills_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Energy Bills"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/shopping_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
