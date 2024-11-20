@@ -10,11 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ImageButton;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -97,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null && user.isEmailVerified()) {
                                 // Redirect to the main dashboard
-                                Intent intent = new Intent(LoginActivity.this, dashboard.class); // Replace with your main dashboard activity
+                                Intent intent = new Intent(LoginActivity.this, ecotracker.class); // Replace with your main dashboard activity
                                 startActivity(intent);
                                 finish();
                             } else {
