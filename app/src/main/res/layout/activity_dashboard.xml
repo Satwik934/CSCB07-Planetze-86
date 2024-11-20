@@ -13,7 +13,7 @@
         android:id="@+id/daily_emissions_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ECO TRACKERS"
+        android:text="ECO TRACKER"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#1B1B1E"
