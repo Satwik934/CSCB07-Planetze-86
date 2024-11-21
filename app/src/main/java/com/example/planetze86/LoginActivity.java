@@ -17,6 +17,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import androidx.annotation.NonNull;
 
 public class LoginActivity extends AppCompatActivity {
@@ -92,10 +96,10 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign-in successful
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null && user.isEmailVerified()) {
-                                // Redirect to the main dashboard
-                                Intent intent = new Intent(LoginActivity.this, ecotracker.class); // Replace with your main dashboard activity
-                                startActivity(intent);
-                                finish();
+                                String uid = user.getUid();
+
+                                // Check `firstLogin` field in Firebase Realtime Database
+                                checkFirstLogin(uid);
                             } else {
                                 // Email not verified
                                 Toast.makeText(LoginActivity.this, "Please verify your email before logging in.", Toast.LENGTH_LONG).show();
@@ -109,4 +113,38 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    // Method to check `firstLogin` from Firebase Realtime Database
+    private void checkFirstLogin(String uid) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(uid);
+
+        databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful() && task.getResult().exists()) {
+                    DataSnapshot snapshot = task.getResult();
+                    boolean firstLogin = snapshot.child("firstLogin").getValue(Boolean.class);
+
+                    if (firstLogin) {
+                        // Redirect to onboarding activity
+                        Intent intent = new Intent(LoginActivity.this, Onboarding.class); // Replace with your onboarding activity
+                        startActivity(intent);
+
+                        // Update `firstLogin` to false
+                        databaseReference.child("firstLogin").setValue(false);
+                    } else {
+                        // Redirect to main dashboard
+                        Intent intent = new Intent(LoginActivity.this, ecotracker.class); // Replace with your main dashboard activity
+                        startActivity(intent);
+                    }
+
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Failed to retrieve user data. Please try again.", Toast.LENGTH_SHORT).show();
+                    Log.e("LoginActivity", "Database error", task.getException());
+                }
+            }
+        });
+    }
+
 }
