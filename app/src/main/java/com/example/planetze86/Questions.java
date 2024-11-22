@@ -1,3 +1,5 @@
+package com.example.planetze86;
+
 import java.util.ArrayList;
 
 
@@ -5,7 +7,7 @@ public class Questions {
     private String question_category;
     private String question_text;
     private ArrayList<String> options;
-    private String answer;
+    protected int answer;
 
 public Questions() {
     this.options = new ArrayList<>();
@@ -17,7 +19,7 @@ public Questions(String question_category, String question_text, ArrayList<Strin
     this.question_category = question_category;
     this.question_text = question_text;
     this.options = options;
-    this.answer = null;
+    this.answer = -1;
 
 
 }
@@ -47,10 +49,10 @@ public void setOptions(ArrayList<String> options) {
     this.options = options;
 }
 
-public void setAnswer(String text){
-     this.answer = text;
+public void setAnswer(int ans){
+     this.answer = ans;
 }
-public String getAnswer(){
+public int getAnswer(){
     return this.answer;
 }
 
