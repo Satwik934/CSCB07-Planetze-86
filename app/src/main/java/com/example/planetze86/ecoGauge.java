@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,9 +38,15 @@ public class ecoGauge extends AppCompatActivity {
         pieChart = findViewById(R.id.pie_chart);
         lineChart = findViewById(R.id.line_chart);
 
-        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        databaseReference = FirebaseDatabase.getInstance().getReference("userEmissions").child(UID);
-        getData();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String UID = currentUser.getUid();
+            databaseReference = FirebaseDatabase.getInstance().getReference("userEmissions").child(UID);
+            getData();
+        }
+        else {
+            Toast.makeText(this, "No user is logged in", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -56,16 +63,16 @@ public class ecoGauge extends AppCompatActivity {
                     float consumption = (float) 0.0;
 
                     if (snapshot.hasChild(FirebaseConstants.TRANSPORTATION)) {
-                        transportation = (float) snapshot.child(FirebaseConstants.TRANSPORTATION).getValue(Double.class).doubleValue();
+                        transportation = getFloat(snapshot.child(FirebaseConstants.TRANSPORTATION));
                     }
                     if (snapshot.hasChild(FirebaseConstants.FOOD)) {
-                        food = (float) snapshot.child(FirebaseConstants.FOOD).getValue(Double.class).doubleValue();
+                        food = getFloat(snapshot.child(FirebaseConstants.FOOD));
                     }
                     if (snapshot.hasChild(FirebaseConstants.HOUSING)) {
-                        housing = (float) snapshot.child(FirebaseConstants.HOUSING).getValue(Double.class).doubleValue();
+                        housing = getFloat(snapshot.child(FirebaseConstants.HOUSING));
                     }
                     if (snapshot.hasChild(FirebaseConstants.CONSUMPTION)) {
-                        consumption = (float) snapshot.child(FirebaseConstants.CONSUMPTION).getValue(Double.class).doubleValue();
+                        consumption = getFloat(snapshot.child(FirebaseConstants.CONSUMPTION));
                     }
                     createPieChart(transportation, food, housing, consumption);
                     createLineChart(transportation, food, housing, consumption);
@@ -81,6 +88,15 @@ public class ecoGauge extends AppCompatActivity {
                 Log.e("ecoGauge", "Database Error: " + error.getMessage());
             }
         });
+    }
+
+    private float getFloat(DataSnapshot snapshot) {
+        Double value = snapshot.getValue(Double.class);
+        if (value != null) {
+            return value.floatValue();
+        } else {
+            return (float) 0.0;
+        }
     }
 
     private void createPieChart(float transportation, float food, float housing, float consumption){
