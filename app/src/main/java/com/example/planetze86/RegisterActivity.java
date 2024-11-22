@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
         // Create a user object
-        User user = new User(firstName, lastName, true);
+        User user = new User(email, firstName, lastName, true);
 
         // Save the user object under the UID
         databaseReference.child(uid).setValue(user)

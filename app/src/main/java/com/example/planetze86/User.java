@@ -2,6 +2,7 @@ package com.example.planetze86;
 
 public class User {
     private String email;
+    private AnnualAnswers AnnualAnswers;
     private String firstName;
     private String lastName;
     private boolean firstLogin;
@@ -15,12 +16,7 @@ public class User {
         this.lastName = lastName;
         this.firstLogin = firstLogin;
     }
-    public User( String firstName, String lastName, boolean firstLogin) {
 
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.firstLogin = firstLogin;
-    }
 
     public String getEmail() {
         return email;
@@ -36,5 +32,9 @@ public class User {
 
     public boolean getFirstLogin() {
         return firstLogin;
+    }
+
+    public AnnualAnswers getAnnualAnswers() {
+        return AnnualAnswers;
     }
 }
