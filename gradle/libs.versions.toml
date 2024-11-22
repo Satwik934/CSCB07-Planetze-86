@@ -28,4 +28,3 @@ mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", versio
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
-
