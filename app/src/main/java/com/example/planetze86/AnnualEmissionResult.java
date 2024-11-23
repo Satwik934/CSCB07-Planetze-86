@@ -1,7 +1,10 @@
 package com.example.planetze86;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -22,6 +25,7 @@ public class AnnualEmissionResult extends AppCompatActivity {
     // Firebase references
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
+    private Button dashboard;
 
     // UI components
     private TextView totalFootprintValue, transportationValue, foodValue, housingValue, consumptionValue, comparisonText;
@@ -36,6 +40,7 @@ public class AnnualEmissionResult extends AppCompatActivity {
 
         // Initialize Firebase
         auth = FirebaseAuth.getInstance();
+        dashboard = findViewById(R.id.dashboard_button);
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
         // Bind UI elements
@@ -48,6 +53,15 @@ public class AnnualEmissionResult extends AppCompatActivity {
 
         // Fetch and display the data
         fetchAnnualAnswers();
+
+        dashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to ForgotPassActivity
+                Intent intent = new Intent(AnnualEmissionResult.this, ecotracker.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void fetchAnnualAnswers() {
