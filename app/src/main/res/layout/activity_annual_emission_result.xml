@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#373F51"
     android:backgroundTint="#D8DBE2"
-    tools:context=".ResultsActivity">
+    tools:context=".AnnualEmissionResult">
 
     <!-- Header -->
     <TextView
