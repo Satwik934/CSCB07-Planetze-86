@@ -40,6 +40,7 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:5.2.3")
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation("com.hbb20:ccp:2.7.1")
     implementation(libs.firebase.database)
     implementation(libs.mpandroidchart)
     testImplementation(libs.junit)

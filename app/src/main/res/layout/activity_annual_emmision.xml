@@ -14,7 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:progressTint="#373f51" />
+        android:progressTint="#009999" />
+
+    <!-- country picker  -->
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/countryPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ccp_showFlag="true"
+        app:ccp_showNameCode="false"
+        app:ccp_showFullName="true"
+        android:layout_marginBottom="16dp" />
 
     <!-- Question Text -->
     <TextView
@@ -23,7 +33,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:textColor="#1b1b1e"
         android:padding="8dp"
         android:gravity="center_horizontal"
         android:layout_marginBottom="16dp" />
@@ -37,9 +47,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
-        android:dividerPadding="8dp"
+        android:dividerPadding="10dp"
         android:orientation="vertical"
-        android:padding="8dp" />
+        android:padding="10dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -73,8 +83,10 @@
             android:textColor="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.945"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintVertical_bias="1.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

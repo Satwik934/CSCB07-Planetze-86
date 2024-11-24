@@ -1,20 +1,17 @@
 package com.example.planetze86;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.res.Resources;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import android.content.Context;
-import android.hardware.camera2.TotalCaptureResult;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class AnnualCalculator {
-    private ArrayList<Questions> ques;
+    private List<Questions> ques;
     private Context context;
     double Total;
     double transportation;
@@ -25,7 +22,7 @@ public class AnnualCalculator {
 
     String country;
 
-    public AnnualCalculator(ArrayList<Questions> ques,String country,Context context){
+    public AnnualCalculator(List<Questions> ques, String country, Context context){
         this.ques = ques;
         this.context = context;
         this.country = country;
