@@ -184,7 +184,7 @@ public class AnnualCalculator {
             double[][] clothesrecycle = {{-54,-108,-180},{-18,-36,-60},{-15,-30,-50},{-0.75,-1.5,-2.5}};
             consumption = consumption + clothesrecycle[ques.get(20).answer][ques.get(23).answer-1];
             double[][] devicerecycle = {{0,0,0},{-45,-60,-90},{-60,-120,-180},{-120,-240,-360}};
-            consumption = consumption + clothesrecycle[ques.get(22).answer][ques.get(23).answer-1];
+            consumption = consumption + devicerecycle[ques.get(22).answer][ques.get(23).answer-1];
         }
 
 

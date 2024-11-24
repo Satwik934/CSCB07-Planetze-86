@@ -184,6 +184,31 @@ public class QuestionsRepo {
      Questions question15 = new Questions("Housing", "What is your average monthly electricity bill?", options15);
      questionList.add(question15);
 
+     ArrayList<String> options22 = new ArrayList<>();
+     options22.add("Natural Gas");
+     options22.add("Electricity");
+     options22.add("Oil");
+     options22.add("Propane");
+     options22.add("Solar");
+     options22.add("Other");
+
+     Questions question22 = new Questions("Housing", "What type of energy do you use to heat water in your home?", options22);
+     questionList.add(question22);
+
+
+     ArrayList<String> options23 = new ArrayList<>();
+     options23.add("Yes, primarily (more than 50% of energy use)");
+     options23.add("Yes, partially (less than 50% of energy use)");
+     options23.add("No");
+
+
+     Questions question23 = new Questions("Housing", "What type of energy do you use to heat water in your home?", options23);
+     questionList.add(question23);
+
+
+
+
+
      // Consumption Category
 
      // Question 18
