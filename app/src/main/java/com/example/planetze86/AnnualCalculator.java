@@ -47,7 +47,7 @@ public class AnnualCalculator {
         int[] longFlight = {0,825,2200,4400,6600};
         transportation = transportation + shortFlight[ques.get(5).answer];
         transportation = transportation + longFlight[ques.get(6).answer];
-        return transportation;
+        return transportation/1000;
     }
 
     public double getFood(){
@@ -71,7 +71,7 @@ public class AnnualCalculator {
         double[] leftover = {0,23.4,70.2,140.4};
         food = food + leftover[ques.get(12).answer];
 
-        return food;
+        return food/1000;
     }
     private double readExcel(int rowIndex,int colIndex) {
         try {
@@ -162,7 +162,7 @@ public class AnnualCalculator {
             housing = housing - 4000;
         }
 
-        return housing;
+        return housing/1000;
     }
 
     public double getConsumption() {
@@ -188,18 +188,75 @@ public class AnnualCalculator {
         }
 
 
-        return consumption;
+        return consumption/1000;
     }
 
     public double getTotal() {
         Total= 0;
         Total = getTransportation() + getFood() + getHousing() + getConsumption();
-        Total = Total/1000;
         return Total;
     }
 
+
+
+
+
+    private double readExcelCountry() {
+        try {
+            // Load the .xlsx file from the raw folder
+            InputStream inputStream = context.getResources().openRawResource(R.raw.global); // Replace 'global' with the actual file name
+
+            // Create a Workbook object
+            Workbook workbook = new XSSFWorkbook(inputStream);
+
+            // Get the first sheet (index 0)
+            Sheet sheet = workbook.getSheetAt(0);
+
+            // Iterate through rows starting from row 3 (index 2)
+            for (int rowIndex = 2; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+                Row row = sheet.getRow(rowIndex);
+                if (row != null) {
+                    Cell countryCell = row.getCell(0); // Column A for country names
+                    Cell emissionCell = row.getCell(1); // Column B for emissions
+
+                    if (countryCell != null && countryCell.getCellType() == CellType.STRING) {
+                        String countryName = countryCell.getStringCellValue().trim();
+
+                        // Compare the country name with the global variable
+                        if (countryName.equalsIgnoreCase(country)) {
+                            if (emissionCell != null && emissionCell.getCellType() == CellType.NUMERIC) {
+                                double emission = emissionCell.getNumericCellValue();
+
+                                // Close resources
+                                workbook.close();
+                                inputStream.close();
+
+                                return emission; // Return the population if found
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Close resources if no match is found
+            workbook.close();
+            inputStream.close();
+            return 0.0; // Return 0.0 if the country is not found
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0; // Return 0.0 if an exception occurs
+        }
+    }
+
+
+
+
+
+
     public double getCountryCompare(){
-        countryCompare = 10.0;
-        return countryCompare;
+        countryCompare = readExcelCountry();
+        double compareTo = getTotal();
+        double percentage = (compareTo/countryCompare  - 1)*100;
+        return percentage;
     }
 }
