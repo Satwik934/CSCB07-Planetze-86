@@ -92,7 +92,6 @@ public class annualEmmision extends AppCompatActivity {
                          .addOnFailureListener(e -> {
                              Toast.makeText(this, "Network Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                          });
-
              }
             }
             else {
