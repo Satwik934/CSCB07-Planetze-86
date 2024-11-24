@@ -202,7 +202,7 @@ public class QuestionsRepo {
      options23.add("No");
 
 
-     Questions question23 = new Questions("Housing", "What type of energy do you use to heat water in your home?", options23);
+     Questions question23 = new Questions("Housing", "Do you use any renewable energy sources for electricity or heating (e.g., solar, wind)?", options23);
      questionList.add(question23);
 
 
