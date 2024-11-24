@@ -39,7 +39,7 @@ public class annualEmmision extends AppCompatActivity {
         prevButton = findViewById(R.id.prevButton);
         CountryCodePicker countryPicker = findViewById(R.id.countryPicker);
 
-        country = "";
+        country = countryPicker.getSelectedCountryName();
         countryPicker.setOnCountryChangeListener(() -> {
             country = countryPicker.getSelectedCountryName();
 
