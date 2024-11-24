@@ -1,36 +1,208 @@
 package com.example.planetze86;
 
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.res.Resources;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+import android.hardware.camera2.TotalCaptureResult;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 public class AnnualCalculator {
     private ArrayList<Questions> ques;
+    private Context context;
     double Total;
-    double transport;
+    double transportation;
     double food;
     double housing;
     double consumption;
-    double countrycompare;
+    double countryCompare;
 
     String country;
 
-    public AnnualCalculator(ArrayList<Questions> ques,String country){
+    public AnnualCalculator(ArrayList<Questions> ques,String country,Context context){
         this.ques = ques;
+        this.context = context;
         this.country = country;
     }
 
-    public double getTransport(){
+    public double getTransportation(){
+        transportation = 0;
+        if(ques == null){
+            return transportation;
+        }
         if(ques.get(0).answer == 0){
             double[] CarsE = {0.24, 0.27, 0.16, 0.05,0.18};
             int[] dist = {5000, 10000, 15000,20000,25000,35000};
-            transport = transport + CarsE[ques.get(1).answer]*dist[ques.get(2).answer];
+            transportation = transportation + CarsE[ques.get(1).answer]*dist[ques.get(2).answer];
         }
-        
-
-
-        return transport;
+        int[][] publicT = {{0},{246,819,1638,3071,4095},{573,1911,3822,7166,9555},{573,1911,3822,7166,9555}};
+        int ind = ques.get(3).answer;
+        if(ind != 0){
+            transportation = transportation + publicT[ind][ques.get(4).answer];
+        }
+        int[] shortFlight = {0,225,600,1200,1800};
+        int[] longFlight = {0,825,2200,4400,6600};
+        transportation = transportation + shortFlight[ques.get(5).answer];
+        transportation = transportation + longFlight[ques.get(6).answer];
+        return transportation;
     }
 
+    public double getFood(){
+        food = 0;
+        if(ques==null){
+            return food;
+        }
+        if(ques.get(7).answer == 3){
+//            8,9,10,11
+            int[] beef = {2500,1900,1300,0};
+            int[] pork = {1450,860,450,0};
+            int[] chicken = {950,600,200,0};
+            int[] fish = {800,500,150,0};
+            food = food + beef[ques.get(8).answer] + pork[ques.get(9).answer] + chicken[ques.get(10).answer] + fish[ques.get(11).answer];
+        }
+        else{
+            int[] veg = {1000,500,1500};
+            food = food + veg[ques.get(7).answer];
+        }
+
+        double[] leftover = {0,23.4,70.2,140.4};
+        food = food + leftover[ques.get(12).answer];
+
+        return food;
+    }
+    private double readExcel(int rowIndex,int colIndex) {
+        try {
+            // Load the .xlsx file from the raw folder
+            InputStream inputStream = context.getResources().openRawResource(R.raw.formulas); // Replace 'your_file_name' with the name of your file (without extension)
+
+            // Create a Workbook object
+            Workbook workbook = new XSSFWorkbook(inputStream);
+
+            // Get the 3 sheet (index 2)
+            Sheet sheet = workbook.getSheetAt(2);
+            Row row = sheet.getRow(rowIndex);
+            if (row != null) {
+                Cell cell = row.getCell(colIndex);
+                if (cell != null) {
+                    // Print the value of the cell
+                    switch (cell.getCellType()) {
+                        case STRING:
+                            workbook.close();
+                            inputStream.close();
+
+                            return 0.0;
+                        case NUMERIC:
+                            workbook.close();
+                            inputStream.close();
+                            return cell.getNumericCellValue();
+
+                        default:
+                            workbook.close();
+                            inputStream.close();
+                            return 0.0;
+                    }
+                } else {
+                    workbook.close();
+                    inputStream.close();
+                    return 0.0;
+                }
+            } else {
+                workbook.close();
+                inputStream.close();
+                return 0.0;
+            }
+
+            // Close the workbook and input stream
 
 
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return 0.0;
+        }
+    }
+    public double getHousing(){
+        housing = 0;
+        int [][] home={{9,17,25},{33,41,49},{57,65,73},{81,90,98},{57,65,73}};
+        int row = home[ques.get(13).answer][ques.get(15).answer] + ques.get(14).answer + 3;
+        int[] heating = {2,7,12,17,22};
+
+        if(ques.get(16).answer == 5){
+            double num = 0;
+            for(int i = 0 ; i < 5;i++){
+                int col = heating[ques.get(17).answer] + i;
+                num = num + readExcel(row,col);
+            }
+            housing= housing + num/5;
+
+        }
+        else{
+            int col = heating[ques.get(17).answer] + ques.get(16).answer;
+            housing = housing + readExcel(row,col);
+        }
+//        moving to water
+        if(ques.get(18).answer == 4){
+            housing = housing - 233;
+        }
+        else if(ques.get(18).answer != ques.get(16).answer){
+            if(ques.get(18).answer == 1){
+                housing = housing - 233;
+            }
+            else{
+                housing = housing + 233;
+            }
+        }
+        if(ques.get(19).answer == 0 ){
+            housing = housing - 6000;
+        }
+        if(ques.get(19).answer == 1 ){
+            housing = housing - 4000;
+        }
+
+        return housing;
+    }
+
+    public double getConsumption() {
+        consumption = 0;
+        int[] newClothes = {360,120,100,5};
+        if(ques.get(21).answer == 0){
+            consumption = consumption + newClothes[ques.get(20).answer]*0.5;
+        }
+        else if(ques.get(21).answer == 1){
+            consumption = consumption + newClothes[ques.get(20).answer]*0.7;
+        }
+        else{
+            consumption = consumption + newClothes[ques.get(20).answer];
+        }
+        int[] devices = {0,300,600,1200};
+        consumption = consumption + devices[ques.get(22).answer];
+
+        if(ques.get(23).answer != 0){
+            double[][] clothesrecycle = {{-54,-108,-180},{-18,-36,-60},{-15,-30,-50},{-0.75,-1.5,-2.5}};
+            consumption = consumption + clothesrecycle[ques.get(20).answer][ques.get(23).answer-1];
+            double[][] devicerecycle = {{0,0,0},{-45,-60,-90},{-60,-120,-180},{-120,-240,-360}};
+            consumption = consumption + clothesrecycle[ques.get(22).answer][ques.get(23).answer-1];
+        }
+
+
+        return consumption;
+    }
+
+    public double getTotal() {
+        Total= 0;
+        Total = getTransportation() + getFood() + getHousing() + getConsumption();
+        Total = Total/1000;
+        return Total;
+    }
+
+    public double getCountryCompare(){
+        countryCompare = 10.0;
+        return countryCompare;
+    }
 }

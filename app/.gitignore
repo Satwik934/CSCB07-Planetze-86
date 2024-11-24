@@ -1,1 +1,4 @@
 /build
+# Ignore local.properties and config.properties
+local.properties
+config.properties
