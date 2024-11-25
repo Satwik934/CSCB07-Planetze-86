@@ -2,6 +2,7 @@ package com.example.planetze86;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -23,11 +24,15 @@ public class annualEmmision extends AppCompatActivity {
 
     private TextView questionText;      // Displays the question
     private RadioGroup optionsGroup;   // Displays the answer options
-    private Button nextButton, prevButton;
-
+    private Button nextButton, prevButton,changeCountryButton;
+    private CountryCodePicker countryPicker;
     private List<Questions> questionList; // Stores all questions
     private  int currentIndex = 0;
     private  String country;
+    private boolean isCountrySelected = false;
+    private TextView locationPrompt;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +42,36 @@ public class annualEmmision extends AppCompatActivity {
         optionsGroup = findViewById(R.id.optionsGroup);
         nextButton = findViewById(R.id.nextButton);
         prevButton = findViewById(R.id.prevButton);
-        CountryCodePicker countryPicker = findViewById(R.id.countryPicker);
+        countryPicker = findViewById(R.id.countryPicker);
+        changeCountryButton = findViewById(R.id.changeCountryButton);
+        locationPrompt = findViewById(R.id.locationPrompt);
 
-        country = countryPicker.getSelectedCountryName();
+        countryPicker.setVisibility(View.VISIBLE);
+        locationPrompt.setVisibility(View.VISIBLE);
+        changeCountryButton.setVisibility(View.GONE); // Hidden initially
+        questionText.setVisibility(View.GONE);
+        optionsGroup.setVisibility(View.GONE);
+        nextButton.setVisibility(View.GONE);
+        prevButton.setVisibility(View.GONE);
+
         countryPicker.setOnCountryChangeListener(() -> {
             country = countryPicker.getSelectedCountryName();
+            Toast.makeText(this, "Selected Country: " + country, Toast.LENGTH_SHORT).show();
 
+            // Hide Country Picker and show questionnaire
+            isCountrySelected = true;
+            toggleCountryPicker(false);
+            loadQuestion();
         });
+
+        // Handle "Change Country" button click
+        changeCountryButton.setOnClickListener(v -> {
+            toggleCountryPicker(true); // Show the Country Picker
+        });
+
 
         QuestionsRepo repository = new QuestionsRepo();
         questionList = repository.getQuestions();
-        loadQuestion();
 
         nextButton.setOnClickListener(v -> {
             if(saveAnswer()){   // Save current answer
@@ -124,7 +148,6 @@ public class annualEmmision extends AppCompatActivity {
                   }
             }
         });
-
     }
     private void loadQuestion() {
         // Clear previous options
@@ -176,13 +199,35 @@ private int skip_food_question(int index){
         index = index + 5;
         return index;
     }
+
+
+
+private void toggleCountryPicker(boolean showPicker) {
+    if (showPicker) {
+        // Show Country Picker and prompt
+        countryPicker.setVisibility(View.VISIBLE);
+        locationPrompt.setVisibility(View.VISIBLE);
+
+        // Hide questionnaire UI
+        questionText.setVisibility(View.GONE);
+        optionsGroup.setVisibility(View.GONE);
+        nextButton.setVisibility(View.GONE);
+        prevButton.setVisibility(View.GONE);
+        changeCountryButton.setVisibility(View.GONE);
+    } else {
+        // Hide Country Picker and prompt
+        countryPicker.setVisibility(View.GONE);
+        locationPrompt.setVisibility(View.GONE);
+
+        // Show questionnaire UI
+        questionText.setVisibility(View.VISIBLE);
+        optionsGroup.setVisibility(View.VISIBLE);
+        nextButton.setVisibility(View.VISIBLE);
+        prevButton.setVisibility(View.VISIBLE);
+        changeCountryButton.setVisibility(View.VISIBLE); // Show the "Change Country" button
+    }
 }
 
 
-
-
-
-
-
-
+}
 
