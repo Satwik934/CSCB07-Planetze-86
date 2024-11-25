@@ -194,6 +194,7 @@ public class AnnualCalculator {
     public double getTotal() {
         Total= 0;
         Total = getTransportation() + getFood() + getHousing() + getConsumption();
+        Total = Math.round(Total * 1000.0) / 1000.0;
         return Total;
     }
 
@@ -257,6 +258,7 @@ public class AnnualCalculator {
         countryCompare = readExcelCountry();
         double compareTo = getTotal();
         double percentage = (compareTo/countryCompare  - 1)*100;
+        percentage = (double) Math.round(percentage * 100) / 100;
         return percentage;
     }
 }
