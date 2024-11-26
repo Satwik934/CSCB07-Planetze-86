@@ -104,7 +104,7 @@ public class annualEmmision extends AppCompatActivity {
              else{
                  AnnualCalculator calc = new AnnualCalculator(questionList,country,this);
                  AnnualAnswers ans = new AnnualAnswers(country, calc.getTotal(), calc.getTransportation(), calc.getFood(),
-                 calc.getHousing(), calc.getConsumption(), calc.getCountryCompare());
+                 calc.getHousing(), calc.getConsumption(), calc.getCountryCompare(),calc.getGlobalCompare());
                  String uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); // Get current user's UID
                  DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(uid);
 
