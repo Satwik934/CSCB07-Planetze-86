@@ -1,6 +1,7 @@
 package com.example.planetze86;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -165,15 +166,22 @@ public class annualEmmision extends AppCompatActivity {
         for (int i = 0; i < options.size(); i++) {
             RadioButton radioButton = new RadioButton(this);
             radioButton.setText(options.get(i));  // Set option text
-            radioButton.setId(i);                // Assign ID to each RadioButton
+            radioButton.setId(i);
+            radioButton.setPadding(16, 16, 16, 16);
+            radioButton.setTextColor(Color.parseColor("#d8dbe2"));
+            radioButton.setBackgroundResource(R.drawable.radio_group_background);
+            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+                    RadioGroup.LayoutParams.MATCH_PARENT, // Full width
+                    160 // Fixed height in pixels
+            );
+            params.setMargins(3, 9, 0, 9); // Add space above and below the button
+            radioButton.setLayoutParams(params);
+
             optionsGroup.addView(radioButton);   // Add to RadioGroup
         }
 
         // Enable/Disable the Previous button
         prevButton.setEnabled(currentIndex > 0);
-        ProgressBar progressBar = findViewById(R.id.progressBar);
-        progressBar.setMax(questionList.size());
-        progressBar.setProgress(currentIndex + 1);
     }
 
 
