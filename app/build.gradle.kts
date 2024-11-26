@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.planetze86"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -37,8 +37,10 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation("com.hbb20:ccp:2.7.1")
     implementation(libs.firebase.database)
     implementation(libs.mpandroidchart)
     testImplementation(libs.junit)

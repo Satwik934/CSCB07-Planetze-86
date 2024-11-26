@@ -102,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                                 checkFirstLogin(uid);
                             } else {
                                 // Email not verified
+
                                 Toast.makeText(LoginActivity.this, "Please verify your email before logging in.", Toast.LENGTH_LONG).show();
                                 mAuth.signOut();
                             }
@@ -134,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                         databaseReference.child("firstLogin").setValue(false);
                     } else {
                         // Redirect to main dashboard
+
                         Intent intent = new Intent(LoginActivity.this, ecotracker.class); // Replace with your main dashboard activity
                         startActivity(intent);
                     }

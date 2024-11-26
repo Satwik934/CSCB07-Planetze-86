@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="10dp" />
+    <!-- Use transparent or neutral solid color if backgroundTint is applied -->
+    <solid android:color="@android:color/transparent" />
+    <stroke android:color="#a9bcd0" android:width="2dp" /> <!-- Light border -->
+</shape>
