@@ -6,17 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#a9bcd0"> <!-- Light grayish blue background -->
+    android:background="#d8dbe2">
 
-    <!-- Progress Bar for Question Progress -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_marginBottom="16dp"
-        android:progressTint="#009999"
-        android:indeterminate="false"
-        android:backgroundTint="#a9bcd0" />
 
     <!-- Country Picker -->
     <TextView
@@ -62,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:textStyle="bold"
+        android:textStyle="bold|italic"
         android:textColor="#1b1b1e"
     android:padding="12dp"
     android:gravity="center_horizontal"
@@ -76,12 +67,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/radio_group_background"
-        android:backgroundTint="#a9bcd0"
-        android:divider="@android:color/darker_gray"
-        android:dividerPadding="10dp"
         android:orientation="vertical"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerPadding="10dp" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
