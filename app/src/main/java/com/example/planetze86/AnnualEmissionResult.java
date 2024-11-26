@@ -28,7 +28,7 @@ public class AnnualEmissionResult extends AppCompatActivity {
     private Button dashboard;
 
     // UI components
-    private TextView totalFootprintValue, transportationValue, foodValue, housingValue, consumptionValue, comparisonText;
+    private TextView totalFootprintValue, transportationValue, foodValue, housingValue, consumptionValue, comparisonText,global_comparison_text;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,6 +50,7 @@ public class AnnualEmissionResult extends AppCompatActivity {
         housingValue = findViewById(R.id.housing_value);
         consumptionValue = findViewById(R.id.consumption_value);
         comparisonText = findViewById(R.id.comparison_text);
+        global_comparison_text = findViewById(R.id.global_comparison_text);
 
         // Fetch and display the data
         fetchAnnualAnswers();
@@ -88,6 +89,13 @@ public class AnnualEmissionResult extends AppCompatActivity {
                     if (annualAnswers.getAnnualCountryPercentage() < 0){
                         int num = (int) (annualAnswers.getAnnualCountryPercentage() * (-1));
                         comparisonText.setText(String.format("Your footprint is %s%% below the national average for %s.", num, annualAnswers.getCountry()));
+                    }
+                    if (annualAnswers.getAnnualGlobalPercentage() > 0){
+                        global_comparison_text.setText(String.format("Your footprint is %s%% above the global emission target.", annualAnswers.getAnnualGlobalPercentage()));
+                    }
+                    if (annualAnswers.getAnnualGlobalPercentage() < 0){
+                        int num = (int) (annualAnswers.getAnnualGlobalPercentage() * (-1));
+                        global_comparison_text.setText(String.format("Your footprint is %s%% below the global emission target.", num));
                     }
                 }
             }

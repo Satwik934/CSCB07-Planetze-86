@@ -261,4 +261,11 @@ public class AnnualCalculator {
         percentage = (double) Math.round(percentage * 100) / 100;
         return percentage;
     }
+
+    public double getGlobalCompare(){
+        double compareTo = getTotal();
+        double percentage = (compareTo/2  - 1)*100;
+        percentage = (double) Math.round(percentage * 100) / 100;
+        return percentage;
+    }
 }
