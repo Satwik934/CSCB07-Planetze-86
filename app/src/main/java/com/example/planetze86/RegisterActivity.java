@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,13 +32,14 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         // Link UI elements
+        TextView loginLink = findViewById(R.id.loginLink);
         emailEditText = findViewById(R.id.registerEmail);
         backButton = findViewById(R.id.backButton);
         passwordEditText = findViewById(R.id.registerPassword);
         confirmPasswordEditText = findViewById(R.id.registerConfirmPassword);
-        firstNameEditText = findViewById(R.id.editTextFirstName);
-        lastNameEditText = findViewById(R.id.editTextLastName);
-        Button submitButton = findViewById(R.id.buttonSubmit);
+        firstNameEditText = findViewById(R.id.firstName);
+        lastNameEditText = findViewById(R.id.lastName);
+        Button submitButton = findViewById(R.id.registerButton);
 
         // Set up the submit button click listener
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +55,12 @@ public class RegisterActivity extends AppCompatActivity {
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
             }
+        });
+
+        loginLink.setOnClickListener(v -> {
+            // Navigate to login page or perform backend action
+            Intent intent = new Intent(RegisterActivity.this, LoginActivityView.class);
+            startActivity(intent);
         });
     }
 
