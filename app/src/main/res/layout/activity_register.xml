@@ -93,7 +93,7 @@
                 android:padding="12dp" />
 
             <EditText
-                android:id="@+id/email"
+                android:id="@+id/registerEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -103,7 +103,7 @@
                 android:padding="12dp" />
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/registerPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -113,7 +113,7 @@
                 android:padding="12dp" />
 
             <EditText
-                android:id="@+id/confirmPassword"
+                android:id="@+id/registerConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -141,7 +141,15 @@
                 android:gravity="center"
                 android:text="Already have an account? Log in"
                 android:textColor="#373F51"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:clickable="true"
+                android:focusable="true"
+                android:textStyle="bold|italic"
+                android:textColorLink="#373F51"
+                android:minHeight="48dp"
+                android:paddingVertical="8dp" />
+
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
