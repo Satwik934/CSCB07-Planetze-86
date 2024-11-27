@@ -27,7 +27,7 @@
             android:name=".Onboarding"
             android:exported="false" />
         <activity
-            android:name=".ecotracker"
+            android:name=".EcoTracker"
             android:exported="false" />
         <activity
             android:name=".forgetPass"

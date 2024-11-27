@@ -1,10 +1,7 @@
 package com.example.planetze86;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,8 +10,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivityPresenter {
     LoginActivityView view;
@@ -95,7 +90,7 @@ public class LoginActivityPresenter {
                     } else {
                         // Redirect to main dashboard
 
-                        Intent intent = new Intent(view, ecotracker.class); // Replace with your main dashboard activity
+                        Intent intent = new Intent(view, EcoTracker.class); // Replace with your main dashboard activity
                         view.startActivity(intent);
                         view.finish();
                     }

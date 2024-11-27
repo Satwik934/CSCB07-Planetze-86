@@ -7,11 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -59,7 +55,7 @@ public class AnnualEmissionResult extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Navigate to ForgotPassActivity
-                Intent intent = new Intent(AnnualEmissionResult.this, ecotracker.class);
+                Intent intent = new Intent(AnnualEmissionResult.this, EcoTracker.class);
                 startActivity(intent);
             }
         });

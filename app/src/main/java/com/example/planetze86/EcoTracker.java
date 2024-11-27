@@ -6,21 +6,18 @@ import android.view.View;
 import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-public class ecotracker extends AppCompatActivity {
+public class EcoTracker extends AppCompatActivity {
 
     Button menuButton;
-
+    Button transportationButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ecotracker);
 
-        Button transportationButton = findViewById(R.id.transportation_button);
+        transportationButton = findViewById(R.id.transportation_button);
         Button foodConsumptionButton = findViewById(R.id.food_consumption_button);
         Button shoppingButton = findViewById(R.id.shopping_button);
         Button energyBillsButton = findViewById(R.id.energy_bills_button);
@@ -29,20 +26,20 @@ public class ecotracker extends AppCompatActivity {
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ecotracker.this, PlanetzeMenu.class);
+                Intent intent = new Intent(EcoTracker.this, PlanetzeMenu.class);
                 startActivity(intent);
             }
         });
         transportationButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ecotracker.this, TransportationTracking.class);
+            Intent intent = new Intent(EcoTracker.this, TransportationTracking.class);
             startActivity(intent);
         });
         foodConsumptionButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ecotracker.this, FoodConsumptionTracking.class);
+            Intent intent = new Intent(EcoTracker.this, FoodConsumptionTracking.class);
             startActivity(intent);
         });
         shoppingButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ecotracker.this, ShoppingTracking.class);
+            Intent intent = new Intent(EcoTracker.this, ShoppingTracking.class);
         });
     }
 }
