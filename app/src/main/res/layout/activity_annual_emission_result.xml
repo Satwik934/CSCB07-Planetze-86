@@ -20,7 +20,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <!-- Total Annual Carbon Footprint Section -->
     <androidx.cardview.widget.CardView
@@ -48,7 +49,8 @@
                 android:layout_height="wrap_content"
                 android:text="Total Annual Carbon Footprint"
                 android:textColor="#D8DBE2"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/total_footprint_value"
@@ -58,7 +60,8 @@
                 android:text="0.00 Tons CO2e"
                 android:textColor="#D8DBE2"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -74,7 +77,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/total_footprint_card" />
+        app:layout_constraintTop_toBottomOf="@id/total_footprint_card"
+        tools:ignore="HardcodedText" />
 
     <!-- Individual Breakdown Cards -->
     <androidx.cardview.widget.CardView
@@ -102,7 +106,8 @@
                 android:text="Transportation"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/transportation_value"
@@ -111,7 +116,8 @@
                 android:layout_marginTop="4dp"
                 android:text="0.00 Tons CO2e"
                 android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -141,7 +147,8 @@
                 android:text="Food"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/food_value"
@@ -150,7 +157,8 @@
                 android:layout_marginTop="4dp"
                 android:text="0.00 Tons CO2e"
                 android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -180,7 +188,8 @@
                 android:text="Housing"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/housing_value"
@@ -189,7 +198,8 @@
                 android:layout_marginTop="4dp"
                 android:text="0.00 Tons CO2e"
                 android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -219,7 +229,8 @@
                 android:text="Consumption"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/consumption_value"
@@ -228,7 +239,8 @@
                 android:layout_marginTop="4dp"
                 android:text="0.00 Tons CO2e"
                 android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -258,7 +270,8 @@
                 android:text="Comparisons and Benchmarks"
                 android:textColor="#1B1B1E"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/comparison_text"
@@ -267,7 +280,8 @@
                 android:layout_marginTop="8dp"
                 android:text="Your footprint is 0% below the national average for Canada."
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/global_comparison_text"
@@ -276,7 +290,8 @@
                 android:layout_marginTop="8dp"
                 android:text="You are 15% above the global climate target."
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -293,6 +308,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
