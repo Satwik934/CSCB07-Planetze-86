@@ -7,9 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageButton;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -91,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         if (emailTask.isSuccessful()) {
                                             Toast.makeText(RegisterActivity.this, "Verification email sent. Please check your email and verify your account.", Toast.LENGTH_LONG).show();
                                             mAuth.signOut();
-                                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                            Intent intent = new Intent(RegisterActivity.this, LoginActivityView.class);
                                             startActivity(intent);
                                             finish();
                                         } else {

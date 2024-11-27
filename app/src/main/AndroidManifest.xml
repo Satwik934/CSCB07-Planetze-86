@@ -33,7 +33,7 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginActivityView"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
