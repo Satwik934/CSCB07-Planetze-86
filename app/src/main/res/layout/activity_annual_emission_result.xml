@@ -13,7 +13,7 @@
         android:id="@+id/header_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:text="Annual Carbon Footprint Results"
         android:textColor="#1B1B1E"
         android:textSize="24sp"
@@ -25,9 +25,10 @@
     <!-- Total Annual Carbon Footprint Section -->
     <androidx.cardview.widget.CardView
         android:id="@+id/total_footprint_card"
-        android:layout_width="382dp"
-        android:layout_height="88dp"
+        android:layout_width="378dp"
+        android:layout_height="64dp"
         android:layout_margin="16dp"
+        android:layout_marginTop="6dp"
         app:cardBackgroundColor="#373F51"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
@@ -39,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/total_footprint_label"
@@ -47,16 +48,16 @@
                 android:layout_height="wrap_content"
                 android:text="Total Annual Carbon Footprint"
                 android:textColor="#D8DBE2"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/total_footprint_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
                 android:text="0.00 Tons CO2e"
                 android:textColor="#D8DBE2"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -284,7 +285,8 @@
         android:id="@+id/dashboard_button"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#1B1B1E"
         android:text="GO TO DASHBOARD"
         android:textColor="#D8DBE2"
