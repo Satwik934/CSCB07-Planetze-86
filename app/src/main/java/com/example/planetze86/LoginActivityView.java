@@ -32,6 +32,7 @@ public class LoginActivityView extends AppCompatActivity {
 
     LoginActivityPresenter presenter;
     private Button forgotPasswordButton;
+    private Button signupButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -53,11 +54,19 @@ public class LoginActivityView extends AppCompatActivity {
 
 
         forgotPasswordButton = findViewById(R.id.forgotPasswordButton);
+        signupButton = findViewById(R.id.signupButton);
 
         forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.onForgotPasswordClicked();
+            }
+        });
+
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onSignupButtonClicked();
             }
         });
 
