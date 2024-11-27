@@ -25,6 +25,11 @@ public class LoginActivityPresenter {
         view.startActivity(intent);
     }
 
+    public void onSignupButtonClicked() {
+        Intent intent = new Intent(view, RegisterActivity.class);
+        view.startActivity(intent);
+    }
+
     // Handle Back button click
     public void onBackButtonClicked() {
         Intent intent = new Intent(view, MainActivity.class);
