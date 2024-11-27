@@ -5,112 +5,146 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#a9bcd0"
+    android:background="#d8dbe2"
     tools:context=".LoginActivityView">
 
     <!-- Back Button -->
-
-    <!-- Profile Image -->
-
-
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="2dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-
-        android:contentDescription="Back to Main Page"
-        android:src="@drawable/backarrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="172dp"
-        android:layout_height="141dp"
-        android:layout_marginTop="32dp"
-        android:background="#a9bcd0"
-        app:layout_constraintBottom_toTopOf="@+id/loginEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Back"
+        android:src="@drawable/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_account_circle_24" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:tint="#1b1b1e" />
 
-    <!-- Email Input -->
+    <!-- Wave Background Image -->
+    <ImageView
+        android:id="@+id/waveBackground"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/co2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Welcome Back Text -->
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome Back"
+        android:textColor="#1b1b1e"
+        android:textSize="32sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/waveBackground"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- Email Address Input -->
     <EditText
         android:id="@+id/loginEmail"
-        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
-        android:layout_width="328dp"
-        android:layout_height="69dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/edittext_background"
-        android:cursorVisible="true"
-        android:ems="10"
-        android:fontFamily="sans-serif-condensed"
-        android:hint="Email"
-        android:inputType="text"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColorLink="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:hint="Email address"
+        android:drawablePadding="12dp"
+        android:padding="12dp"
+        android:background="@drawable/outlined_edittext"
+        android:textColor="#1b1b1e"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/welcomeText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Password Input -->
     <EditText
         android:id="@+id/loginPassword"
-        android:layout_width="328dp"
-        android:layout_height="63dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/edittext_background"
-        android:ems="10"
-        android:fontFamily="sans-serif-condensed"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
         android:hint="Password"
+        android:drawableStart="@drawable/ic_password"
+        android:drawablePadding="12dp"
+        android:padding="12dp"
+        android:background="@drawable/outlined_edittext"
+        android:textColor="#1b1b1e"
+        android:textSize="16sp"
         android:inputType="textPassword"
-        android:textColor="#100F0F"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/loginEmail"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginEmail" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Login Button -->
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="205dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="96dp"
-        android:background="@drawable/edittext_background"
-        android:text="Log in"
-        android:textAlignment="center"
-        android:textColorLink="#1B1616"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
-
-    <!-- Forgotten Password Button -->
+    <!-- Forgot Password Button -->
     <Button
         android:id="@+id/forgotPasswordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:background="#a9bcd0"
-        android:clickable="true"
-        android:fontFamily="sans-serif-black"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
-        android:text="Forgotten Password?"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
+        android:background="@android:color/transparent"
+        android:text="Forgot Password?"
+        android:textColor="#1b1b1e"
+        android:textStyle="bold|italic"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/loginPassword"
+        app:layout_constraintTop_toBottomOf="@id/loginPassword"
+        android:layout_marginTop="8dp" />
 
+    <!-- Login Button -->
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#009999"
+        android:text="Log In"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- OR Divider -->
+    <TextView
+        android:id="@+id/orDivider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:textSize="16sp"
+        android:textColor="#1b1b1e"
+        app:layout_constraintTop_toBottomOf="@id/loginButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Sign Up Button -->
+    <Button
+        android:id="@+id/signupButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#373f51"
+        android:text="Sign Up"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/orDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

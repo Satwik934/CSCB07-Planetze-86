@@ -3,5 +3,5 @@
     <corners android:radius="10dp" />
     <!-- Use transparent or neutral solid color if backgroundTint is applied -->
     <solid android:color="@android:color/transparent" />
-    <stroke android:color="#a9bcd0" android:width="2dp" /> <!-- Light border -->
+    <stroke android:color="#009999" android:width="2dp" /> <!-- Light border -->
 </shape>
