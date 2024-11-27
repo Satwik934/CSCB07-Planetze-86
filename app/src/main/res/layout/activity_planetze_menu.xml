@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlanetzeMenu">
+
+    <TextView
+        android:id="@+id/planetze_menu_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="PLANETZE MENU"
+        android:textColor="#1B1B1E"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Eco Gauge Button -->
+    <Button
+        android:id="@+id/eco_gauge_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Eco Gauge"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/planetze_menu_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp" />
+
+    <!-- Eco Balance Button -->
+    <Button
+        android:id="@+id/eco_balance_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Eco Balance"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/eco_gauge_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Eco Hub Button -->
+    <Button
+        android:id="@+id/eco_hub_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Eco Hub"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/eco_balance_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Eco Agent Button -->
+    <Button
+        android:id="@+id/eco_agent_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Eco Agent"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/eco_hub_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
