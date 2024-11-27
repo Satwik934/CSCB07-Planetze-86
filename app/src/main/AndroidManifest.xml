@@ -15,6 +15,15 @@
         android:theme="@style/Theme.Planetze86"
         tools:targetApi="31">
         <activity
+            android:name=".ShoppingTracking"
+            android:exported="false" />
+        <activity
+            android:name=".FoodConsumptionTracking"
+            android:exported="false" />
+        <activity
+            android:name=".TransportationTracking"
+            android:exported="false" />
+        <activity
             android:name=".PlanetzeMenu"
             android:exported="false" />
         <activity
