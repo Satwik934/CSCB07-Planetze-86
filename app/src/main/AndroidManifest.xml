@@ -15,6 +15,21 @@
         android:theme="@style/Theme.Planetze86"
         tools:targetApi="31">
         <activity
+            android:name=".FlightLogging"
+            android:exported="false" />
+        <activity
+            android:name=".CyclingOrWalkingLogging"
+            android:exported="false" />
+        <activity
+            android:name=".PublicTransportationLogging"
+            android:exported="false" />
+        <activity
+            android:name=".PersonalVehicleLogging"
+            android:exported="false" />
+        <activity
+            android:name=".EnergyBills"
+            android:exported="false" />
+        <activity
             android:name=".ShoppingTracking"
             android:exported="false" />
         <activity

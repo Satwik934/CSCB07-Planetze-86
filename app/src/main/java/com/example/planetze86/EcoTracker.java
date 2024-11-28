@@ -30,9 +30,12 @@ public class EcoTracker extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        transportationButton.setOnClickListener(v -> {
-            Intent intent = new Intent(EcoTracker.this, TransportationTracking.class);
-            startActivity(intent);
+        transportationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(EcoTracker.this, TransportationTracking.class);
+                startActivity(intent);
+            }
         });
         foodConsumptionButton.setOnClickListener(v -> {
             Intent intent = new Intent(EcoTracker.this, FoodConsumptionTracking.class);
@@ -40,6 +43,7 @@ public class EcoTracker extends AppCompatActivity {
         });
         shoppingButton.setOnClickListener(v -> {
             Intent intent = new Intent(EcoTracker.this, ShoppingTracking.class);
+            startActivity(intent);
         });
     }
 }
