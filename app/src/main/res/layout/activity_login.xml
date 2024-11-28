@@ -9,20 +9,6 @@
     tools:context=".LoginActivityView">
 
     <!-- Back Button -->
-    <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="Back"
-        android:src="@drawable/back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:tint="#1b1b1e" />
-
-    <!-- Wave Background Image -->
     <ImageView
         android:id="@+id/waveBackground"
         android:layout_width="0dp"
@@ -32,6 +18,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back Button"
+        android:src="@drawable/baseline_arrow_back_ios_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <!-- Welcome Back Text -->
     <TextView
@@ -107,7 +106,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_button"
+
         android:backgroundTint="#009999"
         android:text="Log In"
         android:textColor="#ffffff"
@@ -138,8 +137,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_button"
-        android:backgroundTint="#373f51"
+
+        android:backgroundTint="#009999"
         android:text="Sign Up"
         android:textColor="#ffffff"
         android:textSize="18sp"
