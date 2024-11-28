@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#D8DBE2"
-    tools:ignore="ExtraText"
     tools:context=".TransportationTracking">
 
     <!-- Header: Daily Carbon Footprint Tracking -->

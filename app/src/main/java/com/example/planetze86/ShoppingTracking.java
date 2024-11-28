@@ -12,7 +12,7 @@ public class ShoppingTracking extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_shoppingconsumption_tracking);
         Button buyNewClothes = findViewById(R.id.button_buy_new_clothes);
         Button buyElectronics = findViewById(R.id.button_buy_electronics);
