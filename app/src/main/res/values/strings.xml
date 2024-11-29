@@ -1,3 +1,26 @@
 <resources>
-    <string name="app_name">Planetze86</string>
+    <string name="app_name">Planetze</string>
+    <string name="register">Register</string>
+    <string name="save_data">Save Data</string>
+
+    <!-- Transportation Types -->
+    <string-array name="transportation_types">
+        <item>Bus</item>
+        <item>Train</item>
+        <item>Subway</item>
+    </string-array>
+
+    <!-- Vehicle Types -->
+    <string-array name="vehicle_types">
+        <item>Gasoline</item>
+        <item>Diesel</item>
+        <item>Hybrid</item>
+        <item>Electric</item>
+    </string-array>
+
+    <!-- Flight Types -->
+    <string-array name="flight_types">
+        <item>Short-Haul (&#60; 1,500 km)</item>
+        <item>Long-Haul (&#62; 1,500 km)</item>
+    </string-array>
 </resources>
