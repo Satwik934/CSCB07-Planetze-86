@@ -68,24 +68,11 @@
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:backgroundTint="#009999"
-        android:text="Cycling"
+        android:text="Cycling &amp; Walking"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_public_transportation" />
-
-    <!-- Button: Walking -->
-    <Button
-        android:id="@+id/button_walking"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#009999"
-        android:text="Walking"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_cycling" />
 
     <!-- Button: Flight -->
     <Button
@@ -98,6 +85,6 @@
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_walking" />
+        app:layout_constraintTop_toBottomOf="@id/button_cycling" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
