@@ -84,22 +84,9 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:backgroundTint="#373F51"
-        android:text="Shopping"
+        android:text="Shopping &amp; Energy Bills"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/food_consumption_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
-
-    <!-- Energy Bills Button -->
-    <Button
-        android:id="@+id/energy_bills_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#373F51"
-        android:text="Energy Bills"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/shopping_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp" />
@@ -115,7 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/energy_bills_button" />
+        app:layout_constraintTop_toBottomOf="@id/date_select_button" />
 
     <!-- Select Date Button -->
     <Button
@@ -125,7 +112,7 @@
         android:backgroundTint="#373F51"
         android:text="Select Date"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/energy_bills_button"
+        app:layout_constraintTop_toBottomOf="@id/shopping_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"/>
