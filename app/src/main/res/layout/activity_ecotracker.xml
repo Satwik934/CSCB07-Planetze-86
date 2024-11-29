@@ -117,4 +117,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/energy_bills_button" />
 
+    <!-- Select Date Button -->
+    <Button
+        android:id="@+id/date_select_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Select Date"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/energy_bills_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"/>
+
+    <!-- TextView to display the selected date -->
+    <TextView
+        android:id="@+id/tv_selected_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selected Date:"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/date_select_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
