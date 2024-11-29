@@ -25,7 +25,6 @@ public class EcoTracker extends AppCompatActivity {
         transportationButton = findViewById(R.id.transportation_button);
         Button foodConsumptionButton = findViewById(R.id.food_consumption_button);
         Button shoppingButton = findViewById(R.id.shopping_button);
-        Button energyBillsButton = findViewById(R.id.energy_bills_button);
         Button dateSelectButton = findViewById(R.id.date_select_button);
         TextView tvSelectedDate = findViewById(R.id.tv_selected_date);
         // Redirects the button to open eco gauge.
@@ -50,10 +49,6 @@ public class EcoTracker extends AppCompatActivity {
         });
         shoppingButton.setOnClickListener(v -> {
             Intent intent = new Intent(EcoTracker.this, ShoppingTracking.class);
-            startActivity(intent);
-        });
-        energyBillsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(EcoTracker.this, EnergyBills.class);
             startActivity(intent);
         });
         dateSelectButton.setOnClickListener(v -> {

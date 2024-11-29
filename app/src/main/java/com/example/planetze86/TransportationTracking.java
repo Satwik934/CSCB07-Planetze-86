@@ -40,7 +40,7 @@ public class TransportationTracking extends AppCompatActivity {
             AutoCompleteTextView actvVehicleType = dialog.findViewById(R.id.actv_vehicle_type);
             Button btnSaveVehicleData = dialog.findViewById(R.id.btn_save_vehicle_data);
 
-            String[] vehicleTypes = {"Gasoline", "Electric", "Hybrid"};
+            String[] vehicleTypes = {"Gasoline", "Diesel", "Electric", "Hybrid"};
             ArrayAdapter<String> vehicleAdapter = new ArrayAdapter<>(TransportationTracking.this, android.R.layout.simple_dropdown_item_1line, vehicleTypes);
             actvVehicleType.setAdapter(vehicleAdapter);
             actvVehicleType.setOnClickListener(w -> actvVehicleType.showDropDown());
@@ -72,7 +72,7 @@ public class TransportationTracking extends AppCompatActivity {
             AutoCompleteTextView actvTransportType = dialog.findViewById(R.id.actv_transportation_type);
             Button btnSaveTransportData = dialog.findViewById(R.id.btn_save_transport_data);
 
-            String[] transportTypes = {"Bus", "Train", "Metro"};
+            String[] transportTypes = {"Bus", "Train", "Subway"};
             ArrayAdapter<String> transportAdapter = new ArrayAdapter<>(TransportationTracking.this, android.R.layout.simple_dropdown_item_1line, transportTypes);
             actvTransportType.setAdapter(transportAdapter);
             actvTransportType.setOnClickListener(w -> actvTransportType.showDropDown());
