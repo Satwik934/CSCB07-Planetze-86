@@ -23,4 +23,38 @@
         <item>Short-Haul (&#60; 1,500 km)</item>
         <item>Long-Haul (&#62; 1,500 km)</item>
     </string-array>
+
+    <!-- Meal Types -->
+    <string-array name="meal_types">
+        <item>Beef</item>
+        <item>Pork</item>
+        <item>Chicken</item>
+        <item>Fish</item>
+        <item>Plant-Based</item>
+    </string-array>
+
+    <!-- Electronics Types -->
+    <string-array name="electronics_types">
+        <item>Smartphone</item>
+        <item>Laptop</item>
+        <item>Television</item>
+        <item>Tablet</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- Other Purchases Types -->
+    <string-array name="purchase_types">
+        <item>Furniture</item>
+        <item>Appliances</item>
+        <item>Books</item>
+        <item>Toys</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- Bill Types -->
+    <string-array name="bill_types">
+        <item>Electricity</item>
+        <item>Gas</item>
+        <item>Water</item>
+    </string-array>
 </resources>

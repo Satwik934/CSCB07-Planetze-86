@@ -149,7 +149,6 @@
                 android:minHeight="48dp"
                 android:paddingVertical="8dp" />
 
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
