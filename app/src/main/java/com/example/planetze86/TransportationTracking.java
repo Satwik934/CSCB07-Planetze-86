@@ -1,15 +1,12 @@
 package com.example.planetze86;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -24,8 +21,7 @@ public class TransportationTracking extends AppCompatActivity {
 
         Button personalVehicleButton = findViewById(R.id.button_personal_vehicle);
         Button publicTransportationButton = findViewById(R.id.button_public_transportation);
-        Button cyclingButton = findViewById(R.id.button_cycling);
-        Button walkingButton = findViewById(R.id.button_walking);
+        Button cyclingOrWalkingButton = findViewById(R.id.button_cycling);
         Button flightButton = findViewById(R.id.button_flight);
 
         // Personal Vehicle Dialog
@@ -93,7 +89,7 @@ public class TransportationTracking extends AppCompatActivity {
         });
 
         // Cycling or Walking Dialog
-        cyclingButton.setOnClickListener(v -> {
+        cyclingOrWalkingButton.setOnClickListener(v -> {
             Dialog dialog = new Dialog(TransportationTracking.this);
             dialog.setContentView(R.layout.activity_cycling_or_walking_logging);
 
