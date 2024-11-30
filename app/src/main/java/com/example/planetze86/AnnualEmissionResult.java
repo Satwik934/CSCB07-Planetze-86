@@ -49,9 +49,12 @@ public class AnnualEmissionResult extends AppCompatActivity {
         consumptionValue = findViewById(R.id.consumption_value);
         comparisonText = findViewById(R.id.comparison_text);
         globalComparisonText = findViewById(R.id.global_comparison_text);
+        LoginActivityModel model = new LoginActivityModel();
 
         // Fetch and display the data
         fetchAnnualAnswers(currentUser.getUid());
+        model.updateFirstLogin();
+
 
         // Set dashboard button click listener
         dashboard.setOnClickListener(v -> {
