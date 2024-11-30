@@ -25,7 +25,7 @@ import androidx.annotation.NonNull;
 
 public class LoginActivityView extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
+
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
     private ImageButton backButton;
@@ -44,7 +44,7 @@ public class LoginActivityView extends AppCompatActivity {
         presenter = new LoginActivityPresenter(this,new LoginActivityModel());
 
         // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+
 
         // Link UI elements
         emailEditText = findViewById(R.id.loginEmail);
