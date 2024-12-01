@@ -81,11 +81,11 @@ public class AnnualEmissionResult extends AppCompatActivity {
                     float totalEmission = (float) annualAnswers.getAnnualEmission();
 
                     // Update TextViews
-                    transportationValue.setText(String.format("Transportation: %.2f Tons CO2e", transportation));
-                    foodValue.setText(String.format("Food: %.2f Tons CO2e", food));
-                    housingValue.setText(String.format("Housing: %.2f Tons CO2e", housing));
-                    consumptionValue.setText(String.format("Consumption: %.2f Tons CO2e", consumption));
-                    totalFootprintValue.setText(String.format("%.2f Tons CO2e", totalEmission));
+                    transportationValue.setText(String.format("%s Tons CO2e", transportation));
+                    foodValue.setText(String.format("%s Tons CO2e", food));
+                    housingValue.setText(String.format("%s Tons CO2e", housing));
+                    consumptionValue.setText(String.format("%s Tons CO2e", consumption));
+                    totalFootprintValue.setText(String.format("%s Tons CO2e", totalEmission));
 
                     // Update branch labels on the static pie chart
 
