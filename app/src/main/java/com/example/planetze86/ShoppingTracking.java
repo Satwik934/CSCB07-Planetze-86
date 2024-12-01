@@ -9,12 +9,107 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ShoppingTracking extends AppCompatActivity {
+    private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
+        String type = snapshot.child("type").getValue(String.class);
+
+        if (type == null) {
+            return null;
+        }
+
+        switch (type) {
+            case "Transportation":
+                return snapshot.getValue(TransportationActivityElement.class);
+            case "Shopping":
+                return snapshot.getValue(ShoppingActivityElement.class);
+            case "Food Consumption":
+                return snapshot.getValue(FoodConsumptionActivityElement.class);
+            default:
+                return null; // Unknown type
+        }
+    }
+
+    private void saveToFirebase(EmissionActivityElement activity, String date) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference megaLogRef = reference.child(userId).child("EmissionActivityMegaLog");
+
+            megaLogRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    HashMap<String, ArrayList<EmissionActivityElement>> activityMap = new HashMap<>();
+
+                    // Retrieve existing data
+                    if (snapshot.exists()) {
+                        for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
+                            ArrayList<EmissionActivityElement> activities = new ArrayList<>();
+                            for (DataSnapshot activitySnapshot : dateSnapshot.getChildren()) {
+                                EmissionActivityElement existingActivity = deserializeActivity(activitySnapshot);
+                                if (existingActivity != null) {
+                                    activities.add(existingActivity);
+                                }
+                            }
+                            activityMap.put(dateSnapshot.getKey(), activities);
+                        }
+                    }
+
+                    // Add the new activity
+                    ArrayList<EmissionActivityElement> dateActivities = activityMap.getOrDefault(date, new ArrayList<>());
+                    dateActivities.add(activity);
+                    activityMap.put(date, dateActivities);
+
+                    // Save back to Firebase
+                    megaLogRef.setValue(activityMap)
+                            .addOnSuccessListener(aVoid -> Toast.makeText(
+                                    ShoppingTracking.this,
+                                    "Data saved successfully!",
+                                    Toast.LENGTH_SHORT).show())
+                            .addOnFailureListener(e -> Toast.makeText(
+                                    ShoppingTracking.this,
+                                    "Failed to save data: " + e.getMessage(),
+                                    Toast.LENGTH_SHORT).show());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(
+                            ShoppingTracking.this,
+                            "Failed to retrieve data: " + error.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
+        if (selectedDate != null && !selectedDate.isEmpty()) {
+            Toast.makeText(this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "No date selected", Toast.LENGTH_SHORT).show();
+        }
         setContentView(R.layout.activity_shoppingconsumption_tracking);
 
         // Button references
@@ -40,6 +135,18 @@ public class ShoppingTracking extends AppCompatActivity {
                     Toast.makeText(ShoppingTracking.this, "Please enter the number of items", Toast.LENGTH_SHORT).show();
                 } else {
                     int clothesCount = Integer.parseInt(clothesCountStr);
+                    // Create ShoppingActivityElement
+                    ShoppingActivityElement shoppingActivity = new ShoppingActivityElement(
+                            selectedDate,
+                            "Clothing",
+                            "", // No subcategory for clothing
+                            clothesCount,
+                            0
+                    );
+
+                    // Save to Firebase
+                    saveToFirebase(shoppingActivity, selectedDate);
+
                     Toast.makeText(ShoppingTracking.this, "Saved: " + clothesCount + " clothing items", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -73,7 +180,21 @@ public class ShoppingTracking extends AppCompatActivity {
                     Toast.makeText(ShoppingTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     int devicesCount = Integer.parseInt(devicesCountStr);
-                    Toast.makeText(ShoppingTracking.this, "Saved: " + devicesCount + " " + deviceType + " devices", Toast.LENGTH_SHORT).show();
+
+
+                    // Create ShoppingActivityElement
+                    ShoppingActivityElement shoppingActivity = new ShoppingActivityElement(
+                            selectedDate,
+                            "Electronics",
+                            deviceType,
+                            devicesCount,
+                            0
+                    );
+
+                    // Save to Firebase
+                    saveToFirebase(shoppingActivity, selectedDate);
+
+                    Toast.makeText(ShoppingTracking.this, "Saved: " + devicesCount + " " + deviceType + "(s)", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
             });
@@ -106,7 +227,21 @@ public class ShoppingTracking extends AppCompatActivity {
                     Toast.makeText(ShoppingTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     int purchasesCount = Integer.parseInt(purchasesCountStr);
-                    Toast.makeText(ShoppingTracking.this, "Saved: " + purchasesCount + " " + purchaseType + " purchases", Toast.LENGTH_SHORT).show();
+
+
+                    // Create ShoppingActivityElement
+                    ShoppingActivityElement shoppingActivity = new ShoppingActivityElement(
+                            selectedDate,
+                            "Miscellaneous",
+                            purchaseType,
+                            purchasesCount,
+                            0
+                    );
+
+                    // Save to Firebase
+                    saveToFirebase(shoppingActivity, selectedDate);
+
+                    Toast.makeText(ShoppingTracking.this, "Saved: " + purchasesCount + " " + purchaseType + "(s)", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
             });
@@ -142,6 +277,17 @@ public class ShoppingTracking extends AppCompatActivity {
                     Toast.makeText(ShoppingTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     double billAmount = Double.parseDouble(billAmountStr);
+
+                    // Create ShoppingActivityElement for energy bills
+                    ShoppingActivityElement shoppingActivity = new ShoppingActivityElement(
+                            selectedDate,
+                            billType,
+                            billAmount
+                    );
+
+                    // Save to Firebase
+                    saveToFirebase(shoppingActivity, selectedDate);
+
                     Toast.makeText(ShoppingTracking.this, "Saved: " + billType + " bill of $" + billAmount, Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
