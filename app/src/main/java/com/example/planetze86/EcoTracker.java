@@ -10,7 +10,10 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class EcoTracker extends AppCompatActivity {
 
@@ -26,7 +29,10 @@ public class EcoTracker extends AppCompatActivity {
         Button foodConsumptionButton = findViewById(R.id.food_consumption_button);
         Button shoppingButton = findViewById(R.id.shopping_button);
         Button dateSelectButton = findViewById(R.id.date_select_button);
+        Button viewActivitiesButton = findViewById(R.id.view_activities_button);
         TextView tvSelectedDate = findViewById(R.id.tv_selected_date);
+        final String selectedDateDefault = (new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())).format(new Date());
+        tvSelectedDate.setText(("Selected Date: " + selectedDateDefault));
         // Redirects the button to open eco gauge.
         menuButton = findViewById(R.id.planetze_menu_button);
         menuButton.setOnClickListener(new View.OnClickListener() {
@@ -40,15 +46,18 @@ public class EcoTracker extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(EcoTracker.this, TransportationTracking.class);
+                intent.putExtra("SELECTED_DATE",tvSelectedDate.getText().toString().replace("Selected Date: ",""));
                 startActivity(intent);
             }
         });
         foodConsumptionButton.setOnClickListener(v -> {
             Intent intent = new Intent(EcoTracker.this, FoodConsumptionTracking.class);
+            intent.putExtra("SELECTED_DATE",tvSelectedDate.getText().toString().replace("Selected Date: ",""));
             startActivity(intent);
         });
         shoppingButton.setOnClickListener(v -> {
             Intent intent = new Intent(EcoTracker.this, ShoppingTracking.class);
+            intent.putExtra("SELECTED_DATE",tvSelectedDate.getText().toString().replace("Selected Date: ",""));
             startActivity(intent);
         });
         dateSelectButton.setOnClickListener(v -> {
@@ -63,12 +72,21 @@ public class EcoTracker extends AppCompatActivity {
                     EcoTracker.this,
                     (view, selectedYear, selectedMonth, selectedDay) -> {
                         // Update the TextView with the selected date
-                        String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
-                        tvSelectedDate.setText("Selected Date: " + selectedDate);
+                        String chosenDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
+                        tvSelectedDate.setText("Selected Date: " + chosenDate);
                     },
                     year, month, day);
 
             datePickerDialog.show();
         });
+        viewActivitiesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EcoTracker.this, ViewEmissionActivitiesActivity.class);
+                intent.putExtra("SELECTED_DATE", tvSelectedDate.getText().toString().replace("Selected Date: ", ""));
+                startActivity(intent);
+            }
+        });
+
     }
 }
