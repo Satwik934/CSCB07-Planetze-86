@@ -5,7 +5,7 @@ public class FoodConsumptionActivityElement extends EmissionActivityElement {
     private int servings;    // Number of servings
 
     public FoodConsumptionActivityElement(String date, String mealType, int servings) {
-        super(date,"Food Consumption");
+        super(date,"FoodConsumption");
         this.mealType = mealType;
         this.servings = servings;
     }
