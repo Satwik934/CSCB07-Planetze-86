@@ -50,8 +50,8 @@ public class TransportationActivityElement extends EmissionActivityElement {
         String durDistNum = "Distance: ";
         String minKm = "km";
         switch (transportMode){
-            case "Public Transportation": durDistNum = "Duration: "; minKm = " min";break;
-            case "Flight": durDistNum = "Count: "; minKm = ""; break;
+            case "Public Transportation": {durDistNum = "Duration: "; minKm = " min";break;}
+            case "Flight": {durDistNum = "Count: "; minKm = ""; break;}
         }
 
         return "Mode: " + transportMode + ", " +

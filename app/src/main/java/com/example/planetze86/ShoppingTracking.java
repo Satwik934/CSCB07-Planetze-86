@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ShoppingTracking extends AppCompatActivity {
-    private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
+    /*private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
         String type = snapshot.child("type").getValue(String.class);
 
         if (type == null) {
@@ -98,9 +98,9 @@ public class ShoppingTracking extends AppCompatActivity {
         } else {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
-
+    FirebaseManager firebaseManager = new FirebaseManager();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +145,7 @@ public class ShoppingTracking extends AppCompatActivity {
                     );
 
                     // Save to Firebase
-                    saveToFirebase(shoppingActivity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate, "Shopping",shoppingActivity);
 
                     Toast.makeText(ShoppingTracking.this, "Saved: " + clothesCount + " clothing items", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
@@ -192,7 +192,7 @@ public class ShoppingTracking extends AppCompatActivity {
                     );
 
                     // Save to Firebase
-                    saveToFirebase(shoppingActivity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate, "Shopping",shoppingActivity);
 
                     Toast.makeText(ShoppingTracking.this, "Saved: " + devicesCount + " " + deviceType + "(s)", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
@@ -239,7 +239,7 @@ public class ShoppingTracking extends AppCompatActivity {
                     );
 
                     // Save to Firebase
-                    saveToFirebase(shoppingActivity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate, "Shopping",shoppingActivity);
 
                     Toast.makeText(ShoppingTracking.this, "Saved: " + purchasesCount + " " + purchaseType + "(s)", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
@@ -286,7 +286,7 @@ public class ShoppingTracking extends AppCompatActivity {
                     );
 
                     // Save to Firebase
-                    saveToFirebase(shoppingActivity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate, "Shopping",shoppingActivity);
 
                     Toast.makeText(ShoppingTracking.this, "Saved: " + billType + " bill of $" + billAmount, Toast.LENGTH_SHORT).show();
                     dialog.dismiss();

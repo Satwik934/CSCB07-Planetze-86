@@ -1,26 +1,37 @@
 package com.example.planetze86;
 
 public class ShoppingActivityElement extends EmissionActivityElement {
-    private String itemType;      // Main category (e.g., "Clothing", "Electronics", etc.)
-    private String subCategory;  // Subcategory for finer segregation (e.g., "Smartphone", "Laptop")
-    private int quantity;         // Number of items purchased
-    private double totalCost;     // Total cost calculated as quantity * costPerItem
+    private String itemType;     // Main category (e.g., "Clothing", "Electronics", etc.)
+    private String subCategory; // Subcategory for finer segregation (e.g., "Smartphone", "Laptop")
+    private int quantity;        // Number of items purchased
+    private double totalCost;    // Total cost in dollars
+    // Constructor for energy bills
 
+    public ShoppingActivityElement(String date, String billType, double totalCost) {
+
+        super(date, "Shopping");
+
+        this.itemType = "Energy Bill";
+
+        this.subCategory = billType;
+
+        this.quantity = 0; // Not applicable for bills
+
+        this.totalCost = totalCost;
+
+    }
     public ShoppingActivityElement(String date, String itemType, String subCategory, int quantity, double totalCost) {
         super(date, "Shopping");
         this.itemType = itemType;
         this.subCategory = subCategory;
         this.quantity = quantity;
-        this.totalCost = itemType.equals("Energy Bills") ? totalCost : 0;
-    }
-    // Constructor for energy bills
-    public ShoppingActivityElement(String date, String billType, double totalCost) {
-        super(date, "Shopping");
-        this.itemType = "Energy Bill";
-        this.subCategory = billType;
-        this.quantity = 0; // Not applicable for bills
         this.totalCost = totalCost;
     }
+
+    public ShoppingActivityElement() {
+        super(); // Required for Firebase
+    }
+
     // Getters and Setters
     public String getItemType() {
         return itemType;
@@ -63,7 +74,6 @@ public class ShoppingActivityElement extends EmissionActivityElement {
     public double getEmissions() {
         double emissionFactor = 0.0;
 
-        // Assign emission factors based on item type and subcategory
         if ("Electronics".equalsIgnoreCase(itemType)) {
             switch (subCategory) {
                 case "Smartphone":
