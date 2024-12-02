@@ -11,6 +11,7 @@ public class User {
     private String lastName;
     private boolean firstLogin;
     private HashMap<String, ArrayList<EmissionActivityElement>> EmissionActivityMegaLog;
+    private HashMap<String, Integer> habitLog;
 
     // Default constructor required for calls to DataSnapshot.getValue(User.class)
     public User() {}
@@ -63,4 +64,15 @@ public class User {
     public HashMap<String, ArrayList<EmissionActivityElement>> getEmissionActivityMegaLog(){
         return EmissionActivityMegaLog;
     }
+
+    public HashMap<String, Integer> getHabitLog() {
+        return habitLog;
+    }
+
+    public void setHabitLog(HashMap<String, Integer> habitLog) {
+        this.habitLog = habitLog;
+    }
+
+    // Method to add a habit and increment the logged days
+
 }
