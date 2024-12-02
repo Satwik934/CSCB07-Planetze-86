@@ -3,6 +3,7 @@ package com.example.planetze86;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,9 +11,14 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class EcoTracker extends AppCompatActivity {
@@ -30,6 +36,7 @@ public class EcoTracker extends AppCompatActivity {
         Button shoppingButton = findViewById(R.id.shopping_button);
         Button dateSelectButton = findViewById(R.id.date_select_button);
         Button viewActivitiesButton = findViewById(R.id.view_activities_button);
+        Button habitButton = findViewById(R.id.habitButton);
         TextView tvSelectedDate = findViewById(R.id.tv_selected_date);
         final String selectedDateDefault = (new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())).format(new Date());
         tvSelectedDate.setText(("Selected Date: " + selectedDateDefault));
@@ -60,6 +67,15 @@ public class EcoTracker extends AppCompatActivity {
             intent.putExtra("SELECTED_DATE",tvSelectedDate.getText().toString().replace("Selected Date: ",""));
             startActivity(intent);
         });
+
+        habitButton.setOnClickListener(v -> {
+
+            Intent intent = new Intent(EcoTracker.this, userHabit.class);
+
+            startActivity(intent);
+        });
+
+
         dateSelectButton.setOnClickListener(v -> {
             // Get the current date
             final Calendar calendar = Calendar.getInstance();
