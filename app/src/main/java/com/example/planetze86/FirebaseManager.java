@@ -191,6 +191,15 @@ public class FirebaseManager {
                 return null;
         }
     }
+    public DatabaseReference getUserRef() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            throw new IllegalStateException("User is not logged in");
+        }
+
+        String userId = currentUser.getUid();
+        return FirebaseDatabase.getInstance().getReference("users").child(userId);
+    }
 
 
 }
