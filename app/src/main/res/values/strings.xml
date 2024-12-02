@@ -57,4 +57,11 @@
         <item>Gas</item>
         <item>Water</item>
     </string-array>
+
+    <!-- Text Styles -->
+    <style name="HabitTextStyle">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>
