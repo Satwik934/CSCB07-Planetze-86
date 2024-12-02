@@ -3,5 +3,5 @@
     <corners android:radius="16dp" /> <!-- Rounded corners -->
     <solid android:color="#a9bcd0" /> <!-- Sky Blue background -->
     <stroke android:color="#a9bcd0" android:width="2dp" /> <!-- Border matching background -->
-    <padding android:left="10dp" android:right="10dp" android:top="5dp" android:bottom="5dp" />
+    <padding android:left="6dp" android:right="6dp" android:top="3dp" android:bottom="3dp" />
 </shape>

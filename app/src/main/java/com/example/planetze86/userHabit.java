@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.view.Gravity;
 
@@ -61,7 +64,7 @@ public class userHabit extends AppCompatActivity {
 
 
     private void populateYourHabitsSection(LinearLayout container) {
-        // Set the background color for this section
+        // Clear the container and set the background color
         container.removeAllViews();
 
         if (habitLog == null || habitLog.isEmpty()) {
@@ -69,8 +72,8 @@ public class userHabit extends AppCompatActivity {
             TextView emptyMessage = new TextView(this);
             emptyMessage.setText("No habits found. Start logging your habits!");
             emptyMessage.setPadding(16, 16, 16, 16);
-            emptyMessage.setGravity(Gravity.CENTER); // Center the text
-            emptyMessage.setBackgroundColor(Color.parseColor("#A9BCD0")); // Ensure color consistency
+            emptyMessage.setGravity(Gravity.CENTER);
+            emptyMessage.setBackgroundColor(Color.parseColor("#A9BCD0"));
             container.addView(emptyMessage);
         } else {
             for (String habitName : habitLog.keySet()) {
@@ -81,41 +84,63 @@ public class userHabit extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                layoutParams.setMargins(16, 24, 16, 24);
+                layoutParams.setMargins(8, 8, 8, 8); // Adjusted margins for spacing
                 habitLayout.setLayoutParams(layoutParams);
-                habitLayout.setPadding(16, 16, 16, 16);
+                habitLayout.setPadding(12, 32, 12, 32); // Adjusted padding for compact design
 
+                // TextView for habit details
                 TextView habitTextView = new TextView(this);
                 habitTextView.setText(habitName + " - Days logged: " + habitLog.get(habitName));
                 habitTextView.setCompoundDrawablesWithIntrinsicBounds(
                         R.drawable.check_circle, 0, 0, 0);
                 habitTextView.setCompoundDrawablePadding(16);
                 habitTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 2));
-                habitTextView.setMaxLines(2);
-                habitTextView.setEllipsize(null);
-                habitTextView.setTextSize(13);
+                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 8)); // Adjust weight to give habitTextView more space
+                habitTextView.setMaxLines(Integer.MAX_VALUE); // No limit on the number of lines
+                habitTextView.setEllipsize(null); // Ensure no ellipsis behavior
+                habitTextView.setTextSize(14);
+                habitTextView.setPadding(16, 16, 16, 16);
 
+                // Log button
                 Button logButton = new Button(this);
                 logButton.setText("Log");
+                logButton.setTextSize(12); // Smaller text size
+                logButton.setPadding(8, 4, 8, 4); // Smaller padding
                 logButton.setBackgroundResource(R.drawable.rounded_button_sky_blue);
+                LinearLayout.LayoutParams logButtonParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                logButtonParams.setMargins(0, 0, 0, 0); // Spacing between buttons
+                logButton.setLayoutParams(logButtonParams);
                 logButton.setOnClickListener(v -> {
                     logHabit(habitName);
                     updateHabitLogToFirebase();
                     populateYourHabitsSection(container);
                 });
 
+                // Remove button
                 Button removeButton = new Button(this);
                 removeButton.setText("Remove");
+                removeButton.setTextSize(12); // Smaller text size
+                removeButton.setPadding(0, 0, 0, 0); // Smaller padding
                 removeButton.setBackgroundResource(R.drawable.rounded_button_dark_blue);
                 removeButton.setCompoundDrawablesWithIntrinsicBounds(
                         R.drawable.trash_can, 0, 0, 0);
+                removeButton.setCompoundDrawablePadding(8); // Add some spacing for icon
+                LinearLayout.LayoutParams removeButtonParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                removeButtonParams.setMargins(8, 0, 8, 0); // Spacing between buttons
+                removeButton.setLayoutParams(removeButtonParams);
                 removeButton.setOnClickListener(v -> {
                     habitLog.remove(habitName);
                     updateHabitLogToFirebase();
                     populateYourHabitsSection(container);
                 });
 
+                // Add components to the habit layout
                 habitLayout.addView(habitTextView);
                 habitLayout.addView(logButton);
                 habitLayout.addView(removeButton);
@@ -123,103 +148,186 @@ public class userHabit extends AppCompatActivity {
             }
         }
 
-        // Add a button at the bottom
+        // Add button at the bottom
         Button addHabitsButton = new Button(this);
         addHabitsButton.setText("Add Habits");
+        addHabitsButton.setTextSize(14); // Smaller text size
         addHabitsButton.setBackgroundResource(R.drawable.rounded_button_teal);
         addHabitsButton.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.plus_box, 0, 0, 0);
-        addHabitsButton.setPadding(16, 16, 16, 16);
+        addHabitsButton.setCompoundDrawablePadding(12); // Spacing for icon
+        addHabitsButton.setPadding(16, 12, 16, 12); // Adjusted padding
         addHabitsButton.setOnClickListener(v -> populateAllActivitiesSection(container));
         container.addView(addHabitsButton);
     }
 
 
-
     private void populateAllActivitiesSection(LinearLayout container) {
-        // Set the background color for this section
         container.removeAllViews();
+        habits = readHabitsFromFile(this);
 
-        if (habits == null || habits.isEmpty()) {
-            // Add an empty message with padding
-            TextView emptyMessage = new TextView(this);
-            emptyMessage.setText("No activities found.");
-            emptyMessage.setPadding(16, 16, 16, 16);
-            emptyMessage.setGravity(Gravity.CENTER); // Center the text
-            emptyMessage.setBackgroundColor(Color.parseColor("#D8DBE2")); // Ensure color consistency
-            container.addView(emptyMessage);
-        } else {
-            for (int i = 0; i < habits.size(); i++) {
-                Habit habit = habits.get(i);
+        // Add filter dropdown (Spinner)
+        Spinner filterSpinner = new Spinner(this);
+        String[] filterOptions = {"All", "High Impact", "Medium Impact", "Low Impact","Transportation", "Energy","Food","Consumption"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filterOptions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterSpinner.setAdapter(adapter);
 
-                LinearLayout habitLayout = new LinearLayout(this);
-                habitLayout.setOrientation(LinearLayout.HORIZONTAL);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                layoutParams.setMargins(16, 24, 16, 24);
-                habitLayout.setLayoutParams(layoutParams);
-                habitLayout.setPadding(16, 16, 16, 16);
-
-                TextView habitTextView = new TextView(this);
-                habitTextView.setText(habit.getName() + " (" + habit.getCategory() + ") - Impact: " + habit.getImpact());
-                int iconRes;
-                switch (habit.getCategory().toLowerCase()) {
-                    case "transportation":
-                        iconRes = R.drawable.car;
-                        break;
-                    case "energy":
-                        iconRes = R.drawable.light_bulb;
-                        break;
-                    case "food":
-                        iconRes = R.drawable.apple;
-                        break;
-                    case "consumption":
-                        iconRes = R.drawable.shopping;
-                        break;
-                    default:
-                        iconRes = R.drawable.check_circle;
-                }
-                habitTextView.setCompoundDrawablesWithIntrinsicBounds(iconRes, 0, 0, 0);
-                habitTextView.setCompoundDrawablePadding(16);
-                habitTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 2));
-                habitTextView.setMaxLines(2);
-                habitTextView.setEllipsize(null);
-                habitTextView.setTextSize(13);
-
-                Button addButton = new Button(this);
-                addButton.setText("Add");
-                addButton.setBackgroundResource(R.drawable.rounded_button_sky_blue);
-                final int index = i;
-                addButton.setOnClickListener(v -> {
-                    logHabit(habit.getName());
-                    habitLog.put(habit.getName(), 1);
-                    habits.remove(index);
-                    updateHabitLogToFirebase();
-                    populateAllActivitiesSection(container);
-                });
-
-                habitLayout.addView(habitTextView);
-                habitLayout.addView(addButton);
-                container.addView(habitLayout);
+        // Add a listener to handle filter selection
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedFilter = filterOptions[position];
+                List<Habit> filteredHabits = applyFilter(selectedFilter);
+                displayHabits(container, filteredHabits);  // Refresh the displayed habits
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No filter applied, show all habits
+                displayHabits(container, habits);
+            }
+        });
+
+        container.addView(filterSpinner);
+
+        // Initially display all habits
+        displayHabits(container, habits);
+    }
+
+    // Helper method to apply the selected filter
+    private List<Habit> applyFilter(String filter) {
+        if (filter.equals("All")) {
+            return new ArrayList<>(habits);  // No filter, return all habits
         }
 
-        // Add a button at the bottom
+        List<Habit> filteredHabits = new ArrayList<>();
+        for (Habit habit : habits) {
+            switch (filter) {
+                case "High Impact":
+                    if (habit.getImpact().equals("High")) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
+                case "Low Impact":
+                    if (habit.getImpact().equals("Low")) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
+                case "Medium Impact":
+                    if (habit.getImpact().equals("Medium")) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
+                case "Transportation":
+                    if (habit.getCategory().equalsIgnoreCase("Transportation")) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
+                case "Energy":
+                    if (habit.getCategory().equalsIgnoreCase("Energy")) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
+                case "Food":
+                    if (habit.getCategory().equalsIgnoreCase("Food")) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
+                case "Consumption":
+                    if (habit.getCategory().equalsIgnoreCase("Consumption")) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
+            }
+        }
+        return filteredHabits;
+    }
+
+    // Helper method to display habits in the container
+    private void displayHabits(LinearLayout container, List<Habit> displayedHabits) {
+        container.removeViews(1, container.getChildCount() - 1);  // Keep the Spinner at the top
+
+
+        if (displayedHabits == null || displayedHabits.isEmpty()) {
+            TextView emptyMessage = new TextView(this);
+            emptyMessage.setText("No activities found for the selected filter.");
+            container.addView(emptyMessage);
+            return;
+        }
+
+        for (Habit habit : displayedHabits) {
+            if (habitLog.containsKey(habit.getName())) {
+                continue; // Skip this habit if it's already logged
+            }
+            // Create a container for each habit
+            LinearLayout habitLayout = new LinearLayout(this);
+            habitLayout.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(16, 24, 16, 24);
+            habitLayout.setLayoutParams(layoutParams);
+            habitLayout.setPadding(16, 16, 16, 16);
+
+            // Create the habit text with bold formatting
+
+
+
+            TextView habitTextView = new TextView(this);
+            habitTextView.setText(habit.getName() + " (" + habit.getCategory() + ") - Impact: " + habit.getImpact());
+            int iconRes;
+            switch (habit.getCategory().toLowerCase()) {
+                case "transportation":
+                    iconRes = R.drawable.car;
+                    break;
+                case "energy":
+                    iconRes = R.drawable.light_bulb;
+                    break;
+                case "food":
+                    iconRes = R.drawable.apple;
+                    break;
+                case "consumption":
+                    iconRes = R.drawable.shopping;
+                    break;
+                default:
+                    iconRes = R.drawable.check_circle;
+            }
+            habitTextView.setCompoundDrawablesWithIntrinsicBounds(iconRes, 0, 0, 0);
+            habitTextView.setCompoundDrawablePadding(16);
+            habitTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 2));
+            habitTextView.setMaxLines(2);
+            habitTextView.setEllipsize(null);
+            habitTextView.setTextSize(13);
+
+            Button addButton = new Button(this);
+            addButton.setText("Add");
+            addButton.setBackgroundResource(R.drawable.rounded_button_sky_blue);
+
+            addButton.setOnClickListener(v -> {
+                logHabit(habit.getName());
+                habitLog.put(habit.getName(), 1);
+                displayedHabits.remove(habit);
+                updateHabitLogToFirebase();
+                displayHabits(container, displayedHabits);
+            });
+
+            habitLayout.addView(habitTextView);
+            habitLayout.addView(addButton);
+            container.addView(habitLayout);
+        }
+
         Button returnButton = new Button(this);
         returnButton.setText("Return");
         returnButton.setBackgroundResource(R.drawable.rounded_button_teal);
         returnButton.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.backarrow, 0, 0, 0);
         returnButton.setPadding(16, 16, 16, 16);
-        returnButton.setOnClickListener(v -> populateYourHabitsSection(container));
+        returnButton.setOnClickListener(v -> fetchHabits());
         container.addView(returnButton);
     }
-
-
-
 
 
 
