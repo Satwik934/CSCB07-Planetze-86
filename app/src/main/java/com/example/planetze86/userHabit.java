@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.view.Gravity;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,148 +61,167 @@ public class userHabit extends AppCompatActivity {
 
 
     private void populateYourHabitsSection(LinearLayout container) {
+        // Set the background color for this section
         container.removeAllViews();
 
         if (habitLog == null || habitLog.isEmpty()) {
+            // Add an empty message with padding
             TextView emptyMessage = new TextView(this);
             emptyMessage.setText("No habits found. Start logging your habits!");
+            emptyMessage.setPadding(16, 16, 16, 16);
+            emptyMessage.setGravity(Gravity.CENTER); // Center the text
+            emptyMessage.setBackgroundColor(Color.parseColor("#A9BCD0")); // Ensure color consistency
             container.addView(emptyMessage);
         } else {
-            // Add all the habits
             for (String habitName : habitLog.keySet()) {
+                // Create a layout for each habit item
                 LinearLayout habitLayout = new LinearLayout(this);
                 habitLayout.setOrientation(LinearLayout.HORIZONTAL);
-                habitLayout.setPadding(8, 8, 8, 8);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                layoutParams.setMargins(16, 24, 16, 24);
+                habitLayout.setLayoutParams(layoutParams);
+                habitLayout.setPadding(16, 16, 16, 16);
 
                 TextView habitTextView = new TextView(this);
                 habitTextView.setText(habitName + " - Days logged: " + habitLog.get(habitName));
+                habitTextView.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.check_circle, 0, 0, 0);
+                habitTextView.setCompoundDrawablePadding(16);
                 habitTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 2));
+                habitTextView.setMaxLines(2);
+                habitTextView.setEllipsize(null);
+                habitTextView.setTextSize(13);
 
-                // Create the "Log" button and set a smaller size
                 Button logButton = new Button(this);
                 logButton.setText("Log");
-                logButton.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                logButton.setTextSize(8); // Smaller text size
-                logButton.setPadding(6, 2, 6, 2); // Smaller padding
-                logButton.setBackgroundColor(Color.parseColor("#a9bcd0")); // Optional: Custom button color
-
+                logButton.setBackgroundResource(R.drawable.rounded_button_sky_blue);
                 logButton.setOnClickListener(v -> {
                     logHabit(habitName);
                     updateHabitLogToFirebase();
-                    populateYourHabitsSection(container); // Refresh the list
+                    populateYourHabitsSection(container);
                 });
 
-                // Create the "Remove" button
                 Button removeButton = new Button(this);
                 removeButton.setText("Remove");
-                removeButton.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                removeButton.setTextSize(12); // Smaller text size
-                removeButton.setPadding(10, 5, 10, 5); // Smaller padding
-                removeButton.setBackgroundColor(Color.parseColor("#373f51")); // Optional: Custom button color for "Remove"
-
+                removeButton.setBackgroundResource(R.drawable.rounded_button_dark_blue);
+                removeButton.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.trash_can, 0, 0, 0);
                 removeButton.setOnClickListener(v -> {
-                    habitLog.remove(habitName);  // Remove the habit from the log
-                    updateHabitLogToFirebase();  // Update the habit log in Firebase
-                    populateYourHabitsSection(container); // Refresh the list
+                    habitLog.remove(habitName);
+                    updateHabitLogToFirebase();
+                    populateYourHabitsSection(container);
                 });
 
                 habitLayout.addView(habitTextView);
                 habitLayout.addView(logButton);
                 habitLayout.addView(removeButton);
-
                 container.addView(habitLayout);
             }
         }
 
-        // Always add the "Add Habits" button at the bottom
+        // Add a button at the bottom
         Button addHabitsButton = new Button(this);
         addHabitsButton.setText("Add Habits");
-        addHabitsButton.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        addHabitsButton.setTextSize(16); // Larger text size for visibility
-        addHabitsButton.setPadding(20, 10, 20, 10); // Padding for a better look
-        addHabitsButton.setBackgroundColor(Color.parseColor("#009999")); // Optional: Custom color for the button
-
-        addHabitsButton.setOnClickListener(v -> {
-            habits = readHabitsFromFile(this);
-            populateAllActivitiesSection(container); // Calls the function to populate all activities
-        });
-
-        container.addView(addHabitsButton); // Add the button to the container
+        addHabitsButton.setBackgroundResource(R.drawable.rounded_button_teal);
+        addHabitsButton.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.plus_box, 0, 0, 0);
+        addHabitsButton.setPadding(16, 16, 16, 16);
+        addHabitsButton.setOnClickListener(v -> populateAllActivitiesSection(container));
+        container.addView(addHabitsButton);
     }
+
 
 
     private void populateAllActivitiesSection(LinearLayout container) {
+        // Set the background color for this section
         container.removeAllViews();
 
         if (habits == null || habits.isEmpty()) {
+            // Add an empty message with padding
             TextView emptyMessage = new TextView(this);
             emptyMessage.setText("No activities found.");
+            emptyMessage.setPadding(16, 16, 16, 16);
+            emptyMessage.setGravity(Gravity.CENTER); // Center the text
+            emptyMessage.setBackgroundColor(Color.parseColor("#D8DBE2")); // Ensure color consistency
             container.addView(emptyMessage);
-            return;
-        }
+        } else {
+            for (int i = 0; i < habits.size(); i++) {
+                Habit habit = habits.get(i);
 
-        for (int i = 0; i < habits.size(); i++) {
-            Habit habit = habits.get(i);
+                LinearLayout habitLayout = new LinearLayout(this);
+                habitLayout.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                layoutParams.setMargins(16, 24, 16, 24);
+                habitLayout.setLayoutParams(layoutParams);
+                habitLayout.setPadding(16, 16, 16, 16);
 
-            // Check if the habit's name is already in the habitLog
-            if (habitLog.containsKey(habit.getName())) {
-                continue;  // Skip adding this habit to the list
+                TextView habitTextView = new TextView(this);
+                habitTextView.setText(habit.getName() + " (" + habit.getCategory() + ") - Impact: " + habit.getImpact());
+                int iconRes;
+                switch (habit.getCategory().toLowerCase()) {
+                    case "transportation":
+                        iconRes = R.drawable.car;
+                        break;
+                    case "energy":
+                        iconRes = R.drawable.light_bulb;
+                        break;
+                    case "food":
+                        iconRes = R.drawable.apple;
+                        break;
+                    case "consumption":
+                        iconRes = R.drawable.shopping;
+                        break;
+                    default:
+                        iconRes = R.drawable.check_circle;
+                }
+                habitTextView.setCompoundDrawablesWithIntrinsicBounds(iconRes, 0, 0, 0);
+                habitTextView.setCompoundDrawablePadding(16);
+                habitTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                        0, LinearLayout.LayoutParams.WRAP_CONTENT, 2));
+                habitTextView.setMaxLines(2);
+                habitTextView.setEllipsize(null);
+                habitTextView.setTextSize(13);
+
+                Button addButton = new Button(this);
+                addButton.setText("Add");
+                addButton.setBackgroundResource(R.drawable.rounded_button_sky_blue);
+                final int index = i;
+                addButton.setOnClickListener(v -> {
+                    logHabit(habit.getName());
+                    habitLog.put(habit.getName(), 1);
+                    habits.remove(index);
+                    updateHabitLogToFirebase();
+                    populateAllActivitiesSection(container);
+                });
+
+                habitLayout.addView(habitTextView);
+                habitLayout.addView(addButton);
+                container.addView(habitLayout);
             }
-
-            // Create a container for each habit
-            LinearLayout habitLayout = new LinearLayout(this);
-            habitLayout.setOrientation(LinearLayout.HORIZONTAL);
-            habitLayout.setPadding(8, 8, 8, 8);
-
-            // Create the habit text with bold formatting
-            String habitInfo = habit.getName() + " (" + habit.getCategory() + ") - Impact: " + habit.getImpact();
-            SpannableString styledText = new SpannableString(habitInfo);
-
-            // Make the habit name and impact bold
-            int habitNameEnd = habit.getName().length();
-            int impactStart = habitInfo.indexOf("Impact: ");
-            int impactEnd = habitInfo.length();
-
-            styledText.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, habitNameEnd, 0); // Bold habit name
-            styledText.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), impactStart, impactEnd, 0); // Bold impact text
-
-            TextView habitTextView = new TextView(this);
-            habitTextView.setText(styledText);
-            habitTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-            habitTextView.setTextSize(16);  // Increase the text size for better readability
-            habitTextView.setPadding(10, 5, 10, 5);  // Add padding for a more spaced-out look
-
-            // Button to log and remove the habit
-            Button logButton = new Button(this);
-            logButton.setText("Add");
-            logButton.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            logButton.setTextSize(14);  // Slightly larger text size for better visibility
-            logButton.setPadding(10, 5, 10, 5); // Padding for better button appearance
-            logButton.setBackgroundColor(Color.parseColor("#373f51"));  // Custom green color for button
-            logButton.setTextColor(Color.WHITE); // White text for contrast
-
-            int finalI = i;
-            logButton.setOnClickListener(v -> {
-                logHabit(habit.getName());  // Log the habit
-                habitLog.put(habit.getName(), 1);  // Mark the habit as logged (adding to habitLog)
-                habits.remove(finalI);  // Remove the habit from the list
-                updateHabitLogToFirebase();  // Update Firebase
-                populateAllActivitiesSection(container);  // Refresh the list
-                fetchHabits();  // Refresh user habits section
-            });
-
-            habitLayout.addView(habitTextView);
-            habitLayout.addView(logButton);
-
-            container.addView(habitLayout);
         }
+
+        // Add a button at the bottom
+        Button returnButton = new Button(this);
+        returnButton.setText("Return");
+        returnButton.setBackgroundResource(R.drawable.rounded_button_teal);
+        returnButton.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.backarrow, 0, 0, 0);
+        returnButton.setPadding(16, 16, 16, 16);
+        returnButton.setOnClickListener(v -> populateYourHabitsSection(container));
+        container.addView(returnButton);
     }
+
+
+
+
+
 
 
     private void updateHabitLogToFirebase() {
