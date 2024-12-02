@@ -1,75 +1,170 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlanetzeMenu">
+    android:background="@drawable/main_photo"
+    tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/planetze_menu_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="PLANETZE MENU"
-        android:textColor="#1B1B1E"
-        android:textSize="24sp"
-        android:textStyle="bold"
+    <!-- Logo -->
+
+    <!-- Eco Gauge Card -->
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="297dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="72dp"
+        android:src="@drawable/planet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Eco Gauge Button -->
-    <Button
-        android:id="@+id/eco_gauge_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#373F51"
-        android:text="Eco Gauge"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/planetze_menu_label"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/eco_gauge_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        app:cardBackgroundColor="#D8DBE2"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp" />
+        app:layout_constraintEnd_toStartOf="@id/eco_tracker_card"
+        app:layout_constraintWidth_percent="0.45"
+        app:layout_constraintHeight_percent="0.25">
 
-    <!-- Eco Balance Button -->
-    <Button
-        android:id="@+id/eco_balance_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#373F51"
-        android:text="Eco Balance"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/eco_gauge_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-    <!-- Eco Hub Button -->
-    <Button
-        android:id="@+id/eco_hub_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#373F51"
-        android:text="Eco Hub"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/eco_balance_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/speed" />
 
-    <!-- Eco Agent Button -->
-    <Button
-        android:id="@+id/annual_button"
-        android:layout_width="203dp"
-        android:layout_height="63dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#373F51"
-        android:text="Recalculate your Annual Emission"
-        android:textColor="#FFFFFF"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="ECO GAUGE"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="Visualize your journey towards a sustainable future with real-time progress tracking."
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Eco Tracker Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/eco_tracker_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        app:cardBackgroundColor="#D8DBE2"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintStart_toEndOf="@id/eco_gauge_card"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.45"
+        app:layout_constraintHeight_percent="0.25">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/footprint" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="ECO TRACKER"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="Monitor your daily activities and their impact on the planet."
+                android:textColor="@android:color/black"
+                android:textSize="17sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Recalculate Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/recalculate_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        app:cardBackgroundColor="#D8DBE2"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/eco_gauge_card"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eco_hub_button" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.85"
+        app:layout_constraintHeight_percent="0.2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/refresh" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="RECALCULATE YOUR ANNUAL EMISSION"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="Update your annual carbon footprint to reflect lifestyle changes."
+                android:textColor="@android:color/black"
+                android:textSize="17sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

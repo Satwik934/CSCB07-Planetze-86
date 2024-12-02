@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TransportationTracking extends AppCompatActivity {
-    private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
+    /*private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
         String type = snapshot.child("type").getValue(String.class);
 
         if (type == null) {
@@ -103,7 +103,7 @@ public class TransportationTracking extends AppCompatActivity {
         } else {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
 
     @Override
@@ -118,7 +118,7 @@ public class TransportationTracking extends AppCompatActivity {
         }
         setContentView(R.layout.activity_transportation_tracking);
 
-
+        FirebaseManager firebaseManager = new FirebaseManager();
 
         Button personalVehicleButton = findViewById(R.id.button_personal_vehicle);
         Button publicTransportationButton = findViewById(R.id.button_public_transportation);
@@ -160,13 +160,13 @@ public class TransportationTracking extends AppCompatActivity {
                 if (distance.isEmpty() || vehicleType.isEmpty()) {
                     Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    EmissionActivityElement activity = new TransportationActivityElement(
+                    TransportationActivityElement activity = new TransportationActivityElement(
                             selectedDate,
                             "Personal Vehicle",
                             Double.parseDouble(distance),
                             vehicleType);
 
-                    saveToFirebase(activity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate,"Transportation",activity);
                     dialog.dismiss();
                 }
             });
@@ -203,13 +203,13 @@ public class TransportationTracking extends AppCompatActivity {
                 if (travelTime.isEmpty() || transportType.isEmpty()) {
                     Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    EmissionActivityElement activity = new TransportationActivityElement(
+                    TransportationActivityElement activity = new TransportationActivityElement(
                             selectedDate,
-                            "Public Transport",
+                            "Public Transportation",
                             Double.parseDouble(travelTime),
                             transportType);
 
-                    saveToFirebase(activity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate,"Transportation",activity);
                     dialog.dismiss();
                 }
             });
@@ -237,13 +237,13 @@ public class TransportationTracking extends AppCompatActivity {
                 if (distance.isEmpty()) {
                     Toast.makeText(TransportationTracking.this, "Please enter the distance", Toast.LENGTH_SHORT).show();
                 } else {
-                    EmissionActivityElement activity = new TransportationActivityElement(
+                    TransportationActivityElement activity = new TransportationActivityElement(
                             selectedDate,
                             activityType,
                             Double.parseDouble(distance),
                             activityType);
 
-                    saveToFirebase(activity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate,"Transportation",activity);
                     dialog.dismiss();
                 }
             });
@@ -275,13 +275,13 @@ public class TransportationTracking extends AppCompatActivity {
                 if (flightNumber.isEmpty() || flightType.isEmpty()) {
                     Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    EmissionActivityElement activity = new TransportationActivityElement(
+                    TransportationActivityElement activity = new TransportationActivityElement(
                             selectedDate,
                             "Flight",
                             Double.parseDouble(flightNumber),
                             flightType);
 
-                    saveToFirebase(activity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate,"Transportation",activity);
                     dialog.dismiss();
                 }
             });
@@ -289,4 +289,5 @@ public class TransportationTracking extends AppCompatActivity {
             dialog.show();
         });
     }
+
 }
