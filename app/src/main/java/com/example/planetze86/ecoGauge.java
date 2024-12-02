@@ -1,6 +1,7 @@
 package com.example.planetze86;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.github.mikephil.charting.charts.LineChart;
@@ -13,7 +14,9 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -25,6 +28,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import java.util.Calendar;
 
 public class ecoGauge extends AppCompatActivity {
 
@@ -32,8 +44,12 @@ public class ecoGauge extends AppCompatActivity {
     private LineChart lineChart;
     private DatabaseReference databaseReference;
     private AnnualAnswers annualData;
-    private Button annualButton, monthlyButton, weeklyButton, dailyButton;
-    private TextView displayMessage;
+    private EmissionDataWrapper emission;
+    private Button annualButton, monthlyButton, weeklyButton, dailyButton, dateButton;
+    private TextView displayMessage, dateMessage;
+    private int chosenDay, chosenMonth, chosenYear;
+    private String chosenDate;
+    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +59,13 @@ public class ecoGauge extends AppCompatActivity {
         pieChart = findViewById(R.id.pie_chart);
 //        lineChart = findViewById(R.id.line_chart);
         displayMessage = findViewById(R.id.emissionMessage);
+        dateMessage = findViewById(R.id.dateMessage);
         annualButton = findViewById(R.id.annual_button);
         monthlyButton = findViewById(R.id.monthly_button);
         weeklyButton = findViewById(R.id.weekly_button);
         dailyButton = findViewById(R.id.daily_button);
+        dateButton = findViewById(R.id.date_button);
+        backButton = findViewById(R.id.backButton);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -54,24 +73,44 @@ public class ecoGauge extends AppCompatActivity {
             databaseReference = FirebaseDatabase.getInstance().getReference("users").child(UID);
             displayAnnualData(databaseReference); // default
 
-            annualButton.setOnClickListener(view -> {
-                displayAnnualData(databaseReference);
-            });
-            monthlyButton.setOnClickListener(view -> {
-                displayMonthlyData(databaseReference);
-            });
-            weeklyButton.setOnClickListener(view -> {
-                displayWeeklyData(databaseReference);
-            });
-            dailyButton.setOnClickListener(view -> {
-                displayDailyData(databaseReference);
-            });
+            annualButton.setOnClickListener(view -> displayAnnualData(databaseReference));
+            monthlyButton.setOnClickListener(view -> displayMonthlyData(databaseReference));
+            weeklyButton.setOnClickListener(view -> displayWeeklyData(databaseReference));
+            dailyButton.setOnClickListener(view -> displayDailyData(databaseReference));
 
         }
         else {
             Toast.makeText(this, "No user is logged in", Toast.LENGTH_LONG).show();
         }
 
+        dateButton.setOnClickListener(view -> showDatePickerDialog());
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ecoGauge.this, PlanetzeMenu.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        chosenYear = calendar.get(Calendar.YEAR);
+        chosenMonth = calendar.get(Calendar.MONTH);
+        chosenDay = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    chosenDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    storeSelectedDate();
+                }, chosenYear, chosenMonth, chosenDay);
+        datePickerDialog.show();
+    }
+
+    private void storeSelectedDate() {
+        dateMessage.setText(chosenDate);
+        Toast.makeText(this, "Date Selected: " + chosenDate, Toast.LENGTH_SHORT).show();
     }
 
     private void highlightSelectedButton(Button btn){
@@ -245,22 +284,21 @@ public class ecoGauge extends AppCompatActivity {
 
     private void createPieChart(float transportation, float housing, float food, float consumption){
         ArrayList<PieEntry> chartTitles = new ArrayList<>();
-        chartTitles.add(new PieEntry(transportation, "Transportation"));
-        chartTitles.add(new PieEntry(housing, "Housing"));
-        chartTitles.add(new PieEntry(food, "Food"));
-        chartTitles.add(new PieEntry(consumption, "Consumption"));
+        chartTitles.add(new PieEntry(transportation, "transportation"));
+        chartTitles.add(new PieEntry(housing, "housing"));
+        chartTitles.add(new PieEntry(food, "food"));
+        chartTitles.add(new PieEntry(consumption, "consumption"));
         PieDataSet dataStorage = new PieDataSet(chartTitles, "");
         dataStorage.setColors(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW);
         dataStorage.setSliceSpace(3f);
         PieData allData = new PieData(dataStorage);
         allData.setValueTextSize(8f);
-        allData.setValueTextColor(Color.WHITE);
+        allData.setValueTextColor(Color.BLACK);
         pieChart.setData(allData);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.TRANSPARENT);
-        pieChart.setCenterText("Annual Emissions Breakdown");
         pieChart.setCenterTextSize(18f);
         pieChart.animateY(1000);
     }
