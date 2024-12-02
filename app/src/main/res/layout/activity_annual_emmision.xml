@@ -1,82 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#d8dbe2">
+    android:background="#d8dbe2"
+    tools:context=".YourActivity">
 
-
-    <!-- Country Picker -->
-    <TextView
-        android:id="@+id/locationPrompt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Please specify your location"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#1b1b1e"
-    android:gravity="center"
-    android:layout_marginBottom="12dp"
-    android:visibility="visible" />
-
-    <com.hbb20.CountryCodePicker
-        android:id="@+id/countryPicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:ccp_showFlag="true"
-        app:ccp_showNameCode="false"
-        app:ccp_showFullName="true"
-        android:background="@drawable/country_picker_background"
-        android:padding="8dp"
-        android:layout_marginBottom="12dp"
-        android:visibility="visible" />
-
-    <Button
-        android:id="@+id/changeCountryButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Country"
-        android:textSize="16sp"
-        android:backgroundTint="#009999"
-        android:layout_gravity="center_horizontal"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        android:textColor="#1b1b1e" />
-
-    <!-- Question Text -->
-    <TextView
-        android:id="@+id/questionText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold|italic"
-        android:textColor="#1b1b1e"
-    android:padding="12dp"
-    android:gravity="center_horizontal"
-    android:layout_marginBottom="16dp" />
-
-    <!-- RadioGroup for Answer Options -->
-
-    <!-- Navigation Buttons -->
-    <RadioGroup
-        android:id="@+id/optionsGroup"
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="12dp"
-        android:divider="@android:color/darker_gray"
-        android:dividerPadding="10dp" />
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout"
+        android:padding="16dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <!-- Country Picker -->
+            <TextView
+                android:id="@+id/locationPrompt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Please specify your location"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#1b1b1e"
+                android:gravity="center"
+                android:layout_marginBottom="12dp"
+                android:visibility="visible" />
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/countryPicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ccp_showFlag="true"
+                app:ccp_showNameCode="false"
+                app:ccp_showFullName="true"
+                android:background="@drawable/country_picker_background"
+                android:padding="8dp"
+                android:layout_marginBottom="12dp"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/changeCountryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change Country"
+                android:textSize="16sp"
+                android:backgroundTint="#009999"
+                android:layout_gravity="center_horizontal"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                android:textColor="#1b1b1e" />
+
+            <!-- Question Text -->
+            <TextView
+                android:id="@+id/questionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold|italic"
+                android:textColor="#1b1b1e"
+                android:padding="12dp"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="16dp" />
+
+            <!-- RadioGroup for Answer Options -->
+            <RadioGroup
+                android:id="@+id/optionsGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:divider="@android:color/darker_gray"
+                android:dividerPadding="10dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Fixed Navigation Buttons -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/prevButton"
@@ -87,7 +101,8 @@
             android:text="Previous"
             android:textColor="#1b1b1e"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/nextButton"
@@ -98,6 +113,8 @@
             android:text="Next"
             android:textColor="#1b1b1e"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

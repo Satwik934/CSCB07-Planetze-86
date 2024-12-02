@@ -28,10 +28,9 @@ public class LoginActivityPresenter {
 
         model.loginUser(email, password, new LoginActivityModel.LoginCallback() {
             @Override
-            public void onSuccess(FirebaseUser user, boolean firstLogin) {
+            public void onSuccess( boolean firstLogin) {
                 if (firstLogin) {
                     goOnboarding();
-                    model.updateFirstLogin(user.getUid());
                 } else {
                     goEco();
                 }

@@ -19,7 +19,7 @@ public class LoginActivityModel {
     private final DatabaseReference databaseReference;
 
     public interface LoginCallback {
-        void onSuccess(FirebaseUser user, boolean firstLogin);
+        void onSuccess( boolean firstLogin);
         void onFailure(String errorMessage);
         void onEmailNotVerified();
     }
@@ -52,7 +52,7 @@ public class LoginActivityModel {
             if (task.isSuccessful() && task.getResult().exists()) {
                 DataSnapshot snapshot = task.getResult();
                 Boolean firstLogin = snapshot.child("firstLogin").getValue(Boolean.class);
-                callback.onSuccess(user, firstLogin != null && firstLogin);
+                callback.onSuccess( firstLogin != null && firstLogin);
             } else {
                 callback.onFailure("Failed to retrieve user data");
             }
@@ -60,8 +60,12 @@ public class LoginActivityModel {
     }
 
     // Update firstLogin field
-    public void updateFirstLogin(String uid) {
-        databaseReference.child(uid).child("firstLogin").setValue(false);
+    public void updateFirstLogin() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null){
+            String uid = user.getUid();
+            databaseReference.child(uid).child("firstLogin").setValue(false);
+        }
     }
     public void signOut(){
         mAuth.signOut();

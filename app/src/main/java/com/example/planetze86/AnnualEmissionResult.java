@@ -2,6 +2,7 @@ package com.example.planetze86;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class AnnualEmissionResult extends AppCompatActivity {
 
     // UI components
     private TextView totalFootprintValue, transportationValue, foodValue, housingValue, consumptionValue, comparisonText, globalComparisonText;
+    private TextView labelTransportation, labelFood, labelHousing, labelConsumption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,7 @@ public class AnnualEmissionResult extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser == null) {
-            // Handle user not logged in
-            finish(); // Close the activity
+            finish();
             return;
         }
 
@@ -49,9 +50,13 @@ public class AnnualEmissionResult extends AppCompatActivity {
         consumptionValue = findViewById(R.id.consumption_value);
         comparisonText = findViewById(R.id.comparison_text);
         globalComparisonText = findViewById(R.id.global_comparison_text);
+        LoginActivityModel model = new LoginActivityModel();
+
+
 
         // Fetch and display the data
         fetchAnnualAnswers(currentUser.getUid());
+        model.updateFirstLogin();
 
         // Set dashboard button click listener
         dashboard.setOnClickListener(v -> {
@@ -61,7 +66,6 @@ public class AnnualEmissionResult extends AppCompatActivity {
     }
 
     private void fetchAnnualAnswers(String userId) {
-        // Fetch data from Firebase
         databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -69,38 +73,52 @@ public class AnnualEmissionResult extends AppCompatActivity {
                 if (user != null && user.getAnnualAnswers() != null) {
                     AnnualAnswers annualAnswers = user.getAnnualAnswers();
 
-                    // Update the UI with the fetched data
-                    totalFootprintValue.setText(String.format("%s Tons CO2e", annualAnswers.getAnnualEmission()));
-                    transportationValue.setText(String.format("%s Tons CO2e", annualAnswers.getAnnualTransportation()));
-                    foodValue.setText(String.format("%s Tons CO2e", annualAnswers.getAnnualFood()));
-                    housingValue.setText(String.format("%s Tons CO2e", annualAnswers.getAnnualHousing()));
-                    consumptionValue.setText(String.format("%s Tons CO2e", annualAnswers.getAnnualConsumption()));
+                    // Ensure non-null and valid data
+                    float transportation = (float) annualAnswers.getAnnualTransportation();
+                    float food = (float) annualAnswers.getAnnualFood();
+                    float housing = (float) annualAnswers.getAnnualHousing();
+                    float consumption = (float) annualAnswers.getAnnualConsumption();
+                    float totalEmission = (float) annualAnswers.getAnnualEmission();
 
-                    if (annualAnswers.getAnnualCountryPercentage() > 0) {
-                        comparisonText.setText(String.format("Your footprint is %s%% above the national average for %s.",
-                                annualAnswers.getAnnualCountryPercentage(), annualAnswers.getCountry()));
-                    } else if (annualAnswers.getAnnualCountryPercentage() < 0) {
-                        int num = Math.abs((int) annualAnswers.getAnnualCountryPercentage());
-                        comparisonText.setText(String.format("Your footprint is %s%% below the national average for %s.",
-                                num, annualAnswers.getCountry()));
-                    }
+                    // Update TextViews
+                    transportationValue.setText(String.format("%s Tons CO2e", transportation));
+                    foodValue.setText(String.format("%s Tons CO2e", food));
+                    housingValue.setText(String.format("%s Tons CO2e", housing));
+                    consumptionValue.setText(String.format("%s Tons CO2e", consumption));
+                    totalFootprintValue.setText(String.format("%s Tons CO2e", totalEmission));
 
-                    if (annualAnswers.getAnnualGlobalPercentage() > 0) {
-                        globalComparisonText.setText(String.format("Your footprint is %s%% above the global emission target.",
-                                annualAnswers.getAnnualGlobalPercentage()));
-                    } else if (annualAnswers.getAnnualGlobalPercentage() < 0) {
-                        int num = Math.abs((int) annualAnswers.getAnnualGlobalPercentage());
-                        globalComparisonText.setText(String.format("Your footprint is %s%% below the global emission target.",
-                                num));
-                    }
+                    // Update branch labels on the static pie chart
+
+
+                    // Update Comparison and Benchmark TextViews
+                    comparisonText.setText(getComparisonText(annualAnswers));
+                    globalComparisonText.setText(getGlobalComparisonText(annualAnswers));
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Log the error
-                System.err.println("Error fetching data: " + databaseError.getMessage());
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("AnnualEmissionResult", "Database error: " + error.getMessage());
             }
         });
+    }
+
+
+
+    private String getComparisonText(AnnualAnswers annualAnswers) {
+        String country = annualAnswers.getCountry();
+        if (annualAnswers.getAnnualCountryPercentage() > 0) {
+            return String.format("Your footprint is %.2f%% above the national average for %s.", annualAnswers.getAnnualCountryPercentage(), country);
+        } else {
+            return String.format("Your footprint is %.2f%% below the national average for %s.", Math.abs(annualAnswers.getAnnualCountryPercentage()), country);
+        }
+    }
+
+    private String getGlobalComparisonText(AnnualAnswers annualAnswers) {
+        if (annualAnswers.getAnnualGlobalPercentage() > 0) {
+            return String.format("Your footprint is %.2f%% above the global emission target.", annualAnswers.getAnnualGlobalPercentage());
+        } else {
+            return String.format("Your footprint is %.2f%% below the global emission target.", Math.abs(annualAnswers.getAnnualGlobalPercentage()));
+        }
     }
 }

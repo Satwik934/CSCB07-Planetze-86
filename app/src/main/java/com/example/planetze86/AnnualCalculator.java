@@ -4,7 +4,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import android.content.Context;
 
 import org.apache.poi.ss.usermodel.*;
@@ -254,18 +255,22 @@ public class AnnualCalculator {
 
 
 
-    public double getCountryCompare(){
+    public double getCountryCompare() {
         countryCompare = readExcelCountry();
         double compareTo = getTotal();
-        double percentage = (compareTo/countryCompare  - 1)*100;
-        percentage = (double) Math.round(percentage * 100) / 100;
-        return percentage;
+        double percentage = (compareTo / countryCompare - 1) * 100;
+
+        // Round to 2 decimal places using BigDecimal
+        BigDecimal roundedPercentage = new BigDecimal(percentage).setScale(2, RoundingMode.HALF_UP);
+        return roundedPercentage.doubleValue();
     }
 
-    public double getGlobalCompare(){
+    public double getGlobalCompare() {
         double compareTo = getTotal();
-        double percentage = (compareTo/2  - 1)*100;
-        percentage = (double) Math.round(percentage * 100) / 100;
-        return percentage;
+        double percentage = (compareTo / 2 - 1) * 100;
+
+        // Round to 2 decimal places using BigDecimal
+        BigDecimal roundedPercentage = new BigDecimal(percentage).setScale(2, RoundingMode.HALF_UP);
+        return roundedPercentage.doubleValue();
     }
 }
