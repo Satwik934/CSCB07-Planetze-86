@@ -10,7 +10,6 @@ public class User {
     private String firstName;
     private String lastName;
     private boolean firstLogin;
-    private HashMap<String, ArrayList<EmissionActivityElement>> EmissionActivityMegaLog;
     private HashMap<String, Integer> habitLog;
 
     // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -28,41 +27,65 @@ public class User {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public boolean getFirstLogin() {
         return firstLogin;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 
     public AnnualAnswers getAnnualAnswers() {
         return AnnualAnswers;
     }
 
-    public ArrayList<EmissionActivityElement> getActivities(String date) {
-        if (EmissionActivityMegaLog == null) return null;
-        return EmissionActivityMegaLog.get(date);
+    public void setAnnualAnswers(AnnualAnswers annualAnswers) {
+        this.AnnualAnswers = annualAnswers;
     }
 
+    /**
+     * Calculates daily emissions dynamically by summing up emissions across all types for a given date.
+     * @param activitiesByDate The activities mapped by date and type from Firebase.
+     * @param date The date for which emissions are calculated.
+     * @return Total emissions for the specified date.
+     */
+    public double getDailyEmissions(HashMap<String, HashMap<String, ArrayList<Object>>> activitiesByDate, String date) {
+        double totalEmissions = 0.0;
 
-    public double getDailyEmissions(String date){
-        double total = 0.0;
-        for(EmissionActivityElement i : EmissionActivityMegaLog.get(date)){
-            total += i.getEmissions();
+        if (activitiesByDate == null || !activitiesByDate.containsKey(date)) {
+            return totalEmissions; // Return 0.0 if no data exists for the date
         }
-        return total;
-    }
 
-    public void setEmissionActivityMegaLog(HashMap<String, ArrayList<EmissionActivityElement>> emissionActivityMegaLog) {
-        EmissionActivityMegaLog = emissionActivityMegaLog;
-    }
-    public HashMap<String, ArrayList<EmissionActivityElement>> getEmissionActivityMegaLog(){
-        return EmissionActivityMegaLog;
+        HashMap<String, ArrayList<Object>> activitiesForDate = activitiesByDate.get(date);
+        for (ArrayList<Object> activities : activitiesForDate.values()) {
+            for (Object obj : activities) {
+                if (obj instanceof EmissionActivityElement) {
+                    totalEmissions += ((EmissionActivityElement) obj).getEmissions();
+                }
+            }
+        }
+
+        return totalEmissions;
     }
 
     public HashMap<String, Integer> getHabitLog() {
