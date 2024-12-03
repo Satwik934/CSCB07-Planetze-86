@@ -3,7 +3,6 @@ package com.example.planetze86;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,10 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class EcoTracker extends AppCompatActivity {
@@ -34,7 +31,13 @@ public class EcoTracker extends AppCompatActivity {
                 tvEmissions.setText(String.format(Locale.getDefault(), "%.2f kg CO2e", totalEmissions))
         );
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextView tvEmissions = findViewById(R.id.daily_emissions_value);
+        String date = ((TextView)findViewById(R.id.tv_selected_date)).getText().toString().replace("Selected Date: ","");
+        updateEmissions(tvEmissions,date);
+    }
     Button menuButton;
     Button transportationButton;
     @Override
@@ -57,7 +60,7 @@ public class EcoTracker extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
         // Initialize emissions for the default selected date
-        //updateEmissions(tvEmissions, tvSelectedDate.getText().toString().replace("Selected Date: ", ""), currentUser);
+        updateEmissions(tvEmissions, tvSelectedDate.getText().toString().replace("Selected Date: ", ""));
         // Redirects the button to open eco gauge.
         menuButton = findViewById(R.id.planetze_menu_button);
         menuButton.setOnClickListener(new View.OnClickListener() {

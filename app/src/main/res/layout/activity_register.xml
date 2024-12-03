@@ -58,9 +58,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Register"
-                android:textColor="#373F51"
+                android:textColor="#1b1b1e"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/registerSubtitle"
@@ -80,7 +80,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:hint="First Name"
-                android:backgroundTint="#A9BCD0"
+                android:textColor="#1b1b1e"
+                android:backgroundTint="#a9bcd0"
                 android:padding="12dp" />
 
             <EditText
@@ -89,7 +90,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:hint="Last Name"
-                android:backgroundTint="#A9BCD0"
+                android:textColor="#1b1b1e"
+                android:backgroundTint="#a9bcd0"
                 android:padding="12dp" />
 
             <EditText
@@ -98,8 +100,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:hint="Email"
+                android:textColor="#1b1b1e"
                 android:inputType="textEmailAddress"
-                android:backgroundTint="#A9BCD0"
+                android:backgroundTint="#a9bcd0"
                 android:padding="12dp" />
 
             <EditText
@@ -108,8 +111,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:hint="Password"
+                android:textColor="#1b1b1e"
                 android:inputType="textPassword"
-                android:backgroundTint="#A9BCD0"
+                android:backgroundTint="#a9bcd0"
                 android:padding="12dp" />
 
             <EditText
@@ -118,8 +122,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:hint="Confirm Password"
+                android:textColor="#1b1b1e"
                 android:inputType="textPassword"
-                android:backgroundTint="#A9BCD0"
+                android:backgroundTint="#a9bcd0"
                 android:padding="12dp" />
 
             <!-- Register Button -->
@@ -129,7 +134,7 @@
                 android:layout_height="48dp"
                 android:backgroundTint="#009999"
                 android:text="Register"
-                android:textColor="#FFFFFF"
+                android:textColor="#d8dbe2"
                 android:textStyle="bold" />
 
             <!-- Footer -->
