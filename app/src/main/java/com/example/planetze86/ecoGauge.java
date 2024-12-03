@@ -15,6 +15,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -38,26 +39,32 @@ import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 import java.util.Calendar;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+
 public class ecoGauge extends AppCompatActivity {
 
     private PieChart pieChart;
     private LineChart lineChart;
     private DatabaseReference databaseReference;
+    private String selectedTab = "Annual";
     private AnnualAnswers annualData;
-    private EmissionDataWrapper emission;
     private Button annualButton, monthlyButton, weeklyButton, dailyButton, dateButton;
     private TextView displayMessage, dateMessage;
-    private int chosenDay, chosenMonth, chosenYear;
     private String chosenDate;
-    private ImageButton backButton;
+    private TextView compareText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eco_gauge);
 
+        
         pieChart = findViewById(R.id.pie_chart);
 //        lineChart = findViewById(R.id.line_chart);
+        compareText = findViewById(R.id.compare_text);
         displayMessage = findViewById(R.id.emissionMessage);
         dateMessage = findViewById(R.id.dateMessage);
         annualButton = findViewById(R.id.annual_button);
@@ -65,7 +72,16 @@ public class ecoGauge extends AppCompatActivity {
         weeklyButton = findViewById(R.id.weekly_button);
         dailyButton = findViewById(R.id.daily_button);
         dateButton = findViewById(R.id.date_button);
-        backButton = findViewById(R.id.backButton);
+        ImageButton backButton = findViewById(R.id.backButton);
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        // Format the default date
+        chosenDate = day + "-" + (month + 1) + "-" + year;
+        dateMessage.setText("Date: " + chosenDate);
+
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -73,10 +89,22 @@ public class ecoGauge extends AppCompatActivity {
             databaseReference = FirebaseDatabase.getInstance().getReference("users").child(UID);
             displayAnnualData(databaseReference); // default
 
-            annualButton.setOnClickListener(view -> displayAnnualData(databaseReference));
-            monthlyButton.setOnClickListener(view -> displayMonthlyData(databaseReference));
-            weeklyButton.setOnClickListener(view -> displayWeeklyData(databaseReference));
-            dailyButton.setOnClickListener(view -> displayDailyData(databaseReference));
+            annualButton.setOnClickListener(view -> {
+                selectedTab = "Annual";
+                displayAnnualData(databaseReference);
+            });
+            monthlyButton.setOnClickListener(view -> {
+                selectedTab = "Monthly"; // Store selected tab
+                displayMonthlyData(databaseReference);
+            });
+            weeklyButton.setOnClickListener(view -> {
+                selectedTab = "Weekly"; // Store selected tab
+                displayWeeklyData(databaseReference);
+            });
+            dailyButton.setOnClickListener(view -> {
+                selectedTab = "Daily"; // Store selected tab
+                displayDailyData(databaseReference);
+            });
 
         }
         else {
@@ -85,6 +113,7 @@ public class ecoGauge extends AppCompatActivity {
 
         dateButton.setOnClickListener(view -> showDatePickerDialog());
 
+        // Back button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,37 +121,6 @@ public class ecoGauge extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-    }
-
-    private void showDatePickerDialog() {
-        Calendar calendar = Calendar.getInstance();
-        chosenYear = calendar.get(Calendar.YEAR);
-        chosenMonth = calendar.get(Calendar.MONTH);
-        chosenDay = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    chosenDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
-                    storeSelectedDate();
-                }, chosenYear, chosenMonth, chosenDay);
-        datePickerDialog.show();
-    }
-
-    private void storeSelectedDate() {
-        dateMessage.setText(chosenDate);
-        Toast.makeText(this, "Date Selected: " + chosenDate, Toast.LENGTH_SHORT).show();
-    }
-
-    private void highlightSelectedButton(Button btn){
-
-        // Remove every highlighted button
-        annualButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
-        monthlyButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
-        weeklyButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
-        dailyButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
-
-        // Highlight current button
-        btn.setBackgroundColor(Color.parseColor("#E0E1DD"));
 
     }
 
@@ -136,6 +134,8 @@ public class ecoGauge extends AppCompatActivity {
                     User user = snapshot.getValue(User.class);
                     if (user != null && user.getAnnualAnswers() != null) {
                         annualData = user.getAnnualAnswers();
+                        compareText.setText(String.format("The average annual footprint in %s is %.4f kg CO2e.",
+                                annualData.getCountry(), annualData.getCountryEmission()));
                         displayMessage.setText(String.format("You've emitted %.2f kg CO2e this year", annualData.getAnnualEmission()));
                         float transportation = (float) annualData.getAnnualTransportation();
                         float food = (float) annualData.getAnnualFood();
@@ -175,6 +175,8 @@ public class ecoGauge extends AppCompatActivity {
                     User user = snapshot.getValue(User.class);
                     if (user != null && user.getAnnualAnswers() != null) {
                         annualData = user.getAnnualAnswers();
+                        compareText.setText(String.format("The average monthly footprint in %s is %.4f kg CO2e.",
+                                annualData.getCountry(), (annualData.getCountryEmission() / 12.0)));
                         displayMessage.setText(String.format("You've emitted %.2f kg CO2e this year", annualData.getAnnualEmission()));
                         float transportation = (float) annualData.getAnnualTransportation();
                         float food = (float) annualData.getAnnualFood();
@@ -214,6 +216,8 @@ public class ecoGauge extends AppCompatActivity {
                     User user = snapshot.getValue(User.class);
                     if (user != null && user.getAnnualAnswers() != null) {
                         annualData = user.getAnnualAnswers();
+                        compareText.setText(String.format("The average weekly footprint in %s is %.4f kg CO2e.",
+                                annualData.getCountry(), ((annualData.getCountryEmission()) * 7.0 / 365.0)));
                         displayMessage.setText(String.format("You've emitted %.2f kg CO2e this year", annualData.getAnnualEmission()));
                         float transportation = (float) annualData.getAnnualTransportation();
                         float food = (float) annualData.getAnnualFood();
@@ -244,6 +248,7 @@ public class ecoGauge extends AppCompatActivity {
     }
 
     private void displayDailyData(DatabaseReference databaseReference){
+        EmissionDataWrapper data = new EmissionDataWrapper();
         highlightSelectedButton(dailyButton);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("DefaultLocale")
@@ -253,11 +258,13 @@ public class ecoGauge extends AppCompatActivity {
                     User user = snapshot.getValue(User.class);
                     if (user != null && user.getAnnualAnswers() != null) {
                         annualData = user.getAnnualAnswers();
+                        compareText.setText(String.format("The average daily footprint in %s is %.4f kg CO2e.",
+                                annualData.getCountry(), (annualData.getCountryEmission() / 365.0)));
                         displayMessage.setText(String.format("You've emitted %.2f kg CO2e this year", annualData.getAnnualEmission()));
-                        float transportation = (float) annualData.getAnnualTransportation();
-                        float food = (float) annualData.getAnnualFood();
+                        float transportation = (float) data.getCategoryEmissions(chosenDate, "Transportation");
+                        float food = (float) data.getCategoryEmissions(chosenDate, "FoodConsumption");
                         float housing = (float) annualData.getAnnualHousing();
-                        float consumption = (float) annualData.getAnnualConsumption();
+                        float consumption = (float) data.getCategoryEmissions(chosenDate, "Shopping");
                         createPieChart(transportation, food, housing, consumption);
                     }
                     else{
@@ -319,6 +326,52 @@ public class ecoGauge extends AppCompatActivity {
         lineChart.setData(allData);
         lineChart.getDescription().setEnabled(false);
         lineChart.animateX(1400);
+    }
+
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int chosenYear = calendar.get(Calendar.YEAR);
+        int chosenMonth = calendar.get(Calendar.MONTH);
+        int chosenDay = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    chosenDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
+                    storeSelectedDate();
+                }, chosenYear, chosenMonth, chosenDay);
+        datePickerDialog.show();
+    }
+
+    private void storeSelectedDate() {
+        dateMessage.setText(chosenDate);
+        Toast.makeText(this, "Date Selected: " + chosenDate, Toast.LENGTH_SHORT).show();
+        switch (selectedTab) {
+            case "Annual":
+                displayAnnualData(databaseReference);
+                break;
+            case "Monthly":
+                displayMonthlyData(databaseReference);
+                break;
+            case "Weekly":
+                displayWeeklyData(databaseReference);
+                break;
+            case "Daily":
+                displayDailyData(databaseReference);
+                break;
+        }
+    }
+
+    private void highlightSelectedButton(Button btn){
+
+        // Remove every highlighted button
+        annualButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
+        monthlyButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
+        weeklyButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
+        dailyButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
+
+        // Highlight current button
+        btn.setBackgroundColor(Color.parseColor("#E0E1DD"));
+
     }
 
 }
