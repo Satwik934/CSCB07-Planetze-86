@@ -8,6 +8,7 @@ public class AnnualAnswers {
     private double annualHousing;
     private double annualConsumption;
     private double annualCountryPercentage;
+    private double countryEmission;
 
     private double annualGlobalPercentage;
 
@@ -16,7 +17,7 @@ public class AnnualAnswers {
 
     // Parameterized constructor
     public AnnualAnswers(String country, double annualEmission, double annualTransportation, double annualFood,
-                         double annualHousing, double annualConsumption, double annualCountryPercentage,double annualGlobalPercentage) {
+                         double annualHousing, double annualConsumption, double annualCountryPercentage,double annualGlobalPercentage,double countryEmission) {
         this.country = country;
         this.annualEmission = annualEmission;
         this.annualTransportation = annualTransportation;
@@ -25,6 +26,7 @@ public class AnnualAnswers {
         this.annualConsumption = annualConsumption;
         this.annualCountryPercentage = annualCountryPercentage;
         this.annualGlobalPercentage = annualGlobalPercentage;
+        this.countryEmission = countryEmission;
     }
 
     // Getters for all fields (required for Firebase)
@@ -57,6 +59,10 @@ public class AnnualAnswers {
     }
     public double getAnnualGlobalPercentage() {
         return annualGlobalPercentage;
+    }
+
+    public double getCountryEmission() {
+        return countryEmission;
     }
 
 }

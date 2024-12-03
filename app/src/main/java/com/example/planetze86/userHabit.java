@@ -253,7 +253,7 @@ public class userHabit extends AppCompatActivity {
             TextView emptyMessage = new TextView(this);
             emptyMessage.setText("No activities found for the selected filter.");
             container.addView(emptyMessage);
-            return;
+
         }
 
         for (Habit habit : displayedHabits) {
