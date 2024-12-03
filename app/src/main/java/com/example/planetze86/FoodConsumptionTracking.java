@@ -102,12 +102,56 @@ public class FoodConsumptionTracking extends AppCompatActivity {
     }*/
 
     FirebaseManager firebaseManager = new FirebaseManager();
+    private boolean isProgrammaticClick = false;
+    FoodConsumptionActivityElement toBeEdited;
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        String activityId = getIntent().getStringExtra("ACTIVITY_ID");
+        String selectedDate = getIntent().getStringExtra("SELECTED_DATE_UPDATE");
+
+        if (activityId != null && selectedDate != null) {
+            firebaseManager.retrieveActivitiesByType(
+                    selectedDate,
+                    "FoodConsumption",
+                    FoodConsumptionActivityElement.class,
+                    activities -> {
+                        for (FoodConsumptionActivityElement activity : activities) {
+                            if (activity.getId().equals(activityId)) {
+                                Dialog dialog = new Dialog(this);
+                                prefillFields(dialog, activity);
+                                break;
+                            }
+                        }
+                    }
+            );
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
+        String activityId = getIntent().getStringExtra("ACTIVITY_ID");
+        String selectedDateUpdate = getIntent().getStringExtra("SELECTED_DATE_UPDATE");
+
+        if (activityId != null && selectedDate != null) {
+            firebaseManager.retrieveActivitiesByType(
+                    selectedDateUpdate,
+                    "FoodConsumption",
+                    FoodConsumptionActivityElement.class,
+                    activities -> {
+                        for (FoodConsumptionActivityElement activity : activities) {
+                            if (activity.getId().equals(activityId)) {
+                                Dialog dialog = new Dialog(this);
+                                prefillFields(dialog, activity);
+                                break;
+                            }
+                        }
+                    }
+            );
+        }
         if (selectedDate != null && !selectedDate.isEmpty()) {
             Toast.makeText(this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
         } else {
@@ -164,4 +208,38 @@ public class FoodConsumptionTracking extends AppCompatActivity {
             dialog.show();
         });
     }
+    private void prefillFields(Dialog dialog, FoodConsumptionActivityElement activity) {
+        toBeEdited = activity;
+
+        isProgrammaticClick = true;
+        findViewById(R.id.button_meal).performClick();
+        isProgrammaticClick = false;
+    }
+
+    private void prefillMealDialog(Dialog dialog, FoodConsumptionActivityElement activity) {
+        AutoCompleteTextView actvMealType = dialog.findViewById(R.id.actv_meal_type);
+        EditText etServings = dialog.findViewById(R.id.et_servings);
+        Button btnSaveFoodData = dialog.findViewById(R.id.btn_save_food_data);
+
+        actvMealType.setText(activity.getMealType(), false);
+        etServings.setText(String.valueOf(activity.getServings()));
+
+        btnSaveFoodData.setOnClickListener(view -> {
+            String mealType = actvMealType.getText().toString();
+            String servingsStr = etServings.getText().toString();
+
+            if (!mealType.isEmpty() && !servingsStr.isEmpty()) {
+                activity.setMealType(mealType);
+                activity.setServings(Integer.parseInt(servingsStr));
+                firebaseManager.updateActivity(activity.getDate(), "FoodConsumption", activity);
+                dialog.dismiss();
+                finish();
+            } else {
+                Toast.makeText(this, "Please fill the fields.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
 }
