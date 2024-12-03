@@ -167,7 +167,7 @@ public class TransportationTracking extends AppCompatActivity {
             );
         }
 
-        if (selectedDate != null && !selectedDate.isEmpty()) {
+        if (selectedDate != null && !selectedDate.isEmpty()&& selectedDateUpdate != null && !selectedDateUpdate.isEmpty()) {
             Toast.makeText(this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "No date selected", Toast.LENGTH_SHORT).show();

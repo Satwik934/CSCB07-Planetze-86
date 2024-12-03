@@ -152,7 +152,7 @@ public class FoodConsumptionTracking extends AppCompatActivity {
                     }
             );
         }
-        if (selectedDate != null && !selectedDate.isEmpty()) {
+        if (selectedDate != null && !selectedDate.isEmpty() && selectedDateUpdate != null && !selectedDateUpdate.isEmpty()) {
             Toast.makeText(this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "No date selected", Toast.LENGTH_SHORT).show();
@@ -167,45 +167,49 @@ public class FoodConsumptionTracking extends AppCompatActivity {
 
             // Set specific width and height for the dialog
             dialog.getWindow().setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.8), ViewGroup.LayoutParams.WRAP_CONTENT);
+            if(isProgrammaticClick){
+                prefillMealDialog(dialog,toBeEdited);
+            }
+            else {
+                // Access elements in the dialog
+                AutoCompleteTextView actvMealType = dialog.findViewById(R.id.actv_meal_type);
+                EditText etServings = dialog.findViewById(R.id.et_servings);
+                Button btnSaveFoodData = dialog.findViewById(R.id.btn_save_food_data);
 
-            // Access elements in the dialog
-            AutoCompleteTextView actvMealType = dialog.findViewById(R.id.actv_meal_type);
-            EditText etServings = dialog.findViewById(R.id.et_servings);
-            Button btnSaveFoodData = dialog.findViewById(R.id.btn_save_food_data);
+                // Populate dropdown for meal type
+                String[] mealTypes = {"Beef", "Pork", "Chicken", "Fish", "Plant-based"};
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(FoodConsumptionTracking.this, android.R.layout.simple_dropdown_item_1line, mealTypes);
+                actvMealType.setAdapter(adapter);
+                actvMealType.setOnClickListener(w -> actvMealType.showDropDown());
 
-            // Populate dropdown for meal type
-            String[] mealTypes = {"Beef", "Pork", "Chicken", "Fish", "Plant-based"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(FoodConsumptionTracking.this, android.R.layout.simple_dropdown_item_1line, mealTypes);
-            actvMealType.setAdapter(adapter);
-            actvMealType.setOnClickListener(w -> actvMealType.showDropDown());
+                // Set up the Save button logic
+                btnSaveFoodData.setOnClickListener(view -> {
+                    String mealType = actvMealType.getText().toString();
+                    String servingsStr = etServings.getText().toString();
 
-            // Set up the Save button logic
-            btnSaveFoodData.setOnClickListener(view -> {
-                String mealType = actvMealType.getText().toString();
-                String servingsStr = etServings.getText().toString();
+                    if (mealType.isEmpty() || servingsStr.isEmpty()) {
+                        Toast.makeText(FoodConsumptionTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    } else {
+                        int servings = Integer.parseInt(servingsStr);
 
-                if (mealType.isEmpty() || servingsStr.isEmpty()) {
-                    Toast.makeText(FoodConsumptionTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    int servings = Integer.parseInt(servingsStr);
+                        // Create FoodConsumptionActivityElement
+                        FoodConsumptionActivityElement foodActivity = new FoodConsumptionActivityElement(
+                                selectedDate,
+                                mealType,
+                                servings
+                        );
 
-                    // Create FoodConsumptionActivityElement
-                    FoodConsumptionActivityElement foodActivity = new FoodConsumptionActivityElement(
-                            selectedDate,
-                            mealType,
-                            servings
-                    );
+                        // Save to Firebase
+                        firebaseManager.saveActivity(selectedDate, "FoodConsumption", foodActivity);
 
-                    // Save to Firebase
-                    firebaseManager.saveActivity(selectedDate, "FoodConsumption", foodActivity);
+                        Toast.makeText(FoodConsumptionTracking.this, "Saved: " + mealType + ", Servings: " + servings, Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(FoodConsumptionTracking.this, "Saved: " + mealType + ", Servings: " + servings, Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
 
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.show();
+                dialog.show();
+            }
         });
     }
     private void prefillFields(Dialog dialog, FoodConsumptionActivityElement activity) {
