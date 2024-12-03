@@ -27,7 +27,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.time.Year;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 
 import android.app.DatePickerDialog;
 
@@ -150,133 +156,175 @@ public class ecoGauge extends AppCompatActivity {
         return totalEmissions;
     }
 
-    private void displayAnnualData(DatabaseReference databaseReference){
+    private void displayAnnualData(DatabaseReference databaseReference) {
+
         highlightSelectedButton(annualButton);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    User user = snapshot.getValue(User.class);
-                    if (user != null && user.getAnnualAnswers() != null) {
-                        annualData = user.getAnnualAnswers();
-                        compareText.setText(String.format("The average annual footprint in %s is %.4f kg CO2e.",
-                                annualData.getCountry(), annualData.getCountryEmission()));
-                        displayMessage.setText(String.format("You've emitted %.2f kg CO2e this year", annualData.getAnnualEmission()));
-                        float transportation = (float) annualData.getAnnualTransportation();
-                        float food = (float) annualData.getAnnualFood();
-                        float housing = (float) annualData.getAnnualHousing();
-                        float consumption = (float) annualData.getAnnualConsumption();
-                        createPieChart(transportation, food, housing, consumption);
-                    }
-                    else{
-                        float transportation = (float) 0.0;
-                        float food = (float) 0.0;
-                        float housing = (float) 0.0;
-                        float consumption = (float) 0.0;
-                        createPieChart(transportation, food, housing, consumption);
-                        Toast.makeText(ecoGauge.this, "No annual data found.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Log.e("ecoGauge", "Used data not found.");
-                    Toast.makeText(ecoGauge.this, "Failed to load data.", Toast.LENGTH_SHORT).show();
-                }
-            }
+        int selectedYear = Integer.parseInt(chosenDate.substring(6, 10));
+        int numOfDays = Year.isLeap(selectedYear) ? 366 : 365;
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("ecoGauge", "Database Error: " + error.getMessage());
-            }
-        });
+        // Using arrays to store since java won't let us modify local var.
+        // i.e. can't set transportation = 0 and than increment later.
+        final float[] transportation = {0};
+        final float[] food = {0};
+        final float[] housing = {0};
+        final float[] consumption = {0};
+        final int[] processedDays = {0};
+
+        for (int day = 1; day <= numOfDays; day++) {
+
+            // collects and writes date in format dd-mm-yyyy
+            LocalDate date = LocalDate.ofYearDay(selectedYear, day);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String currentDate = date.format(formatter);
+
+            databaseReference.child("activities").child(currentDate)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                transportation[0] += calculateEmissions(snapshot,
+                                        "Transportation");
+                                food[0] += calculateEmissions(snapshot, "FoodConsumption");
+                                consumption[0] += calculateEmissions(snapshot, "Shopping");
+                                housing[0] = (annualData != null ? (float)(annualData
+                                        .getAnnualHousing()) : 0);
+                            }
+                            processedDays[0]++;
+
+                            // Display only updates when all days of year are calculated.
+                            if (processedDays[0] == numOfDays) {
+                                updateDisplay(transportation[0], food[0], consumption[0],
+                                        housing[0], "year", (float) 1.0);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e("ecoGauge", "Database Error: " + error.getMessage());
+                        }
+                    });
+        }
     }
 
-    private void displayMonthlyData(DatabaseReference databaseReference){
+    private void displayMonthlyData(DatabaseReference databaseReference) {
+
         highlightSelectedButton(monthlyButton);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    User user = snapshot.getValue(User.class);
-                    if (user != null && user.getAnnualAnswers() != null) {
-                        annualData = user.getAnnualAnswers();
-                        compareText.setText(String.format("The average monthly footprint in %s is %.4f kg CO2e.",
-                                annualData.getCountry(), (annualData.getCountryEmission() / 12.0)));
-                        displayMessage.setText(String.format("You've emitted %.2f kg CO2e this year", annualData.getAnnualEmission()));
-                        float transportation = (float) annualData.getAnnualTransportation();
-                        float food = (float) annualData.getAnnualFood();
-                        float housing = (float) annualData.getAnnualHousing();
-                        float consumption = (float) annualData.getAnnualConsumption();
-                        createPieChart(transportation, food, housing, consumption);
-                    }
-                    else{
-                        float transportation = (float) 0.0;
-                        float food = (float) 0.0;
-                        float housing = (float) 0.0;
-                        float consumption = (float) 0.0;
-                        createPieChart(transportation, food, housing, consumption);
-                        Toast.makeText(ecoGauge.this, "No annual data found.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Log.e("ecoGauge", "Used data not found.");
-                    Toast.makeText(ecoGauge.this, "Failed to load data.", Toast.LENGTH_SHORT).show();
-                }
-            }
+        int selectedMonth = Integer.parseInt(chosenDate.substring(3, 5)); // Date format 00-00-0000
+        int selectedYear = Integer.parseInt(chosenDate.substring(6, 10));
+        int numOfDays = getDaysInMonth(chosenDate);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("ecoGauge", "Database Error: " + error.getMessage());
-            }
-        });
+        // Using arrays to store since java won't let us modify local var.
+        // i.e. can't set transportation = 0 and than increment later.
+        final float[] transportation = {0};
+        final float[] food = {0};
+        final float[] housing = {0};
+        final float[] consumption = {0};
+        final int[] processedDays = {0};
+
+        for (int day = 1; day <= numOfDays; day++) {
+            @SuppressLint("DefaultLocale") String currentDate = String.format("%02d-%02d-%04d",
+                    day, selectedMonth, selectedYear);
+            databaseReference.child("activities")
+                    .child(currentDate).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                transportation[0] += calculateEmissions(snapshot,
+                                        "Transportation");
+                                food[0] += calculateEmissions(snapshot, "FoodConsumption");
+                                consumption[0] += calculateEmissions(snapshot, "Shopping");
+                                housing[0] = (annualData != null ? (float)(annualData
+                                        .getAnnualHousing() / 12.0) : 0);
+                            }
+                            processedDays[0]++;
+
+                            // Display only updates when all days of month are calculated.
+                            if (processedDays[0] == numOfDays) {
+                                updateDisplay(transportation[0], food[0],
+                                        consumption[0], housing[0], "month", (float) 12.0);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e("ecoGauge", "Database Error: " + error.getMessage());
+                        }
+                    });
+        }
     }
 
-    private void displayWeeklyData(DatabaseReference databaseReference){
-        highlightSelectedButton(weeklyButton);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    User user = snapshot.getValue(User.class);
-                    if (user != null && user.getAnnualAnswers() != null) {
-                        annualData = user.getAnnualAnswers();
-                        compareText.setText(String.format("The average weekly footprint in %s is %.4f kg CO2e.",
-                                annualData.getCountry(), ((annualData.getCountryEmission()) * 7.0 / 365.0)));
-                        displayMessage.setText(String.format("You've emitted %.2f kg CO2e this year", annualData.getAnnualEmission()));
-                        float transportation = (float) annualData.getAnnualTransportation();
-                        float food = (float) annualData.getAnnualFood();
-                        float housing = (float) annualData.getAnnualHousing();
-                        float consumption = (float) annualData.getAnnualConsumption();
-                        createPieChart(transportation, food, housing, consumption);
-                    }
-                    else{
-                        float transportation = (float) 0.0;
-                        float food = (float) 0.0;
-                        float housing = (float) 0.0;
-                        float consumption = (float) 0.0;
-                        createPieChart(transportation, food, housing, consumption);
-                        Toast.makeText(ecoGauge.this, "No annual data found.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Log.e("ecoGauge", "Used data not found.");
-                    Toast.makeText(ecoGauge.this, "Failed to load data.", Toast.LENGTH_SHORT).show();
-                }
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    private void updateDisplay(float transportation, float food, float shopping,
+                               float housing, String zone, float divisor) {
+        if (transportation == 0 && food == 0 && shopping == 0 && housing == 0) {
+            createPieChart(0, 0, 0, 0);
+            displayMessage.setText(String.format("No data found for the selected %s.", zone));
+            compareText.setText("Data unavailable for comparison.");
+            Toast.makeText(ecoGauge.this,
+                    String.format("No data found for the selected %s.", zone), Toast.LENGTH_SHORT).show();
+        } else {
+            displayMessage.setText(String.format("You've emitted %.4f kg CO2e this %s on %s.",
+                    transportation + food + shopping + housing, zone, chosenDate));
+            createPieChart(transportation, housing, food, shopping);
+            if (annualData != null) {
+                compareText.setText(String.format("The average %s's footprint in %s is %.4f kg CO2e.",
+                        zone, annualData.getCountry(), (annualData.getCountryEmission() / divisor)));
             }
+        }
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("ecoGauge", "Database Error: " + error.getMessage());
-            }
-        });
+    private void displayWeeklyData(DatabaseReference databaseReference) {
+
+        highlightSelectedButton(weeklyButton);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate selectedDate = LocalDate.parse(chosenDate, formatter);
+
+        // Week starts sunday, ends saturday
+        LocalDate startOfWeek = selectedDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate endOfWeek = selectedDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+
+        // Using arrays to store since java won't let us modify local var.
+        // i.e. can't set transportation = 0 and than increment later.
+        final float[] transportation = {0};
+        final float[] food = {0};
+        final float[] housing = {0};
+        final float[] consumption = {0};
+        final int[] elapsedDays = {0};
+
+        // Using the date directly as a loop variable and adding one day at a time.
+        // If the date surpasses the last day of week (saturday) it will break the loop.
+        for (LocalDate date = startOfWeek; !date.isAfter(endOfWeek); date = date.plusDays(1)) {
+            final String currentDate = date.format(formatter); // Format like dd-mm-yyyy
+
+            databaseReference.child("activities").child(currentDate).addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                transportation[0] += calculateEmissions(snapshot, "Transportation");
+                                food[0] += calculateEmissions(snapshot, "FoodConsumption");
+                                consumption[0] += calculateEmissions(snapshot, "Shopping");
+                                housing[0] = (annualData != null ? (float)(annualData.getAnnualHousing() / 52.0) : 0);
+                            }
+                            elapsedDays[0]++;
+
+                            // Display only updates when all 7 days of week are calculated.
+                            if (elapsedDays[0] == 7) {
+                                updateDisplay(transportation[0], food[0], consumption[0], housing[0], "week", (float)52.0);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e("ecoGauge", "Database Error: " + error.getMessage());
+                        }
+                    });
+        }
     }
 
     private void displayDailyData(DatabaseReference databaseReference){
         highlightSelectedButton(dailyButton);
-        databaseReference.child("activities").child(chosenDate).addListenerForSingleValueEvent(
-                new ValueEventListener() {
+        databaseReference.child("activities").child(chosenDate)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint({"DefaultLocale", "SetTextI18n"})
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -284,18 +332,13 @@ public class ecoGauge extends AppCompatActivity {
                     float transportation = calculateEmissions(snapshot, "Transportation");
                     float food = calculateEmissions(snapshot, "FoodConsumption");
                     float shopping = calculateEmissions(snapshot, "Shopping");
-                    float housing = (annualData != null ? (float) (annualData.getAnnualHousing() / 365.0) : 0);
-                    if (annualData != null) {
-                        compareText.setText(String.format("The average daily footprint in %s is %.4f kg CO2e.",
-                                annualData.getCountry(), (annualData.getCountryEmission() / 365.0)));
-                    }
-                    displayMessage.setText(String.format("You've emitted %.4f kg CO2e on %s.",
-                            transportation + food + shopping + housing, chosenDate));
-                    createPieChart(transportation, housing, food, shopping);
+                    float housing = (annualData != null ? (float) (annualData
+                            .getAnnualHousing() / 365.0) : 0);
+                    updateDisplay(transportation, food, shopping,
+                            housing, "day", (float)365.0);
                 } else {
-                    createPieChart(0, 0, 0, 0);
-                    compareText.setText("Data unavailable for comparison.");
-                    Toast.makeText(ecoGauge.this, "No data found for the selected date.", Toast.LENGTH_SHORT).show();
+                    updateDisplay(0, 0, 0, 0,
+                            "day", (float)365.0);
                 }
             }
 
@@ -395,6 +438,15 @@ public class ecoGauge extends AppCompatActivity {
         // Highlight current button
         btn.setBackgroundColor(Color.parseColor("#E0E1DD"));
 
+    }
+
+    private int getDaysInMonth(String chosenDate) {
+        int day = Integer.parseInt(chosenDate.substring(0, 2));
+        int month = Integer.parseInt(chosenDate.substring(3, 5));
+        int year = Integer.parseInt(chosenDate.substring(6, 10));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day);
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH); // This returns # of days in month.
     }
 
 }
