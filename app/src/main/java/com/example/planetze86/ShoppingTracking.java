@@ -8,20 +8,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ShoppingTracking extends AppCompatActivity {
     /*private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
@@ -150,8 +138,8 @@ public class ShoppingTracking extends AppCompatActivity {
                     }
             );
         }
-        if (selectedDate != null && !selectedDate.isEmpty()) {
-            Toast.makeText(this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
+        if ((selectedDate != null && !selectedDate.isEmpty()) || (selectedDateUpdate != null && !selectedDateUpdate.isEmpty())) {
+            Toast.makeText(this, "Selected Date: " + ((selectedDate != null) ? selectedDate : selectedDateUpdate), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "No date selected", Toast.LENGTH_SHORT).show();
         }
@@ -377,7 +365,7 @@ public class ShoppingTracking extends AppCompatActivity {
             case "Miscellaneous":
                 findViewById(R.id.button_other_purchases).performClick();
                 break;
-            case "Energy Bills":
+            case "Energy Bill":
                 findViewById(R.id.button_energy_bills).performClick();
                 break;
 
@@ -466,7 +454,7 @@ public class ShoppingTracking extends AppCompatActivity {
         Button btnSaveBill = dialog.findViewById(R.id.btn_save_energy_bill);
 
         actvBillType.setText(activity.getSubCategory(), false);
-        etBillAmount.setText(String.valueOf(activity.getTotalCost()));
+        etBillAmount.setText(String.valueOf(activity.getCost()));
 
         btnSaveBill.setOnClickListener(view -> {
             String billType = actvBillType.getText().toString();
@@ -474,7 +462,7 @@ public class ShoppingTracking extends AppCompatActivity {
 
             if (!billType.isEmpty() && !billAmountStr.isEmpty()) {
                 activity.setSubCategory(billType);
-                activity.setTotalCost(Double.parseDouble(billAmountStr));
+                activity.setCost(Double.parseDouble(billAmountStr));
                 firebaseManager.updateActivity(activity.getDate(), "Shopping", activity);
                 dialog.dismiss();
                 finish();

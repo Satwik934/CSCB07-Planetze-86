@@ -1,3 +1,10 @@
+/**
+ * The 'PlanetzeMenu' class displays the main-menu activity of the Planetze app.
+ * It provides navigation to three key features:
+ * - Eco Gauge: Displays dashboard for emissions tracking and related data.
+ * - Eco Tracker: Tracks user activities and emissions.
+ * - Recalculate: Allows users to redo their onboarding process to adjust emission calculations.
+ */
 package com.example.planetze86;
 
 import android.content.Intent;
@@ -6,11 +13,22 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+/**
+ * Activity class for PlanetzeMenu feature.
+ * Displays a menu screen that provides users with options
+ * to navigate to ecoGauge, EcoTracker, or Recalculate activities.
+ */
 public class PlanetzeMenu extends AppCompatActivity {
 
     // Declare CardView variables for all three buttons
     CardView ecoGaugeCard, ecoTrackerCard, recalculateCard;
 
+    /**
+     * Starts initializing the PlanetzeMenu activity, setting up the UI and
+     * navigation functionality for the Eco Gauge, Eco Tracker, and Recalculate features.
+     *
+     * @param savedInstanceState A Bundle object containing the activity's previously saved state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

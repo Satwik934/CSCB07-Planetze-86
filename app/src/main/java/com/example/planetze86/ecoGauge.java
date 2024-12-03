@@ -34,11 +34,14 @@ import java.time.Year;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-
 import android.app.DatePickerDialog;
-
 import java.util.Calendar;
 
+/**
+ * Activity class for EcoGauge feature.
+ * Displays a dashboard that provides users with a clear snapshot
+ * of their carbon emissions and progress over time.
+ */
 public class ecoGauge extends AppCompatActivity {
 
     private PieChart pieChart;
@@ -54,6 +57,12 @@ public class ecoGauge extends AppCompatActivity {
     private String chosenDate;
     private TextView compareText;
 
+
+    /**
+     * Starts initializing the activity, sets up UI components, and loads default data.
+     *
+     * @param savedInstanceState Saved instance state for restoring activity state.
+     */
     @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +135,13 @@ public class ecoGauge extends AppCompatActivity {
 
     }
 
+    /**
+     * Fetches annual data based on the initial survey asked
+     * to users upon registering and sets annual
+     * data from the Firebase database.
+     *
+     * @param databaseReference Reference to the Firebase database for the current user.
+     */
     private void defineAnnualData(DatabaseReference databaseReference) {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -144,6 +160,14 @@ public class ecoGauge extends AppCompatActivity {
         });
     }
 
+    /**
+     * Calculates and returns the total emissions for a given category
+     * (i.e. "Transportation", "Housing", etc.) from a Firebase DataSnapshot.
+     *
+     * @param snapshot Snapshot of the data from Firebase.
+     * @param category Category of emissions (e.g., "Transportation", "Housing", etc.).
+     * @return Total emissions for the given category.
+     */
     private float calculateEmissions(DataSnapshot snapshot, String category) {
         float totalEmissions = 0;
         if (snapshot.child(category).exists()) {
@@ -159,6 +183,12 @@ public class ecoGauge extends AppCompatActivity {
         return totalEmissions;
     }
 
+    /**
+     * Displays the selected year's carbon footprint/ emission data as pie and
+     * line charts, and also compares it with user's average regional data.
+     *
+     * @param databaseReference Reference to the Firebase database for the current user.
+     */
     private void displayAnnualData(DatabaseReference databaseReference) {
 
         highlightSelectedButton(annualButton);
@@ -214,6 +244,12 @@ public class ecoGauge extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays the selected month's carbon footprint/ emission data as pie and line charts, and
+     * also compares it with user's average regional data.
+     *
+     * @param databaseReference Reference to the Firebase database for the current user.
+     */
     private void displayMonthlyData(DatabaseReference databaseReference) {
 
         highlightSelectedButton(monthlyButton);
@@ -266,6 +302,17 @@ public class ecoGauge extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the UI (text messages, charts, layout, colours, etc.) with calculated
+     * emissions data and comparison text.
+     *
+     * @param transportation Transportation emissions in kg CO2e.
+     * @param food           Food emissions in kg CO2e.
+     * @param shopping       Shopping emissions in kg CO2e.
+     * @param housing        Housing emissions in kg CO2e.
+     * @param zone           Time zone (e.g., "day", "week", "month", "year").
+     * @param divisor        Divisor for average calculation (e.g., 365 for annual average).
+     */
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     private void updateDisplay(float transportation, float food, float shopping,
                                float housing, String zone, float divisor) {
@@ -286,6 +333,12 @@ public class ecoGauge extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays the selected week's carbon footprint/ emission data as pie and
+     * line charts, and also compares it with user's average regional data.
+     *
+     * @param databaseReference Reference to the Firebase database for the current user.
+     */
     private void displayWeeklyData(DatabaseReference databaseReference) {
 
         highlightSelectedButton(weeklyButton);
@@ -344,6 +397,12 @@ public class ecoGauge extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays the selected day's carbon footprint/ emission data as pie and
+     * line charts, and also compares it with user's average regional data.
+     *
+     * @param databaseReference Reference to the Firebase database for the current user.
+     */
     private void displayDailyData(DatabaseReference databaseReference){
         highlightSelectedButton(dailyButton);
         databaseReference.child("activities").child(chosenDate)
@@ -377,6 +436,14 @@ public class ecoGauge extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Create and display pie chart with a breakdown of emissions by category.
+     *
+     * @param transportation Transportation emissions in kg CO2e.
+     * @param housing        Housing emissions in kg CO2e.
+     * @param food           Food emissions in kg CO2e.
+     * @param consumption    Shopping emissions in kg CO2e.
+     */
     private void createPieChart(float transportation, float housing, float food, float consumption){
         ArrayList<PieEntry> chartTitles = new ArrayList<>();
         if (transportation > 0) chartTitles.add(new PieEntry(transportation, "Transportation"));
@@ -409,6 +476,13 @@ public class ecoGauge extends AppCompatActivity {
         pieChart.invalidate();
     }
 
+    /**
+     * Create and display a line chart with the trend of CO2e emissions
+     * over time  (e.g., daily, weekly, monthly).
+     *
+     * @param dataPoints List of data points to plot on the line chart.
+     * @param label      Label/ tag for the line chart.
+     */
     private void createLineChart(List<Entry> dataPoints, String label) {
         LineDataSet dataSet = new LineDataSet(dataPoints, label);
         dataSet.setColor(Color.parseColor("#173E45"));
@@ -429,6 +503,9 @@ public class ecoGauge extends AppCompatActivity {
         lineChart.invalidate();
     }
 
+    /**
+     * Display a date picker dialog so that the user can select a date.
+     */
     private void showDatePickerDialog() {
         Calendar calendar = Calendar.getInstance();
         int chosenYear = calendar.get(Calendar.YEAR);
@@ -437,12 +514,15 @@ public class ecoGauge extends AppCompatActivity {
         @SuppressLint("DefaultLocale") DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     chosenDate = String.format("%02d-%02d-%04d", selectedDay, selectedMonth + 1, selectedYear);
-                    storeSelectedDate();
+                    saveSelectedDate();
                 }, chosenYear, chosenMonth, chosenDay);
         datePickerDialog.show();
     }
 
-    private void storeSelectedDate() {
+    /**
+     * Save the selected date and updates the UI with data for the selected time slot.
+     */
+    private void saveSelectedDate() {
         dateMessage.setText(chosenDate);
         Toast.makeText(this, "Date Selected: " + chosenDate, Toast.LENGTH_SHORT).show();
         switch (selectedTab) {
@@ -461,6 +541,12 @@ public class ecoGauge extends AppCompatActivity {
         }
     }
 
+    /**
+     * Highlights the selected button in the UI and resets the styling for others so
+     * that the current selection stands out from the rest.
+     *
+     * @param btn The button to highlight.
+     */
     private void highlightSelectedButton(Button btn){
 
         // Remove every highlighted button
@@ -474,6 +560,12 @@ public class ecoGauge extends AppCompatActivity {
 
     }
 
+    /**
+     * Calculates and returns the number of days in the selected date's month.
+     *
+     * @param chosenDate The selected date (in "dd-MM-yyyy" format).
+     * @return The number of days in the month.
+     */
     private int getDaysInMonth(String chosenDate) {
         int day = Integer.parseInt(chosenDate.substring(0, 2));
         int month = Integer.parseInt(chosenDate.substring(3, 5));
