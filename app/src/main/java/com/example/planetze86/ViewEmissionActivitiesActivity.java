@@ -1,5 +1,6 @@
 package com.example.planetze86;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -71,7 +72,8 @@ public class ViewEmissionActivitiesActivity extends AppCompatActivity {
                 .setItems(options, (dialog, which) -> {
                     if (which == 0) {
                         // Edit selected
-                        //editActivity(position);
+                        editActivity(position);
+
                     } else if (which == 1) {
                         // Delete selected
                         deleteActivity(position);
@@ -103,6 +105,31 @@ public class ViewEmissionActivitiesActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+    private void editActivity(int position) {
+        EmissionActivityElement selectedActivity = activityObjects.get(position);
+
+        Intent intent = null;
+
+        // Check the type of the selected activity and route to the correct tracking activity
+        if (selectedActivity instanceof TransportationActivityElement) {
+            intent = new Intent(ViewEmissionActivitiesActivity.this, TransportationTracking.class);
+        } else if (selectedActivity instanceof ShoppingActivityElement) {
+            intent = new Intent(ViewEmissionActivitiesActivity.this, ShoppingTracking.class);
+        } else if (selectedActivity instanceof FoodConsumptionActivityElement) {
+            intent = new Intent(ViewEmissionActivitiesActivity.this, FoodConsumptionTracking.class);
+        }
+
+        if (intent != null) {
+            // Pass the activity ID and type to the tracking activity for editing
+            intent.putExtra("ACTIVITY_ID", selectedActivity.getId());
+            intent.putExtra("ACTIVITY_TYPE", selectedActivity.getType());
+            intent.putExtra("SELECTED_DATE_UPDATE", selectedDate);
+            startActivity(intent);
+            fetchActivities();
+        } else {
+            Toast.makeText(this, "Edit not supported for this activity type.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

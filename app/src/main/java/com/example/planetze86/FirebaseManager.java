@@ -201,5 +201,18 @@ public class FirebaseManager {
         return FirebaseDatabase.getInstance().getReference("users").child(userId);
     }
 
+    public void updateActivity(String date, String type, EmissionActivityElement activity) {
+        // Reference the specific activity in the Firebase database
+        DatabaseReference activityRef = getUserRef()
+                .child("activities")
+                .child(date)
+                .child(type)
+                .child(activity.getId());
+
+        // Update the activity in Firebase
+        activityRef.setValue(activity)
+                .addOnSuccessListener(aVoid -> Log.d("FirebaseManager", "Activity updated successfully"))
+                .addOnFailureListener(e -> Log.e("FirebaseManager", "Failed to update activity: " + e.getMessage()));
+    }
 
 }
