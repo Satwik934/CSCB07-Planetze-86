@@ -67,8 +67,27 @@ public class ShoppingActivityElement extends EmissionActivityElement {
 
     @Override
     public String getDetails() {
-        return "Item: " + itemType + " (" + subCategory + "), Quantity: " + quantity + ", Total Cost: $" + cost;
+        switch (itemType.toLowerCase()) {
+            case "energy bill":
+                // For energy bills, show the type and total cost only
+                return "Energy Bill: " + subCategory + ", Total Cost: $" + cost;
+
+            case "clothing":
+                // For clothing, no subcategory, show quantity only
+                return "Clothing, Quantity: " + quantity;
+
+            case "electronics":
+                // For electronics, include subcategory and quantity
+                return "Electronics: " + subCategory + ", Quantity: " + quantity;
+
+            default:
+                // For other categories, show all applicable details
+                return "Item: " + itemType + (subCategory != null && !subCategory.isEmpty() ? " (" + subCategory + ")" : "")
+                        + ", Quantity: " + quantity;
+        }
     }
+
+
 
     @Override
     public double getEmissions() {
