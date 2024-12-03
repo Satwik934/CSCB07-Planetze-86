@@ -457,15 +457,15 @@ public class ecoGauge extends AppCompatActivity {
         }
         PieDataSet dataStorage = new PieDataSet(chartTitles, "");
         dataStorage.setColors(
-                Color.parseColor("#173E45"), // Transportation
-                Color.parseColor("#E4C141"), // Housing (Energy Use)
-                Color.parseColor("#EEA944"), // Food
-                Color.parseColor("#43A989")  // Shopping (Consumption)
+                Color.parseColor("#a9bcd0"), // Transportation
+                Color.parseColor("#1b1b1e"), // Housing (Energy Use)
+                Color.parseColor("#373f51"), // Food
+                Color.parseColor("#009999")  // Shopping (Consumption)
         );
         dataStorage.setSliceSpace(3f);
         PieData allData = new PieData(dataStorage);
         allData.setValueTextSize(8f);
-        allData.setValueTextColor(Color.BLACK);
+        allData.setValueTextColor(Color.parseColor("#d8dbe2"));
         pieChart.setData(allData);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
@@ -485,20 +485,20 @@ public class ecoGauge extends AppCompatActivity {
      */
     private void createLineChart(List<Entry> dataPoints, String label) {
         LineDataSet dataSet = new LineDataSet(dataPoints, label);
-        dataSet.setColor(Color.parseColor("#173E45"));
+        dataSet.setColor(Color.parseColor("#009999"));
         dataSet.setLineWidth(1f);
-        dataSet.setCircleColor(Color.parseColor("#EEA944"));
+        dataSet.setCircleColor(Color.parseColor("#a9bcd0"));
         dataSet.setCircleRadius(2f);
         dataSet.setValueTextSize(6f);
-        dataSet.setCircleHoleColor(Color.parseColor("#173E45"));
-        dataSet.setValueTextColor(Color.parseColor("#43A989"));
+        dataSet.setCircleHoleColor(Color.parseColor("#009999"));
+        dataSet.setValueTextColor(Color.parseColor("#d8dbe2"));
         LineData allData = new LineData(dataSet);
         lineChart.setData(allData);
         lineChart.getDescription().setEnabled(false);
-        lineChart.getXAxis().setTextColor(Color.parseColor("#173E45"));
-        lineChart.getAxisLeft().setTextColor(Color.parseColor("#173E45"));
+        lineChart.getXAxis().setTextColor(Color.parseColor("#373f51"));
+        lineChart.getAxisLeft().setTextColor(Color.parseColor("#373f51"));
         lineChart.getAxisRight().setEnabled(false);
-        lineChart.getLegend().setTextColor(Color.parseColor("#173E45"));
+        lineChart.getLegend().setTextColor(Color.parseColor("#1b1b1e"));
         lineChart.animateX(1400);
         lineChart.invalidate();
     }
@@ -556,7 +556,7 @@ public class ecoGauge extends AppCompatActivity {
         dailyButton.setBackgroundColor(Color.parseColor("#A9BCD0"));
 
         // Highlight current button
-        btn.setBackgroundColor(Color.parseColor("#E0E1DD"));
+        btn.setBackgroundColor(Color.parseColor("#009999"));
 
     }
 
