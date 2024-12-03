@@ -15,7 +15,6 @@ import com.github.mikephil.charting.data.PieEntry;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -29,20 +28,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+
 import android.app.DatePickerDialog;
-import android.widget.DatePicker;
+
 import java.util.Calendar;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
 
 public class ecoGauge extends AppCompatActivity {
 
@@ -56,6 +45,7 @@ public class ecoGauge extends AppCompatActivity {
     private String chosenDate;
     private TextView compareText;
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,14 +69,17 @@ public class ecoGauge extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         // Format the default date
-        chosenDate = day + "-" + (month + 1) + "-" + year;
-        dateMessage.setText("Date: " + chosenDate);
+        chosenDate = String.format("%02d-%02d-%04d", day, month + 1, year);
+        dateMessage.setText(chosenDate);
 
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String UID = currentUser.getUid();
             databaseReference = FirebaseDatabase.getInstance().getReference("users").child(UID);
+
+            defineAnnualData(databaseReference);
+
             displayAnnualData(databaseReference); // default
 
             annualButton.setOnClickListener(view -> {
@@ -122,6 +115,39 @@ public class ecoGauge extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void defineAnnualData(DatabaseReference databaseReference) {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        annualData = user.getAnnualAnswers();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Set annual data", "Database error: " + error.getMessage());
+            }
+        });
+    }
+
+    private float calculateEmissions(DataSnapshot snapshot, String category) {
+        float totalEmissions = 0;
+        if (snapshot.child(category).exists()) {
+            for (DataSnapshot activity : snapshot.child(category).getChildren()) {
+                if (activity.child("emissions").exists()) {
+                    Float value = activity.child("emissions").getValue(Float.class);
+                    if (value != null){
+                        totalEmissions += value;
+                    }
+                }
+            }
+        }
+        return totalEmissions;
     }
 
     private void displayAnnualData(DatabaseReference databaseReference){
@@ -248,37 +274,28 @@ public class ecoGauge extends AppCompatActivity {
     }
 
     private void displayDailyData(DatabaseReference databaseReference){
-        EmissionDataWrapper data = new EmissionDataWrapper();
         highlightSelectedButton(dailyButton);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("DefaultLocale")
+        databaseReference.child("activities").child(chosenDate).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "SetTextI18n"})
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    User user = snapshot.getValue(User.class);
-                    if (user != null && user.getAnnualAnswers() != null) {
-                        annualData = user.getAnnualAnswers();
+                if (snapshot.exists()) {
+                    float transportation = calculateEmissions(snapshot, "Transportation");
+                    float food = calculateEmissions(snapshot, "FoodConsumption");
+                    float shopping = calculateEmissions(snapshot, "Shopping");
+                    float housing = (annualData != null ? (float) (annualData.getAnnualHousing() / 365.0) : 0);
+                    if (annualData != null) {
                         compareText.setText(String.format("The average daily footprint in %s is %.4f kg CO2e.",
                                 annualData.getCountry(), (annualData.getCountryEmission() / 365.0)));
-                        displayMessage.setText(String.format("You've emitted %.2f kg CO2e this year", annualData.getAnnualEmission()));
-                        float transportation = (float) data.getCategoryEmissions(chosenDate, "Transportation");
-                        float food = (float) data.getCategoryEmissions(chosenDate, "FoodConsumption");
-                        float housing = (float) annualData.getAnnualHousing();
-                        float consumption = (float) data.getCategoryEmissions(chosenDate, "Shopping");
-                        createPieChart(transportation, food, housing, consumption);
                     }
-                    else{
-                        float transportation = (float) 0.0;
-                        float food = (float) 0.0;
-                        float housing = (float) 0.0;
-                        float consumption = (float) 0.0;
-                        createPieChart(transportation, food, housing, consumption);
-                        Toast.makeText(ecoGauge.this, "No annual data found.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Log.e("ecoGauge", "Used data not found.");
-                    Toast.makeText(ecoGauge.this, "Failed to load data.", Toast.LENGTH_SHORT).show();
+                    displayMessage.setText(String.format("You've emitted %.4f kg CO2e on %s.",
+                            transportation + food + shopping + housing, chosenDate));
+                    createPieChart(transportation, housing, food, shopping);
+                } else {
+                    createPieChart(0, 0, 0, 0);
+                    compareText.setText("Data unavailable for comparison.");
+                    Toast.makeText(ecoGauge.this, "No data found for the selected date.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -291,10 +308,15 @@ public class ecoGauge extends AppCompatActivity {
 
     private void createPieChart(float transportation, float housing, float food, float consumption){
         ArrayList<PieEntry> chartTitles = new ArrayList<>();
-        chartTitles.add(new PieEntry(transportation, "transportation"));
-        chartTitles.add(new PieEntry(housing, "housing"));
-        chartTitles.add(new PieEntry(food, "food"));
-        chartTitles.add(new PieEntry(consumption, "consumption"));
+        if (transportation > 0) chartTitles.add(new PieEntry(transportation, "Transportation"));
+        if (housing > 0) chartTitles.add(new PieEntry(housing, "Energy Use"));
+        if (food > 0) chartTitles.add(new PieEntry(food, "Food"));
+        if (consumption > 0) chartTitles.add(new PieEntry(consumption, "Shopping"));
+        if (chartTitles.isEmpty()) {
+            pieChart.clear();
+            pieChart.setNoDataText("No data to display.");
+            return;
+        }
         PieDataSet dataStorage = new PieDataSet(chartTitles, "");
         dataStorage.setColors(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW);
         dataStorage.setSliceSpace(3f);
@@ -308,6 +330,7 @@ public class ecoGauge extends AppCompatActivity {
         pieChart.setHoleColor(Color.TRANSPARENT);
         pieChart.setCenterTextSize(18f);
         pieChart.animateY(1000);
+        pieChart.invalidate();
     }
 
     private void createLineChart(float transportation, float housing, float food, float consumption){
@@ -334,9 +357,9 @@ public class ecoGauge extends AppCompatActivity {
         int chosenYear = calendar.get(Calendar.YEAR);
         int chosenMonth = calendar.get(Calendar.MONTH);
         int chosenDay = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+        @SuppressLint("DefaultLocale") DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
-                    chosenDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
+                    chosenDate = String.format("%02d-%02d-%04d", selectedDay, selectedMonth + 1, selectedYear);
                     storeSelectedDate();
                 }, chosenYear, chosenMonth, chosenDay);
         datePickerDialog.show();
