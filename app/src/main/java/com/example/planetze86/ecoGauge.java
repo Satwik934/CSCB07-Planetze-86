@@ -46,7 +46,10 @@ public class ecoGauge extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String selectedTab = "Annual";
     private AnnualAnswers annualData;
-    private Button annualButton, monthlyButton, weeklyButton, dailyButton, dateButton;
+    private Button annualButton;
+    private Button monthlyButton;
+    private Button weeklyButton;
+    private Button dailyButton;
     private TextView displayMessage, dateMessage;
     private String chosenDate;
     private TextView compareText;
@@ -67,7 +70,7 @@ public class ecoGauge extends AppCompatActivity {
         monthlyButton = findViewById(R.id.monthly_button);
         weeklyButton = findViewById(R.id.weekly_button);
         dailyButton = findViewById(R.id.daily_button);
-        dateButton = findViewById(R.id.date_button);
+        Button dateButton = findViewById(R.id.date_button);
         ImageButton backButton = findViewById(R.id.backButton);
 
         Calendar calendar = Calendar.getInstance();
