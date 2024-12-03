@@ -18,6 +18,7 @@ import android.view.Gravity;
 
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -41,6 +42,7 @@ import java.util.List;
 
 public class userHabit extends AppCompatActivity {
     List<Habit> habits;
+    String[] suggested = {""};
     HashMap<String, Integer> habitLog;
 
 
@@ -55,7 +57,9 @@ public class userHabit extends AppCompatActivity {
         habits = readHabitsFromFile(this);
 
         habitLog = new HashMap<>();
+        getSuggested();
         fetchHabits();
+
 
 
     }
@@ -168,7 +172,7 @@ public class userHabit extends AppCompatActivity {
 
         // Add filter dropdown (Spinner)
         Spinner filterSpinner = new Spinner(this);
-        String[] filterOptions = {"All", "High Impact", "Medium Impact", "Low Impact","Transportation", "Energy","Food","Consumption"};
+        String[] filterOptions = {"All","Suggested", "High Impact", "Medium Impact", "Low Impact","Transportation", "Energy","Food","Consumption"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filterOptions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(adapter);
@@ -204,6 +208,11 @@ public class userHabit extends AppCompatActivity {
         List<Habit> filteredHabits = new ArrayList<>();
         for (Habit habit : habits) {
             switch (filter) {
+                case "Suggested":
+                    if (habit.getCategory().equalsIgnoreCase(suggested[0])) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
                 case "High Impact":
                     if (habit.getImpact().equals("High")) {
                         filteredHabits.add(habit);
@@ -460,6 +469,64 @@ public class userHabit extends AppCompatActivity {
 
         // Fetch the latest habit log from Firebase when the user returns to the activity
         fetchHabits();
+    }
+
+
+
+    private void getSuggested(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            Log.e("getSuggested", "No user is signed in");
+        }
+
+        String userId = auth.getCurrentUser().getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference("users");
+
+        databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null && user.getAnnualAnswers() != null) {
+                    AnnualAnswers annualAnswers = user.getAnnualAnswers();
+
+                    // Ensure non-null and valid data
+                    float transportation = (float) annualAnswers.getAnnualTransportation();
+                    float food = (float) annualAnswers.getAnnualFood();
+                    float housing = (float) annualAnswers.getAnnualHousing();
+                    float consumption = (float) annualAnswers.getAnnualConsumption();
+
+
+                    // Update TextViews
+                    float maxEmission = 0;
+                    if (transportation > maxEmission) {
+                        maxEmission = transportation;
+                        suggested[0] = "Transportation";
+                    }
+                    if (food > maxEmission) {
+                        maxEmission = food;
+                        suggested[0] = "Food";
+                    }
+                    if (housing > maxEmission) {
+                        maxEmission = housing;
+                        suggested[0] = "Energy";
+                    }
+                    if (consumption > maxEmission) {
+                        maxEmission = consumption;
+                        suggested[0] = "Consumption";
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("AnnualEmissionResult", "Database error: " + error.getMessage());
+            }
+        });
+
+
+
     }
 
 
