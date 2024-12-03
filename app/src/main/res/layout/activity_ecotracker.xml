@@ -5,21 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#d8dbe2"
+    android:background="#E8F5E9"
     tools:context=".EcoTracker">
 
     <!-- Header: Eco Tracker -->
     <TextView
         android:id="@+id/daily_emissions_label"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="ECO TRACKER"
-        android:textSize="32sp"
-        android:textStyle="bold|italic"
-        android:textColor="#1b1b1e"
-        android:background="@drawable/fancy_buttons_2"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#1B1B1E"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,16 +25,15 @@
     <!-- Box: Total CO2e Emissions for the Current Day -->
     <TextView
         android:id="@+id/total_emissions_box"
-        android:layout_width="400dp"
-        android:layout_height="90dp"
+        android:layout_width="351dp"
+        android:layout_height="56dp"
         android:layout_marginTop="20dp"
-        android:background="#d8dbe2"
+        android:background="#D8DBE2"
         android:gravity="center"
         android:padding="10dp"
         android:text="Total CO2e emissions for the current day is"
         android:textColor="#1B1B1E"
-        android:textStyle="italic"
-        android:textSize="22sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/daily_emissions_label" />
@@ -45,36 +41,81 @@
     <!-- Daily Emissions Value -->
     <TextView
         android:id="@+id/daily_emissions_value"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/fancy_buttons_2"
-        android:gravity="center"
-        android:backgroundTint="#a9bcd0"
-        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="0.00 kg CO2e"
-        android:textColor="#1b1b1e"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="#4CAF50"
+        app:layout_constraintTop_toBottomOf="@id/total_emissions_box"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/total_emissions_box" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp" />
 
-    <!-- Select Date Button -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/date_select_button"
+    <!-- Transportation Button -->
+    <Button
+        android:id="@+id/transportation_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:background="@drawable/fancy_buttons"
-        android:text="Select Date"
+        android:backgroundTint="#373F51"
+        android:text="Transportation"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/daily_emissions_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp" />
+
+    <!-- Food Consumption Button -->
+    <Button
+        android:id="@+id/food_consumption_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Food Consumption"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/transportation_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp" />
+
+    <!-- Shopping Button -->
+    <Button
+        android:id="@+id/shopping_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Shopping &amp; Energy Bills"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/food_consumption_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/planetze_menu_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="204dp"
+        android:backgroundTint="#373F51"
+        android:text="Planetze Menu"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_select_button" />
+
+    <!-- Select Date Button -->
+    <Button
+        android:id="@+id/date_select_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#373F51"
+        android:text="Select Date"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/shopping_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"/>
 
     <!-- TextView to display the selected date -->
     <TextView
@@ -82,103 +123,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Selected Date:"
-        android:textSize="20sp"
-        android:textColor="#1b1b1e"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
+        android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@id/date_select_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Transportation Button -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/transportation_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:background="@drawable/fancy_buttons"
-        android:text="Transportation"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tv_selected_date"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp" />
-
-    <!-- Food Consumption Button -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/food_consumption_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:background="@drawable/fancy_buttons"
-        android:text="Food Consumption"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/transportation_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
-
-    <!-- Shopping Button -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/shopping_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:background="@drawable/fancy_buttons"
-        android:text="Shopping &amp; Energy Bills"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/food_consumption_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="16dp" />
 
     <!-- View Activities Button -->
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/view_activities_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:background="@drawable/fancy_buttons"
+        android:backgroundTint="#373F51"
         android:text="View Activities"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/shopping_button"
+        app:layout_constraintTop_toBottomOf="@id/tv_selected_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"/>
 
-    <!-- View Habit Button -->
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/habitButton"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/fancy_buttons"
-        android:text="View Habit"
+        android:backgroundTint="#373F51"
+        android:text="View Habits"
         android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/view_activities_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
-    <!-- Planetze Menu Button -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/planetze_menu_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/fancy_buttons"
-        android:text="Planetze Menu"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/habitButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
