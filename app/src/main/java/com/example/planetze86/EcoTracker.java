@@ -105,12 +105,12 @@ public class EcoTracker extends AppCompatActivity {
             DatePickerDialog datePickerDialog = new DatePickerDialog(
                     EcoTracker.this,
                     (view, selectedYear, selectedMonth, selectedDay) -> {
-                        // Update the TextView with the selected date
-                        String chosenDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
+                        // Format the chosen date to ensure leading zeros
+                        String chosenDate = String.format(Locale.getDefault(), "%02d-%02d-%d", selectedDay, selectedMonth + 1, selectedYear);
                         tvSelectedDate.setText("Selected Date: " + chosenDate);
+
                         // Update emissions for the newly selected date
                         updateEmissions(tvEmissions, chosenDate);
-
 
                         // Update the real-time listener for the new date
                         addRealTimeListener(tvEmissions, chosenDate);
@@ -119,6 +119,7 @@ public class EcoTracker extends AppCompatActivity {
 
             datePickerDialog.show();
         });
+
         viewActivitiesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
