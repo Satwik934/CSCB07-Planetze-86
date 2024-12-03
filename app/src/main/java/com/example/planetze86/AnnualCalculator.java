@@ -74,6 +74,8 @@ public class AnnualCalculator {
 
         return food/1000;
     }
+
+    //Extracts value from excel file using row and index
     private double readExcel(int rowIndex,int colIndex) {
         try {
             // Load the .xlsx file from the raw folder
@@ -202,7 +204,7 @@ public class AnnualCalculator {
 
 
 
-
+   //extracts country emission from excel file
     private double readExcelCountry() {
         try {
             // Load the .xlsx file from the raw folder

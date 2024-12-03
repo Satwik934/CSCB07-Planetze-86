@@ -279,14 +279,10 @@ public class userHabit extends AppCompatActivity {
             layoutParams.setMargins(16, 24, 16, 24);
             habitLayout.setLayoutParams(layoutParams);
             habitLayout.setPadding(16, 16, 16, 16);
-
-            // Create the habit text with bold formatting
-
-
-
             TextView habitTextView = new TextView(this);
             habitTextView.setText(habit.getName() + " (" + habit.getCategory() + ") - Impact: " + habit.getImpact());
             int iconRes;
+            //add icons
             switch (habit.getCategory().toLowerCase()) {
                 case "transportation":
                     iconRes = R.drawable.car;
@@ -314,7 +310,7 @@ public class userHabit extends AppCompatActivity {
             Button addButton = new Button(this);
             addButton.setText("Add");
             addButton.setBackgroundResource(R.drawable.rounded_button_sky_blue);
-
+            //button for logging habits
             addButton.setOnClickListener(v -> {
                 logHabit(habit.getName());
                 habitLog.put(habit.getName(), 1);
@@ -340,7 +336,7 @@ public class userHabit extends AppCompatActivity {
 
 
 
-
+    //updates user habits in firebase
     private void updateHabitLogToFirebase() {
         // Get the current user's UID from FirebaseAuth
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -358,7 +354,7 @@ public class userHabit extends AppCompatActivity {
             }
         });
     }
-
+    //to populate habits list from habit text file in raw resource
     private List<Habit> readHabitsFromFile(Context context) {
         List<Habit> habits = new ArrayList<>();
 
@@ -409,6 +405,7 @@ public class userHabit extends AppCompatActivity {
         return habits;
     }
 
+    //to add habits to user habits
     public void logHabit(String habitName) {
         if (habitLog.containsKey(habitName)) {
             habitLog.put(habitName, habitLog.get(habitName) + 1); // Increment the logged days
@@ -417,7 +414,7 @@ public class userHabit extends AppCompatActivity {
         }
 
     }
-
+    //to fetch user habits from firebase
     public void fetchHabits() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
@@ -472,7 +469,7 @@ public class userHabit extends AppCompatActivity {
     }
 
 
-
+   //to set suggested category to the one with most emissions
     private void getSuggested(){
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
