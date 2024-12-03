@@ -27,9 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.List;
 import java.time.Year;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -62,7 +62,7 @@ public class ecoGauge extends AppCompatActivity {
 
         
         pieChart = findViewById(R.id.pie_chart);
-//        lineChart = findViewById(R.id.line_chart);
+        lineChart = findViewById(R.id.line_chart);
         compareText = findViewById(R.id.compare_text);
         displayMessage = findViewById(R.id.emissionMessage);
         dateMessage = findViewById(R.id.dateMessage);
@@ -172,13 +172,14 @@ public class ecoGauge extends AppCompatActivity {
         final float[] housing = {0};
         final float[] consumption = {0};
         final int[] processedDays = {0};
+        final List<Entry> chartPoints = new ArrayList<>();
 
         for (int day = 1; day <= numOfDays; day++) {
-
             // collects and writes date in format dd-mm-yyyy
             LocalDate date = LocalDate.ofYearDay(selectedYear, day);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String currentDate = date.format(formatter);
+            final int currDay = day;
 
             databaseReference.child("activities").child(currentDate)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -193,11 +194,15 @@ public class ecoGauge extends AppCompatActivity {
                                         .getAnnualHousing()) : 0);
                             }
                             processedDays[0]++;
+                            float dayTotalEmission = transportation[0] + food[0]
+                                    + consumption[0] + housing[0];
+                            chartPoints.add(new Entry(currDay, dayTotalEmission));
 
                             // Display only updates when all days of year are calculated.
                             if (processedDays[0] == numOfDays) {
                                 updateDisplay(transportation[0], food[0], consumption[0],
                                         housing[0], "year", (float) 1.0);
+                                createLineChart(chartPoints, "Annual Emissions Trend");
                             }
                         }
 
@@ -223,10 +228,12 @@ public class ecoGauge extends AppCompatActivity {
         final float[] housing = {0};
         final float[] consumption = {0};
         final int[] processedDays = {0};
+        final List<Entry> chartPoints = new ArrayList<>();
 
         for (int day = 1; day <= numOfDays; day++) {
             @SuppressLint("DefaultLocale") String currentDate = String.format("%02d-%02d-%04d",
                     day, selectedMonth, selectedYear);
+            final int currDay = day;
             databaseReference.child("activities")
                     .child(currentDate).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -241,10 +248,14 @@ public class ecoGauge extends AppCompatActivity {
                             }
                             processedDays[0]++;
 
+                            float dayTotalEmissions = transportation[0] + food[0] + consumption[0] + housing[0];
+                            chartPoints.add(new Entry(currDay, dayTotalEmissions));
+
                             // Display only updates when all days of month are calculated.
                             if (processedDays[0] == numOfDays) {
                                 updateDisplay(transportation[0], food[0],
                                         consumption[0], housing[0], "month", (float) 12.0);
+                                createLineChart(chartPoints, "Monthly Emissions Trend");
                             }
                         }
                         @Override
@@ -292,27 +303,36 @@ public class ecoGauge extends AppCompatActivity {
         final float[] housing = {0};
         final float[] consumption = {0};
         final int[] elapsedDays = {0};
+        final List<Entry> lineChartDataPoints = new ArrayList<>();
 
         // Using the date directly as a loop variable and adding one day at a time.
         // If the date surpasses the last day of week (saturday) it will break the loop.
         for (LocalDate date = startOfWeek; !date.isAfter(endOfWeek); date = date.plusDays(1)) {
             final String currentDate = date.format(formatter); // Format like dd-mm-yyyy
-
+            final int currDay = date.getDayOfMonth();
             databaseReference.child("activities").child(currentDate).addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
-                                transportation[0] += calculateEmissions(snapshot, "Transportation");
+                                transportation[0] += calculateEmissions(snapshot,
+                                        "Transportation");
                                 food[0] += calculateEmissions(snapshot, "FoodConsumption");
                                 consumption[0] += calculateEmissions(snapshot, "Shopping");
-                                housing[0] = (annualData != null ? (float)(annualData.getAnnualHousing() / 52.0) : 0);
+                                housing[0] = (annualData != null ? (float)(annualData
+                                        .getAnnualHousing() / 52.0) : 0);
                             }
                             elapsedDays[0]++;
 
+                            float dayTotalEmissions = transportation[0] + food[0]
+                                    + consumption[0] + housing[0];
+                            lineChartDataPoints.add(new Entry(currDay, dayTotalEmissions));
+
                             // Display only updates when all 7 days of week are calculated.
                             if (elapsedDays[0] == 7) {
-                                updateDisplay(transportation[0], food[0], consumption[0], housing[0], "week", (float)52.0);
+                                updateDisplay(transportation[0], food[0], consumption[0],
+                                        housing[0], "week", (float)52.0);
+                                createLineChart(lineChartDataPoints,"Weekly Emissions Trend");
                             }
                         }
 
@@ -331,18 +351,23 @@ public class ecoGauge extends AppCompatActivity {
             @SuppressLint({"DefaultLocale", "SetTextI18n"})
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                float totalEmissions = 0;
                 if (snapshot.exists()) {
                     float transportation = calculateEmissions(snapshot, "Transportation");
                     float food = calculateEmissions(snapshot, "FoodConsumption");
                     float shopping = calculateEmissions(snapshot, "Shopping");
                     float housing = (annualData != null ? (float) (annualData
                             .getAnnualHousing() / 365.0) : 0);
+                    totalEmissions = transportation + food + shopping + housing;
                     updateDisplay(transportation, food, shopping,
                             housing, "day", (float)365.0);
                 } else {
                     updateDisplay(0, 0, 0, 0,
                             "day", (float)365.0);
                 }
+                List<Entry> dataPoints = new ArrayList<>();
+                dataPoints.add(new Entry(1, totalEmissions));
+                createLineChart(dataPoints, "Daily Emissions Trend");
             }
 
             @Override
@@ -364,7 +389,12 @@ public class ecoGauge extends AppCompatActivity {
             return;
         }
         PieDataSet dataStorage = new PieDataSet(chartTitles, "");
-        dataStorage.setColors(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW);
+        dataStorage.setColors(
+                Color.parseColor("#173E45"), // Transportation
+                Color.parseColor("#E4C141"), // Housing (Energy Use)
+                Color.parseColor("#EEA944"), // Food
+                Color.parseColor("#43A989")  // Shopping (Consumption)
+        );
         dataStorage.setSliceSpace(3f);
         PieData allData = new PieData(dataStorage);
         allData.setValueTextSize(8f);
@@ -379,24 +409,25 @@ public class ecoGauge extends AppCompatActivity {
         pieChart.invalidate();
     }
 
-    private void createLineChart(float transportation, float housing, float food, float consumption){
-        ArrayList<Entry> lineTitles = new ArrayList<>();
-        lineTitles.add(new Entry(0, transportation));
-        lineTitles.add(new Entry(1, housing));
-        lineTitles.add(new Entry(2, food));
-        lineTitles.add(new Entry(3, consumption));
-        LineDataSet dataStorage = new LineDataSet(lineTitles, "Emissions Trend");
-        dataStorage.setColor(Color.BLUE);
-        dataStorage.setLineWidth(2f);
-        dataStorage.setCircleColor(Color.RED);
-        dataStorage.setCircleRadius(5f);
-        dataStorage.setValueTextSize(10f);
-        LineData allData = new LineData(dataStorage);
+    private void createLineChart(List<Entry> dataPoints, String label) {
+        LineDataSet dataSet = new LineDataSet(dataPoints, label);
+        dataSet.setColor(Color.parseColor("#173E45"));
+        dataSet.setLineWidth(1f);
+        dataSet.setCircleColor(Color.parseColor("#EEA944"));
+        dataSet.setCircleRadius(2f);
+        dataSet.setValueTextSize(6f);
+        dataSet.setCircleHoleColor(Color.parseColor("#173E45"));
+        dataSet.setValueTextColor(Color.parseColor("#43A989"));
+        LineData allData = new LineData(dataSet);
         lineChart.setData(allData);
         lineChart.getDescription().setEnabled(false);
+        lineChart.getXAxis().setTextColor(Color.parseColor("#173E45"));
+        lineChart.getAxisLeft().setTextColor(Color.parseColor("#173E45"));
+        lineChart.getAxisRight().setEnabled(false);
+        lineChart.getLegend().setTextColor(Color.parseColor("#173E45"));
         lineChart.animateX(1400);
+        lineChart.invalidate();
     }
-
 
     private void showDatePickerDialog() {
         Calendar calendar = Calendar.getInstance();
