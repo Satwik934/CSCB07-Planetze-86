@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Eco Gauge"
+        android:textColor="#1b1b1e"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +46,7 @@
         android:layout_marginTop="12dp"
         android:backgroundTint="#373F51"
         android:text="Select Date"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintBottom_toTopOf="@+id/top_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.075"
@@ -78,7 +79,7 @@
             android:backgroundTint="#A9BCD0"
             android:gravity="center"
             android:text="Yearly"
-            android:textColor="#000000" />
+            android:textColor="#1b1b1e" />
 
         <Button
             android:id="@+id/monthly_button"
@@ -89,7 +90,7 @@
             android:backgroundTint="#A9BCD0"
             android:gravity="center"
             android:text="Monthly"
-            android:textColor="#000000" />
+            android:textColor="#1b1b1e" />
 
         <Button
             android:id="@+id/weekly_button"
@@ -100,7 +101,7 @@
             android:backgroundTint="#A9BCD0"
             android:gravity="center"
             android:text="Weekly"
-            android:textColor="#000000" />
+            android:textColor="#1b1b1e" />
 
         <Button
             android:id="@+id/daily_button"
@@ -111,7 +112,7 @@
             android:backgroundTint="#A9BCD0"
             android:gravity="center"
             android:text="Daily"
-            android:textColor="#000000" />
+            android:textColor="#1b1b1e" />
 
     </LinearLayout>
 
@@ -122,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="00/00/00"
-        android:textColor="#000000"
+        android:textColor="#1b1b1e"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/top_buttons"
         app:layout_constraintEnd_toEndOf="parent"
@@ -140,7 +141,7 @@
         android:padding="10dp"
         android:textStyle="bold"
         android:layout_marginTop="2dp"
-        android:textColor="#000000"
+        android:textColor="#1b1b1e"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -180,7 +181,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="The average annual footprint in Canada is 0 kg CO2e."
-                android:textColor="#000000"
+                android:textColor="#1b1b1e"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -211,6 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="180dp"
                 android:text="Your Emissions"
+                android:textColor="#1b1b1e"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </com.github.mikephil.charting.charts.PieChart>
@@ -231,6 +233,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CO2e Trends"
+                    android:textColor="#1b1b1e"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </com.github.mikephil.charting.charts.LineChart>
