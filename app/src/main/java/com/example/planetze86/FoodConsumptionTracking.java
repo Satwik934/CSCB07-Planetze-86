@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FoodConsumptionTracking extends AppCompatActivity {
-    private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
+    /*private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
         String type = snapshot.child("type").getValue(String.class);
 
         if (type == null) {
@@ -99,8 +99,9 @@ public class FoodConsumptionTracking extends AppCompatActivity {
         } else {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
+    FirebaseManager firebaseManager = new FirebaseManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +153,7 @@ public class FoodConsumptionTracking extends AppCompatActivity {
                     );
 
                     // Save to Firebase
-                    saveToFirebase(foodActivity, selectedDate);
+                    firebaseManager.saveActivity(selectedDate, "FoodConsumption", foodActivity);
 
                     Toast.makeText(FoodConsumptionTracking.this, "Saved: " + mealType + ", Servings: " + servings, Toast.LENGTH_SHORT).show();
 

@@ -1,0 +1,71 @@
+Walk or Cycle
+Transportation
+High
+
+Drive instead of Flying
+Transportation
+High
+
+Carpool
+Transportation
+Low
+
+Use an Electric Car
+Transportation
+Medium
+
+Use Public Transport
+Transportation
+Medium
+
+Use Energy-Efficient Lightbulbs
+Energy
+High
+
+Unplug Devices When Not in Use
+Energy
+Medium
+
+Use Smart Thermostats
+Energy
+Medium
+
+Install Solar Panels
+Energy
+High
+
+Eat More Plant-Based Foods
+Food
+High
+
+Reduce Food Waste
+Food
+High
+
+Buy Local and Seasonal Produce
+Food
+Medium
+
+Compost Food Scraps
+Food
+Medium
+
+Buy Secondhand Items
+Consumption
+Medium
+
+Use Reusable Bags, Bottles, and Containers
+Consumption
+High
+
+Reduce, Reuse, Recycle
+Consumption
+High
+
+Support Sustainable Brands
+Consumption
+Medium
+
+Repair or Reuse Electronics Instead of Buying New
+Consumption
+Low

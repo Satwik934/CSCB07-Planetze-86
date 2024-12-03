@@ -50,8 +50,8 @@ public class TransportationActivityElement extends EmissionActivityElement {
         String durDistNum = "Distance: ";
         String minKm = "km";
         switch (transportMode){
-            case "Public Transportation": durDistNum = "Duration: "; minKm = " min";break;
-            case "Flight": durDistNum = "Count: "; minKm = ""; break;
+            case "Public Transportation": {durDistNum = "Duration: "; minKm = " min";break;}
+            case "Flight": {durDistNum = "Count: "; minKm = ""; break;}
         }
 
         return "Mode: " + transportMode + ", " +
@@ -104,9 +104,9 @@ public class TransportationActivityElement extends EmissionActivityElement {
                 break;
             }
             case "Flight": {
-                if (additionalDetails.equals("Short-Haul Flight")) {
+                if (additionalDetails.equals("Short-Haul")) {
                     emissions = distanceOrDurationOrFlightCount * 225/3/2; // 1.5 Flights a year is 225kg
-                } else if (additionalDetails.equals("Long-Haul Flight")) {
+                } else if (additionalDetails.equals("Long-Haul")) {
                     emissions = distanceOrDurationOrFlightCount * 825/3/2; // 1.5 Flights a year is 825kg
                 }
                 break;

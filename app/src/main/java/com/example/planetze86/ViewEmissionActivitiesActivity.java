@@ -1,33 +1,31 @@
 package com.example.planetze86;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class ViewEmissionActivitiesActivity extends AppCompatActivity {
+
+    private FirebaseManager firebaseManager;
+    private ListView listView;
+    private String selectedDate;
+    private ArrayList<String> activityDetails;
+    private ArrayList<EmissionActivityElement> activityObjects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_emission_activities);
 
-        ListView listView = findViewById(R.id.activities_list_view);
-        String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
+        firebaseManager = new FirebaseManager();
+        listView = findViewById(R.id.activities_list_view);
+        selectedDate = getIntent().getStringExtra("SELECTED_DATE");
 
         if (selectedDate == null || selectedDate.isEmpty()) {
             Toast.makeText(this, "No date selected", Toast.LENGTH_SHORT).show();
@@ -35,22 +33,17 @@ public class ViewEmissionActivitiesActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
+        fetchActivities();
+    }
 
-        if (currentUser == null) {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-        String userId = currentUser.getUid();
-
-        retrieveActivities(userId, selectedDate, activities -> {
-            ArrayList<String> activityDetails = new ArrayList<>();
+    private void fetchActivities() {
+        firebaseManager.retrieveAllActivitiesForDate(selectedDate, activities -> {
+            activityDetails = new ArrayList<>();
+            activityObjects = new ArrayList<>();
 
             for (EmissionActivityElement activity : activities) {
                 activityDetails.add(activity.getDetails());
+                activityObjects.add(activity); // Keep track of the actual objects
             }
 
             if (activityDetails.isEmpty()) {
@@ -59,64 +52,114 @@ public class ViewEmissionActivitiesActivity extends AppCompatActivity {
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activityDetails);
             listView.setAdapter(adapter);
-        });
-    }
 
-    private void retrieveActivities(String userId, String date, OnActivitiesLoadedListener listener) {
-        DatabaseReference reference = FirebaseDatabase.getInstance()
-                .getReference("users")
-                .child(userId)
-                .child("EmissionActivityMegaLog")
-                .child(date);
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<EmissionActivityElement> activities = new ArrayList<>();
-
-                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    String type = childSnapshot.child("type").getValue(String.class);
-
-                    if ("Transportation".equals(type)) {
-                        TransportationActivityElement activity = childSnapshot.getValue(TransportationActivityElement.class);
-                        if (activity != null) {
-                            activities.add(activity);
-                        }
-                    }
-                    else if("Shopping".equals(type)) {
-                        ShoppingActivityElement activity = childSnapshot.getValue(ShoppingActivityElement.class);
-                        if (activity != null) {
-                            activities.add(activity);
-                        }
-                    }
-                    else if("Food Consumption".equals(type)) {
-                        FoodConsumptionActivityElement activity = childSnapshot.getValue(FoodConsumptionActivityElement.class);
-                        if (activity != null) {
-                            activities.add(activity);
-                        }
-                    }
-                    // Add more types if needed
+            // Set up long-press listener for edit/delete options
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
+                if (position >= activityObjects.size()) {
+                    return false; // Ignore if it's the "No activities" message
                 }
-
-                listener.onActivitiesLoaded(activities);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("FirebaseError", "Error: " + error.getMessage());
-                listener.onActivitiesLoaded(new ArrayList<>()); // Pass an empty list on failure
-            }
+                showEditDeleteDialog(position);
+                return true;
+            });
         });
     }
 
-    // Listener interface for callback
-    interface OnActivitiesLoadedListener {
-        void onActivitiesLoaded(ArrayList<EmissionActivityElement> activities);
+    private void showEditDeleteDialog(int position) {
+        String[] options = {"Edit", "Delete"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose an action")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        // Edit selected
+                        //editActivity(position);
+                    } else if (which == 1) {
+                        // Delete selected
+                        deleteActivity(position);
+                    }
+                })
+                .show();
     }
 
-    // Callback interface
-    interface OnUserLoadedListener {
-        void onUserLoaded(User user);
+
+    private void deleteActivity(int position) {
+        EmissionActivityElement selectedActivity = activityObjects.get(position);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete this activity?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    firebaseManager.deleteActivity(
+                            selectedDate,
+                            selectedActivity.getType(),
+                            selectedActivity.getId(),
+                            success -> {
+                                if (success) {
+                                    Toast.makeText(this, "Activity deleted successfully!", Toast.LENGTH_SHORT).show();
+                                    fetchActivities(); // Refresh the list
+                                } else {
+                                    Toast.makeText(this, "Failed to delete activity.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
+    /**
+     * Retrieves transportation activities for the selected date.
+     */
+    /*public void retrieveTransportationActivities() {
+        firebaseManager.retrieveActivities("transportationActivities", selectedDate, TransportationActivityElement.class, activities -> {
+            if (!activities.isEmpty()) {
+                for (TransportationActivityElement activity : activities) {
+                    activityDetails.add(activity.getDetails());
+                }
+            } else {
+                activityDetails.add("No transportation activities logged for this date.");
+            }
+            updateListView();
+        });
+    }
+
+    /**
+     * Retrieves shopping activities for the selected date.
+     */
+    /*public void retrieveShoppingActivities() {
+        firebaseManager.retrieveActivities("shoppingActivities", selectedDate, ShoppingActivityElement.class, activities -> {
+            if (!activities.isEmpty()) {
+                for (ShoppingActivityElement activity : activities) {
+                    activityDetails.add("Shopping: " + activity.getType() +
+                            ", Quantity: " + activity.getQuantity());
+                }
+            } else {
+                activityDetails.add("No shopping activities logged for this date.");
+            }
+            updateListView();
+        });
+    }
+
+    /**
+     * Retrieves food consumption activities for the selected date.
+     */
+    /*public void retrieveFoodConsumptionActivities() {
+        firebaseManager.retrieveActivities("foodConsumptionActivities", selectedDate, FoodConsumptionActivityElement.class, activities -> {
+            if (!activities.isEmpty()) {
+                for (FoodConsumptionActivityElement activity : activities) {
+                    activityDetails.add("Food Consumption: " + activity.getMealType() +
+                            ", Servings: " + activity.getServings());
+                }
+            } else {
+                activityDetails.add("No food consumption activities logged for this date.");
+            }
+            updateListView();
+        });
+    }*/
+
+    /**
+     * Updates the ListView with the current activity details.
+     */
+    private void updateListView() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activityDetails);
+        listView.setAdapter(adapter);
+    }
 }
