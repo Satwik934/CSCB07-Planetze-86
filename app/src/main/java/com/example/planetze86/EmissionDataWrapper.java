@@ -24,28 +24,39 @@ public class EmissionDataWrapper {
      * @return The total emissions for the specified date and category.
      */
     public double getCategoryEmissions(String date, String category) {
-        DatabaseReference categoryRef = firebaseManager.getUserRef().child("activities").child(date).child(category);
+        final double[] result = {0.0};
 
-        Task<DataSnapshot> task = categoryRef.get();
+        Thread thread = new Thread(() -> {
+            DatabaseReference categoryRef = firebaseManager.getUserRef().child("activities").child(date).child(category);
+            Task<DataSnapshot> task = categoryRef.get();
+
+            try {
+                DataSnapshot snapshot = Tasks.await(task);
+
+                double totalEmissions = 0.0;
+                for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                    Double emissions = activitySnapshot.child("emissions").getValue(Double.class);
+                    if (emissions != null) {
+                        totalEmissions += emissions;
+                    }
+                }
+
+                result[0] = totalEmissions;
+
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e("EmissionDataWrapper", "Failed to retrieve emissions: " + e.getMessage());
+            }
+        });
+
+        thread.start();
 
         try {
-            // Wait for the task to complete synchronously
-            DataSnapshot snapshot = Tasks.await(task);
-
-            double totalEmissions = 0.0;
-
-            for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
-                Double emissions = activitySnapshot.child("emissions").getValue(Double.class);
-                if (emissions != null) {
-                    totalEmissions += emissions;
-                }
-            }
-
-            return totalEmissions;
-
-        } catch (ExecutionException | InterruptedException e) {
-            Log.e("EmissionDataWrapper", "Failed to retrieve emissions: " + e.getMessage());
-            return 0.0; // Return 0 if there's an error
+            thread.join(); // Wait for the thread to complete
+        } catch (InterruptedException e) {
+            Log.e("EmissionDataWrapper", "Thread interrupted: " + e.getMessage());
         }
+
+        return result[0];
     }
+
 }
