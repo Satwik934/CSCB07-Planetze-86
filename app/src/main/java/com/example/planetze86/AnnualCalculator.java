@@ -265,6 +265,11 @@ public class AnnualCalculator {
         return roundedPercentage.doubleValue();
     }
 
+    public double getCountryEmission() {
+        countryCompare = readExcelCountry();
+        return countryCompare;
+    }
+
     public double getGlobalCompare() {
         double compareTo = getTotal();
         double percentage = (compareTo / 2 - 1) * 100;
