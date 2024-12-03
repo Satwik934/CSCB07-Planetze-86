@@ -4,10 +4,10 @@ public class ShoppingActivityElement extends EmissionActivityElement {
     private String itemType;     // Main category (e.g., "Clothing", "Electronics", etc.)
     private String subCategory; // Subcategory for finer segregation (e.g., "Smartphone", "Laptop")
     private int quantity;        // Number of items purchased
-    private double totalCost;    // Total cost in dollars
+    private double cost;    // Total cost in dollars
     // Constructor for energy bills
 
-    public ShoppingActivityElement(String date, String billType, double totalCost) {
+    public ShoppingActivityElement(String date, String billType, double cost) {
 
         super(date, "Shopping");
 
@@ -17,15 +17,15 @@ public class ShoppingActivityElement extends EmissionActivityElement {
 
         this.quantity = 0; // Not applicable for bills
 
-        this.totalCost = totalCost;
+        this.cost = cost;
 
     }
-    public ShoppingActivityElement(String date, String itemType, String subCategory, int quantity, double totalCost) {
+    public ShoppingActivityElement(String date, String itemType, String subCategory, int quantity, double cost) {
         super(date, "Shopping");
         this.itemType = itemType;
         this.subCategory = subCategory;
         this.quantity = quantity;
-        this.totalCost = totalCost;
+        this.cost = cost;
     }
 
     public ShoppingActivityElement() {
@@ -57,56 +57,83 @@ public class ShoppingActivityElement extends EmissionActivityElement {
         this.quantity = quantity;
     }
 
-    public double getTotalCost() {
-        return totalCost;
+    public double getCost() {
+        return cost;
     }
 
-    public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
     @Override
     public String getDetails() {
-        return "Item: " + itemType + " (" + subCategory + "), Quantity: " + quantity + ", Total Cost: $" + totalCost;
+        return "Item: " + itemType + " (" + subCategory + "), Quantity: " + quantity + ", Total Cost: $" + cost;
     }
 
     @Override
     public double getEmissions() {
         double emissionFactor = 0.0;
 
-        if ("Electronics".equalsIgnoreCase(itemType)) {
-            switch (subCategory) {
-                case "Smartphone":
-                    emissionFactor = 70.0; // kg CO2e per unit
-                    break;
-                case "Laptop":
-                    emissionFactor = 200.0; // kg CO2e per unit
-                    break;
-                case "Tablet":
-                    emissionFactor = 120.0; // kg CO2e per unit
-                    break;
-                case "Television":
-                    emissionFactor = 300.0; // kg CO2e per unit
-                    break;
-                default:
-                    emissionFactor = 100.0; // Default for other electronics
-                    break;
-            }
-        } else {
-            // General emission factors for other item types
-            switch (itemType) {
-                case "Clothing":
-                    emissionFactor = 30.0; // kg CO2e per unit
-                    break;
-                case "Furniture":
-                    emissionFactor = 100.0; // kg CO2e per unit
-                    break;
-                default:
-                    emissionFactor = 10.0; // Default for unknown item types
-                    break;
-            }
+        switch (itemType.toLowerCase()) {
+            case "electronics":
+                emissionFactor = getElectronicsEmissionFactor(subCategory);
+                break;
+
+            case "clothing":
+                emissionFactor = 30.0; // kg CO2e per unit for clothing
+                break;
+
+            case "miscellaneous":
+                emissionFactor = 100.0; // kg CO2e per unit for furniture
+                break;
+
+            case "energy bill":
+                emissionFactor = calculateEnergyBillEmissions();
+                break;
+
+            default:
+                emissionFactor = 10.0; // Default for unknown item types
+                break;
         }
 
-        return quantity * emissionFactor; // Compute emissions based on quantity
+        return quantity * emissionFactor; // Emissions for item quantity
     }
+
+    // Helper method to get emission factors for electronics subcategories
+    private double getElectronicsEmissionFactor(String subCategory) {
+        switch (subCategory.toLowerCase()) {
+            case "smartphone":
+                return 70.0; // kg CO2e per unit
+            case "laptop":
+                return 200.0; // kg CO2e per unit
+            case "tablet":
+                return 120.0; // kg CO2e per unit
+            case "television":
+                return 300.0; // kg CO2e per unit
+            default:
+                return 100.0; // Default for other electronics
+        }
+
+    }
+
+    // Helper method to calculate emissions for energy bills
+    private double calculateEnergyBillEmissions() {
+        //Estimates
+        double result = cost;
+        switch(subCategory){
+            case "Gas":{
+                result *= 5.3;
+                break;
+            }
+            case "Electricity":{
+                result *= 4.5;
+                break;
+            }
+            case "Water":{
+                result *= 1.5;
+            }
+        }
+        return result;
+    }
+
 }
