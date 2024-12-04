@@ -23,40 +23,45 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Header: Daily Carbon Footprint Tracking -->
+
+    <!-- Subheader: Consumption and Shopping Activities -->
+
+    <!-- Button: Buy New Clothes -->
+
     <TextView
         android:id="@+id/header_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="92dp"
+        android:background="@drawable/fancy_text_background"
+        android:elevation="6dp"
         android:padding="12dp"
         android:text="DAILY CARBON FOOTPRINT TRACKING"
         android:textColor="#1B1B1E"
         android:textSize="18sp"
         android:textStyle="italic"
-        android:background="@drawable/fancy_text_background"
-        android:elevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Subheader: Consumption and Shopping Activities -->
     <TextView
         android:id="@+id/subheader_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:background="@drawable/fancy_text_background"
+        android:elevation="4dp"
         android:padding="10dp"
         android:text="CONSUMPTION AND SHOPPING ACTIVITIES"
         android:textColor="#1B1B1E"
         android:textSize="18sp"
         android:textStyle="italic"
-        android:background="@drawable/fancy_text_background"
-        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header_text" />
 
-    <!-- Button: Buy New Clothes -->
     <androidx.appcompat.widget.AppCompatButton
         android:background="@drawable/fancy_buttons"
         android:id="@+id/button_buy_new_clothes"

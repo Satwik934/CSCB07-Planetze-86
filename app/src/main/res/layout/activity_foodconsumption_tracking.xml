@@ -9,14 +9,20 @@
     android:background="@drawable/gradient_3"
     android:padding="16dp">
 
-    android:background="#D8DBE2">
     <!-- Back Button -->
+
+    <!-- Header: Daily Carbon Footprint Tracking -->
+
+    <!-- Subheader: Food Consumption Activities -->
+
+    <!-- Button: Meal -->
+
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Back Button"
@@ -24,32 +30,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Header: Daily Carbon Footprint Tracking -->
     <TextView
         android:id="@+id/header_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:padding="12dp"
+        android:layout_marginTop="88dp"
         android:background="@drawable/fancy_text_background"
         android:elevation="6dp"
+        android:padding="12dp"
         android:text="DAILY CARBON FOOTPRINT TRACKING"
         android:textColor="#1B1B1E"
         android:textSize="18sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Subheader: Food Consumption Activities -->
     <TextView
         android:id="@+id/subheader_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:padding="10dp"
+        android:layout_marginTop="44dp"
         android:background="@drawable/fancy_text_background"
         android:elevation="4dp"
+        android:padding="10dp"
         android:text="FOOD CONSUMPTION ACTIVITIES"
         android:textColor="#1B1B1E"
         android:textSize="18sp"
@@ -58,18 +63,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header_text" />
 
-    <!-- Button: Meal -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_meal"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="56dp"
         android:background="@drawable/fancy_buttons"
+        android:elevation="6dp"
         android:text="MEAL"
         android:textColor="#d8dbe2"
-        android:elevation="6dp"
         android:translationZ="4dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subheader_text" />
 
