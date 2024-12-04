@@ -30,9 +30,9 @@ public class LoginActivityPresenter {
             @Override
             public void onSuccess( boolean firstLogin) {
                 if (firstLogin) {
-                    goOnboarding();
+                    goOnboarding();//onboarding form if first log in
                 } else {
-                    goEco();
+                    goEco();//ecoTracker if not first log in
                 }
                 view.finish();
             }

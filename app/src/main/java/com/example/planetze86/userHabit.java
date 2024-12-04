@@ -3,6 +3,7 @@ package com.example.planetze86;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.Gravity;
 
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -41,7 +43,9 @@ import java.util.List;
 
 public class userHabit extends AppCompatActivity {
     List<Habit> habits;
+    String[] suggested = {""};
     HashMap<String, Integer> habitLog;
+    ImageButton backButton;
 
 
 
@@ -50,12 +54,21 @@ public class userHabit extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_habit);
-
+        backButton = findViewById(R.id.backButton);
         habits = new ArrayList<>();
         habits = readHabitsFromFile(this);
 
         habitLog = new HashMap<>();
+        getSuggested();
         fetchHabits();
+        backButton.bringToFront();
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(userHabit.this, EcoTracker.class);
+                startActivity(intent);
+            }
+        });
 
 
     }
@@ -66,6 +79,7 @@ public class userHabit extends AppCompatActivity {
     private void populateYourHabitsSection(LinearLayout container) {
         // Clear the container and set the background color
         container.removeAllViews();
+        backButton.setVisibility(View.VISIBLE);
 
         if (habitLog == null || habitLog.isEmpty()) {
             // Add an empty message with padding
@@ -164,11 +178,12 @@ public class userHabit extends AppCompatActivity {
 
     private void populateAllActivitiesSection(LinearLayout container) {
         container.removeAllViews();
+        backButton.setVisibility(View.INVISIBLE);
         habits = readHabitsFromFile(this);
 
         // Add filter dropdown (Spinner)
         Spinner filterSpinner = new Spinner(this);
-        String[] filterOptions = {"All", "High Impact", "Medium Impact", "Low Impact","Transportation", "Energy","Food","Consumption"};
+        String[] filterOptions = {"All","Suggested", "High Impact", "Medium Impact", "Low Impact","Transportation", "Energy","Food","Consumption"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filterOptions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(adapter);
@@ -204,6 +219,11 @@ public class userHabit extends AppCompatActivity {
         List<Habit> filteredHabits = new ArrayList<>();
         for (Habit habit : habits) {
             switch (filter) {
+                case "Suggested":
+                    if (habit.getCategory().equalsIgnoreCase(suggested[0])) {
+                        filteredHabits.add(habit);
+                    }
+                    break;
                 case "High Impact":
                     if (habit.getImpact().equals("High")) {
                         filteredHabits.add(habit);
@@ -267,17 +287,13 @@ public class userHabit extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            layoutParams.setMargins(16, 24, 16, 24);
+            layoutParams.setMargins(16, 36, 16, 24);
             habitLayout.setLayoutParams(layoutParams);
             habitLayout.setPadding(16, 16, 16, 16);
-
-            // Create the habit text with bold formatting
-
-
-
             TextView habitTextView = new TextView(this);
             habitTextView.setText(habit.getName() + " (" + habit.getCategory() + ") - Impact: " + habit.getImpact());
             int iconRes;
+            //add icons
             switch (habit.getCategory().toLowerCase()) {
                 case "transportation":
                     iconRes = R.drawable.car;
@@ -305,7 +321,7 @@ public class userHabit extends AppCompatActivity {
             Button addButton = new Button(this);
             addButton.setText("Add");
             addButton.setBackgroundResource(R.drawable.rounded_button_sky_blue);
-
+            //button for logging habits
             addButton.setOnClickListener(v -> {
                 logHabit(habit.getName());
                 habitLog.put(habit.getName(), 1);
@@ -331,7 +347,7 @@ public class userHabit extends AppCompatActivity {
 
 
 
-
+    //updates user habits in firebase
     private void updateHabitLogToFirebase() {
         // Get the current user's UID from FirebaseAuth
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -349,7 +365,7 @@ public class userHabit extends AppCompatActivity {
             }
         });
     }
-
+    //to populate habits list from habit text file in raw resource
     private List<Habit> readHabitsFromFile(Context context) {
         List<Habit> habits = new ArrayList<>();
 
@@ -400,6 +416,7 @@ public class userHabit extends AppCompatActivity {
         return habits;
     }
 
+    //to add habits to user habits
     public void logHabit(String habitName) {
         if (habitLog.containsKey(habitName)) {
             habitLog.put(habitName, habitLog.get(habitName) + 1); // Increment the logged days
@@ -408,7 +425,7 @@ public class userHabit extends AppCompatActivity {
         }
 
     }
-
+    //to fetch user habits from firebase
     public void fetchHabits() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
@@ -460,6 +477,64 @@ public class userHabit extends AppCompatActivity {
 
         // Fetch the latest habit log from Firebase when the user returns to the activity
         fetchHabits();
+    }
+
+
+   //to set suggested category to the one with most emissions
+    private void getSuggested(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            Log.e("getSuggested", "No user is signed in");
+        }
+
+        String userId = auth.getCurrentUser().getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference("users");
+
+        databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null && user.getAnnualAnswers() != null) {
+                    AnnualAnswers annualAnswers = user.getAnnualAnswers();
+
+                    // Ensure non-null and valid data
+                    float transportation = (float) annualAnswers.getAnnualTransportation();
+                    float food = (float) annualAnswers.getAnnualFood();
+                    float housing = (float) annualAnswers.getAnnualHousing();
+                    float consumption = (float) annualAnswers.getAnnualConsumption();
+
+
+                    // Update TextViews
+                    float maxEmission = 0;
+                    if (transportation > maxEmission) {
+                        maxEmission = transportation;
+                        suggested[0] = "Transportation";
+                    }
+                    if (food > maxEmission) {
+                        maxEmission = food;
+                        suggested[0] = "Food";
+                    }
+                    if (housing > maxEmission) {
+                        maxEmission = housing;
+                        suggested[0] = "Energy";
+                    }
+                    if (consumption > maxEmission) {
+                        maxEmission = consumption;
+                        suggested[0] = "Consumption";
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("AnnualEmissionResult", "Database error: " + error.getMessage());
+            }
+        });
+
+
+
     }
 
 
