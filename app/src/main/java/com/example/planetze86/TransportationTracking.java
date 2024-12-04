@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -183,8 +184,16 @@ public class TransportationTracking extends AppCompatActivity {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         int screenHeight = displayMetrics.heightPixels;
         int[] location = new int[2];
-        // Personal Vehicle Dialog
+        ImageButton backButton = findViewById(R.id.backButton);
 
+        // Back button
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransportationTracking.this, EcoTracker.class);
+                startActivity(intent);
+            }
+        });
 
         personalVehicleButton.setOnClickListener(v -> {
             Dialog dialog = new Dialog(TransportationTracking.this);

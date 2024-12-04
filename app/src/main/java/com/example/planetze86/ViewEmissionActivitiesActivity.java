@@ -2,7 +2,9 @@ package com.example.planetze86;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,8 +35,16 @@ public class ViewEmissionActivitiesActivity extends AppCompatActivity {
             finish();
             return;
         }
-
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.bringToFront();
         fetchActivities();
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewEmissionActivitiesActivity.this, EcoTracker.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void fetchActivities() {

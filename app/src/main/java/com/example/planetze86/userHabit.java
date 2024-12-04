@@ -3,6 +3,7 @@ package com.example.planetze86;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
@@ -52,14 +53,21 @@ public class userHabit extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_habit);
-
+        ImageButton backButton = findViewById(R.id.backButton);
         habits = new ArrayList<>();
         habits = readHabitsFromFile(this);
 
         habitLog = new HashMap<>();
         getSuggested();
         fetchHabits();
-
+        backButton.bringToFront();
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(userHabit.this, EcoTracker.class);
+                startActivity(intent);
+            }
+        });
 
 
     }

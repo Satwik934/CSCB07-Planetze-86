@@ -1,12 +1,15 @@
 package com.example.planetze86;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -158,8 +161,16 @@ public class FoodConsumptionTracking extends AppCompatActivity {
             Toast.makeText(this, "No date selected", Toast.LENGTH_SHORT).show();
         }
         setContentView(R.layout.activity_foodconsumption_tracking);
+        ImageButton backButton = findViewById(R.id.backButton);
 
         Button mealButton = findViewById(R.id.button_meal);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FoodConsumptionTracking.this, EcoTracker.class);
+                startActivity(intent);
+            }
+        });
         mealButton.setOnClickListener(v -> {
             // Create a custom dialog
             Dialog dialog = new Dialog(FoodConsumptionTracking.this);
