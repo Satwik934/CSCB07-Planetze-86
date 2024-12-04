@@ -45,6 +45,7 @@ public class userHabit extends AppCompatActivity {
     List<Habit> habits;
     String[] suggested = {""};
     HashMap<String, Integer> habitLog;
+    ImageButton backButton;
 
 
 
@@ -53,7 +54,7 @@ public class userHabit extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_habit);
-        ImageButton backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.backButton);
         habits = new ArrayList<>();
         habits = readHabitsFromFile(this);
 
@@ -78,6 +79,7 @@ public class userHabit extends AppCompatActivity {
     private void populateYourHabitsSection(LinearLayout container) {
         // Clear the container and set the background color
         container.removeAllViews();
+        backButton.setVisibility(View.VISIBLE);
 
         if (habitLog == null || habitLog.isEmpty()) {
             // Add an empty message with padding
@@ -176,6 +178,7 @@ public class userHabit extends AppCompatActivity {
 
     private void populateAllActivitiesSection(LinearLayout container) {
         container.removeAllViews();
+        backButton.setVisibility(View.INVISIBLE);
         habits = readHabitsFromFile(this);
 
         // Add filter dropdown (Spinner)
@@ -284,7 +287,7 @@ public class userHabit extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            layoutParams.setMargins(16, 24, 16, 24);
+            layoutParams.setMargins(16, 36, 16, 24);
             habitLayout.setLayoutParams(layoutParams);
             habitLayout.setPadding(16, 16, 16, 16);
             TextView habitTextView = new TextView(this);
