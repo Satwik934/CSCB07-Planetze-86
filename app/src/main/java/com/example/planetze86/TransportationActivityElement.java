@@ -104,9 +104,9 @@ public class TransportationActivityElement extends EmissionActivityElement {
                 break;
             }
             case "Flight": {
-                if (additionalDetails.equals("Short-Haul Flight")) {
+                if (additionalDetails.equals("Short-Haul")) {
                     emissions = distanceOrDurationOrFlightCount * 225/3/2; // 1.5 Flights a year is 225kg
-                } else if (additionalDetails.equals("Long-Haul Flight")) {
+                } else if (additionalDetails.equals("Long-Haul")) {
                     emissions = distanceOrDurationOrFlightCount * 825/3/2; // 1.5 Flights a year is 825kg
                 }
                 break;

@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TransportationTracking extends AppCompatActivity {
+    private boolean isProgrammaticClick = false;
     /*private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
         String type = snapshot.child("type").getValue(String.class);
 
@@ -104,21 +107,75 @@ public class TransportationTracking extends AppCompatActivity {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
         }
     }*/
+    TransportationActivityElement toBeEdited;
 
+    FirebaseManager firebaseManager = new FirebaseManager();
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Check if activity is being edited
+        String activityId = getIntent().getStringExtra("ACTIVITY_ID");
+        String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
+        if (activityId != null && selectedDate != null) {
+
+            // Fetch activity details
+            firebaseManager.retrieveActivitiesByType(
+                    selectedDate,
+                    "Transportation",
+                    TransportationActivityElement.class,
+                    activities -> {
+                        for (TransportationActivityElement activity : activities) {
+                            if (activity.getId().equals(activityId)) {
+                                Dialog dialog = new Dialog(this);
+
+                                prefillFields(dialog,activity);
+                                break;
+                            }
+                        }
+                    }
+            );
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
 
-        if (selectedDate != null && !selectedDate.isEmpty()) {
-            Toast.makeText(this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
+
+
+
+        String activityId = getIntent().getStringExtra("ACTIVITY_ID");
+        String selectedDateUpdate = getIntent().getStringExtra("SELECTED_DATE_UPDATE");
+
+        if (activityId != null && selectedDateUpdate != null) {
+            // Fetch activity details from Firebase
+            firebaseManager.retrieveActivitiesByType(
+                    selectedDateUpdate,
+                    "Transportation",
+                    TransportationActivityElement.class,
+                    activities -> {
+                        for (TransportationActivityElement activity : activities) {
+                            if (activity.getId().equals(activityId)) {
+                                Dialog dialog = new Dialog(TransportationTracking.this);
+                                // Pre-fill the fields for editing
+                                prefillFields(dialog,activity);
+                                break;
+                            }
+                        }
+                    }
+            );
+        }
+
+        if ((selectedDate != null && !selectedDate.isEmpty()) || (selectedDateUpdate != null && !selectedDateUpdate.isEmpty())) {
+            Toast.makeText(this, "Selected Date: " + ((selectedDate != null) ? selectedDate : selectedDateUpdate), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "No date selected", Toast.LENGTH_SHORT).show();
         }
         setContentView(R.layout.activity_transportation_tracking);
 
-        FirebaseManager firebaseManager = new FirebaseManager();
+
 
         Button personalVehicleButton = findViewById(R.id.button_personal_vehicle);
         Button publicTransportationButton = findViewById(R.id.button_public_transportation);
@@ -127,8 +184,16 @@ public class TransportationTracking extends AppCompatActivity {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         int screenHeight = displayMetrics.heightPixels;
         int[] location = new int[2];
-        // Personal Vehicle Dialog
+        ImageButton backButton = findViewById(R.id.backButton);
 
+        // Back button
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransportationTracking.this, EcoTracker.class);
+                startActivity(intent);
+            }
+        });
 
         personalVehicleButton.setOnClickListener(v -> {
             Dialog dialog = new Dialog(TransportationTracking.this);
@@ -136,42 +201,59 @@ public class TransportationTracking extends AppCompatActivity {
 
             dialog.getWindow().setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.8), ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
+            AutoCompleteTextView actvVehicleType;
+            EditText etDistanceDriven;
+            if(isProgrammaticClick){
+                prefillPersonalVehicleDialog(dialog,toBeEdited);
+            }
+            else {
+                etDistanceDriven = dialog.findViewById(R.id.et_distance_driven);
+                actvVehicleType = dialog.findViewById(R.id.actv_vehicle_type);
+                actvVehicleType.getLocationOnScreen(location);
+                int availableHeight = screenHeight - location[1] - actvVehicleType.getHeight();
+                int dropdownHeight = Math.min((int) (screenHeight * 0.3), availableHeight);
+                actvVehicleType.setDropDownHeight(dropdownHeight);
 
-            EditText etDistanceDriven = dialog.findViewById(R.id.et_distance_driven);
-            AutoCompleteTextView actvVehicleType = dialog.findViewById(R.id.actv_vehicle_type);
 
+                Button btnSaveVehicleData = dialog.findViewById(R.id.btn_save_vehicle_data);
 
-            actvVehicleType.getLocationOnScreen(location);
-            int availableHeight = screenHeight - location[1] - actvVehicleType.getHeight();
-            int dropdownHeight = Math.min((int) (screenHeight * 0.3), availableHeight);
-            actvVehicleType.setDropDownHeight(dropdownHeight);
+                String[] vehicleTypes = {"Gasoline", "Diesel", "Hybrid", "Electric"};
+                ArrayAdapter<String> vehicleAdapter = new ArrayAdapter<>(TransportationTracking.this, android.R.layout.simple_dropdown_item_1line, vehicleTypes);
+                actvVehicleType.setAdapter(vehicleAdapter);
+                actvVehicleType.setOnClickListener(w -> actvVehicleType.showDropDown());
 
-            Button btnSaveVehicleData = dialog.findViewById(R.id.btn_save_vehicle_data);
+                btnSaveVehicleData.setOnClickListener(view -> {
+                    String distance = etDistanceDriven.getText().toString();
+                    String vehicleType = actvVehicleType.getText().toString();
 
-            String[] vehicleTypes = {"Gasoline", "Diesel", "Hybrid", "Electric"};
-            ArrayAdapter<String> vehicleAdapter = new ArrayAdapter<>(TransportationTracking.this, android.R.layout.simple_dropdown_item_1line, vehicleTypes);
-            actvVehicleType.setAdapter(vehicleAdapter);
-            actvVehicleType.setOnClickListener(w -> actvVehicleType.showDropDown());
+                    if (distance.isEmpty() || vehicleType.isEmpty()) {
+                        Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    } else {
+                        TransportationActivityElement activity = new TransportationActivityElement(
+                                selectedDate,
+                                "Personal Vehicle",
+                                Double.parseDouble(distance),
+                                vehicleType);
 
-            btnSaveVehicleData.setOnClickListener(view -> {
-                String distance = etDistanceDriven.getText().toString();
-                String vehicleType = actvVehicleType.getText().toString();
+                        firebaseManager.saveActivity(selectedDate, "Transportation", activity);
+                        /*if (isProgrammaticClick) {
+                            firebaseManager.deleteActivity(selectedDateUpdate, "Transportation", activityId, w -> {
+                                if (w) {
+                                    Toast.makeText(this, "Activity edited successfully!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(TransportationTracking.this, ViewEmissionActivitiesActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(this, "Failed to edit activity.", Toast.LENGTH_SHORT).show();
 
-                if (distance.isEmpty() || vehicleType.isEmpty()) {
-                    Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    TransportationActivityElement activity = new TransportationActivityElement(
-                            selectedDate,
-                            "Personal Vehicle",
-                            Double.parseDouble(distance),
-                            vehicleType);
+                                }
+                            });
+                        }*/
+                        dialog.dismiss();
+                    }
+                });
 
-                    firebaseManager.saveActivity(selectedDate,"Transportation",activity);
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.show();
+                dialog.show();
+            }
         });
 
         // Public Transportation Dialog
@@ -181,40 +263,56 @@ public class TransportationTracking extends AppCompatActivity {
 
             dialog.getWindow().setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.8), ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
+            if(isProgrammaticClick){
+                prefillPublicTransportationDialog(dialog,toBeEdited);
+            }
+            else {
+                EditText etTravelTime = dialog.findViewById(R.id.et_transportation_time);
+                AutoCompleteTextView actvTransportType = dialog.findViewById(R.id.actv_transportation_type);
+                Button btnSaveTransportData = dialog.findViewById(R.id.btn_save_transport_data);
 
-            EditText etTravelTime = dialog.findViewById(R.id.et_transportation_time);
-            AutoCompleteTextView actvTransportType = dialog.findViewById(R.id.actv_transportation_type);
-            Button btnSaveTransportData = dialog.findViewById(R.id.btn_save_transport_data);
+                actvTransportType.getLocationOnScreen(location);
+                int availableHeight = screenHeight - location[1] - actvTransportType.getHeight();
+                int dropdownHeight = Math.min((int) (screenHeight * 0.3), availableHeight);
+                actvTransportType.setDropDownHeight(dropdownHeight);
 
-            actvTransportType.getLocationOnScreen(location);
-            int availableHeight = screenHeight - location[1] - actvTransportType.getHeight();
-            int dropdownHeight = Math.min((int) (screenHeight * 0.3), availableHeight);
-            actvTransportType.setDropDownHeight(dropdownHeight);
+                String[] transportTypes = {"Bus", "Train", "Subway"};
+                ArrayAdapter<String> transportAdapter = new ArrayAdapter<>(TransportationTracking.this, android.R.layout.simple_dropdown_item_1line, transportTypes);
+                actvTransportType.setAdapter(transportAdapter);
+                actvTransportType.setOnClickListener(w -> actvTransportType.showDropDown());
 
-            String[] transportTypes = {"Bus", "Train", "Subway"};
-            ArrayAdapter<String> transportAdapter = new ArrayAdapter<>(TransportationTracking.this, android.R.layout.simple_dropdown_item_1line, transportTypes);
-            actvTransportType.setAdapter(transportAdapter);
-            actvTransportType.setOnClickListener(w -> actvTransportType.showDropDown());
+                btnSaveTransportData.setOnClickListener(view -> {
+                    String travelTime = etTravelTime.getText().toString();
+                    String transportType = actvTransportType.getText().toString();
 
-            btnSaveTransportData.setOnClickListener(view -> {
-                String travelTime = etTravelTime.getText().toString();
-                String transportType = actvTransportType.getText().toString();
+                    if (travelTime.isEmpty() || transportType.isEmpty()) {
+                        Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    } else {
+                        TransportationActivityElement activity = new TransportationActivityElement(
+                                selectedDate,
+                                "Public Transportation",
+                                Double.parseDouble(travelTime),
+                                transportType);
 
-                if (travelTime.isEmpty() || transportType.isEmpty()) {
-                    Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    TransportationActivityElement activity = new TransportationActivityElement(
-                            selectedDate,
-                            "Public Transportation",
-                            Double.parseDouble(travelTime),
-                            transportType);
+                        firebaseManager.saveActivity(selectedDate, "Transportation", activity);
+                        /*if (isProgrammaticClick) {
+                            firebaseManager.deleteActivity(selectedDateUpdate, "Transportation", activityId, w -> {
+                                if (w) {
+                                    Toast.makeText(this, "Activity edited successfully!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(TransportationTracking.this, ViewEmissionActivitiesActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(this, "Failed to edit activity.", Toast.LENGTH_SHORT).show();
 
-                    firebaseManager.saveActivity(selectedDate,"Transportation",activity);
-                    dialog.dismiss();
-                }
-            });
+                                }
+                            });
+                        }*/
+                        dialog.dismiss();
+                    }
+                });
 
-            dialog.show();
+                dialog.show();
+            }
         });
 
         // Cycling or Walking Dialog
@@ -224,31 +322,46 @@ public class TransportationTracking extends AppCompatActivity {
 
             dialog.getWindow().setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.8), ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
+            if(isProgrammaticClick){
+                prefillCyclingOrWalkingDialog(dialog,toBeEdited);
+            }
+            else {
+                RadioGroup rgActivityType = dialog.findViewById(R.id.rg_activity_type);
+                EditText etDistance = dialog.findViewById(R.id.et_distance);
+                Button btnSaveActivityData = dialog.findViewById(R.id.btn_save_activity_data);
 
-            RadioGroup rgActivityType = dialog.findViewById(R.id.rg_activity_type);
-            EditText etDistance = dialog.findViewById(R.id.et_distance);
-            Button btnSaveActivityData = dialog.findViewById(R.id.btn_save_activity_data);
+                btnSaveActivityData.setOnClickListener(view -> {
+                    int selectedActivityId = rgActivityType.getCheckedRadioButtonId();
+                    String activityType = selectedActivityId == R.id.rb_cycling ? "Cycling" : "Walking";
+                    String distance = etDistance.getText().toString();
 
-            btnSaveActivityData.setOnClickListener(view -> {
-                int selectedActivityId = rgActivityType.getCheckedRadioButtonId();
-                String activityType = selectedActivityId == R.id.rb_cycling ? "Cycling" : "Walking";
-                String distance = etDistance.getText().toString();
+                    if (distance.isEmpty()) {
+                        Toast.makeText(TransportationTracking.this, "Please enter the distance", Toast.LENGTH_SHORT).show();
+                    } else {
+                        TransportationActivityElement activity = new TransportationActivityElement(
+                                selectedDate,
+                                activityType,
+                                Double.parseDouble(distance),
+                                activityType);
 
-                if (distance.isEmpty()) {
-                    Toast.makeText(TransportationTracking.this, "Please enter the distance", Toast.LENGTH_SHORT).show();
-                } else {
-                    TransportationActivityElement activity = new TransportationActivityElement(
-                            selectedDate,
-                            activityType,
-                            Double.parseDouble(distance),
-                            activityType);
+                        firebaseManager.saveActivity(selectedDate, "Transportation", activity);
+                        /*if (isProgrammaticClick) {
+                            firebaseManager.deleteActivity(selectedDateUpdate, "Transportation", activityId, w -> {
+                                if (w) {
+                                    Toast.makeText(this, "Activity edited successfully!", Toast.LENGTH_SHORT).show();
 
-                    firebaseManager.saveActivity(selectedDate,"Transportation",activity);
-                    dialog.dismiss();
-                }
-            });
+                                } else {
+                                    Toast.makeText(this, "Failed to edit activity.", Toast.LENGTH_SHORT).show();
 
-            dialog.show();
+                                }
+                            });
+                        }*/
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
         });
 
         // Flight Dialog
@@ -258,36 +371,200 @@ public class TransportationTracking extends AppCompatActivity {
 
             dialog.getWindow().setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.8), ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
+            if(isProgrammaticClick){
+                prefillFlightDialog(dialog,toBeEdited);
+            }
+            else{
+                EditText etFlightNumber = dialog.findViewById(R.id.et_flight_number);
+                AutoCompleteTextView actvFlightType = dialog.findViewById(R.id.actv_flight_type);
+                Button btnSaveFlightData = dialog.findViewById(R.id.btn_save_flight_data);
 
-            EditText etFlightNumber = dialog.findViewById(R.id.et_flight_number);
-            AutoCompleteTextView actvFlightType = dialog.findViewById(R.id.actv_flight_type);
-            Button btnSaveFlightData = dialog.findViewById(R.id.btn_save_flight_data);
+                String[] flightTypes = {"Short-Haul", "Long-Haul"};
+                ArrayAdapter<String> flightAdapter = new ArrayAdapter<>(TransportationTracking.this, android.R.layout.simple_dropdown_item_1line, flightTypes);
+                actvFlightType.setAdapter(flightAdapter);
+                actvFlightType.setOnClickListener(w -> actvFlightType.showDropDown());
 
-            String[] flightTypes = {"Short-Haul", "Long-Haul"};
-            ArrayAdapter<String> flightAdapter = new ArrayAdapter<>(TransportationTracking.this, android.R.layout.simple_dropdown_item_1line, flightTypes);
-            actvFlightType.setAdapter(flightAdapter);
-            actvFlightType.setOnClickListener(w -> actvFlightType.showDropDown());
+                btnSaveFlightData.setOnClickListener(view -> {
+                    String flightNumber = etFlightNumber.getText().toString();
+                    String flightType = actvFlightType.getText().toString();
 
-            btnSaveFlightData.setOnClickListener(view -> {
-                String flightNumber = etFlightNumber.getText().toString();
-                String flightType = actvFlightType.getText().toString();
+                    if (flightNumber.isEmpty() || flightType.isEmpty()) {
+                        Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    } else {
+                        TransportationActivityElement activity = new TransportationActivityElement(
+                                selectedDate,
+                                "Flight",
+                                Double.parseDouble(flightNumber),
+                                flightType);
 
-                if (flightNumber.isEmpty() || flightType.isEmpty()) {
-                    Toast.makeText(TransportationTracking.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    TransportationActivityElement activity = new TransportationActivityElement(
-                            selectedDate,
-                            "Flight",
-                            Double.parseDouble(flightNumber),
-                            flightType);
+                        firebaseManager.saveActivity(selectedDate,"Transportation",activity);
+                        /*if(isProgrammaticClick){
+                            firebaseManager.deleteActivity(selectedDateUpdate,"Transportation",activityId,w->{
+                                if(w){
+                                    Toast.makeText(this, "Activity edited successfully!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(TransportationTracking.this, ViewEmissionActivitiesActivity.class);
+                                    startActivity(intent);
+                                }else{
+                                    Toast.makeText(this, "Failed to edit activity.", Toast.LENGTH_SHORT).show();
 
-                    firebaseManager.saveActivity(selectedDate,"Transportation",activity);
-                    dialog.dismiss();
-                }
-            });
+                                }
+                            });
+                        }*/
+                        dialog.dismiss();
+                    }
+                });
 
-            dialog.show();
+                dialog.show();
+            }
         });
     }
+    private void prefillFields(Dialog dialog, TransportationActivityElement activity) {
+        View view;
+        toBeEdited = activity;
+        switch (activity.getTransportMode()) {
+            case "Personal Vehicle":
+                view = findViewById(R.id.button_personal_vehicle);
+                isProgrammaticClick = true;
+                view.performClick();
+                isProgrammaticClick = false;
+                break;
+
+            case "Public Transportation":
+                view = findViewById(R.id.button_public_transportation);
+                isProgrammaticClick = true;
+                view.performClick();
+                isProgrammaticClick = false;
+                break;
+
+            case "Cycling":
+            case "Walking":
+                view = findViewById(R.id.button_cycling);
+                isProgrammaticClick = true;
+                view.performClick();
+                isProgrammaticClick = false;
+                break;
+
+            case "Flight":
+                view = findViewById(R.id.button_flight);
+                isProgrammaticClick = true;
+                view.performClick();
+                isProgrammaticClick = false;
+                break;
+
+            default:
+                Toast.makeText(this, "Unsupported transport mode for pre-fill.", Toast.LENGTH_SHORT).show();
+                return;
+        }
+
+
+    }
+    private void prefillPublicTransportationDialog(Dialog dialog, TransportationActivityElement activity) {
+        EditText etTravelTime = dialog.findViewById(R.id.et_transportation_time);
+        AutoCompleteTextView actvTransportType = dialog.findViewById(R.id.actv_transportation_type);
+        Button btnSaveTransportData = dialog.findViewById(R.id.btn_save_transport_data);
+        dialog.show();
+        // Pre-fill fields
+        etTravelTime.setText(String.valueOf(activity.getDistanceOrDurationOrFlightCount()));
+        actvTransportType.setText(activity.getAdditionalDetails(), false);
+
+        btnSaveTransportData.setOnClickListener(view -> {
+            String travelTime = etTravelTime.getText().toString();
+            String transportType = actvTransportType.getText().toString();
+
+            if (travelTime.isEmpty() || transportType.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields.", Toast.LENGTH_SHORT).show();
+            } else {
+                activity.setDistanceOrDurationOrFlightCount(Double.parseDouble(travelTime));
+                activity.setAdditionalDetails(transportType);
+
+                new FirebaseManager().updateActivity(activity.getDate(), "Transportation", activity);
+                dialog.dismiss();
+                finish();
+            }
+        });
+    }
+    private void prefillCyclingOrWalkingDialog(Dialog dialog, TransportationActivityElement activity) {
+        RadioGroup rgActivityType = dialog.findViewById(R.id.rg_activity_type);
+        EditText etDistance = dialog.findViewById(R.id.et_distance);
+        Button btnSaveActivityData = dialog.findViewById(R.id.btn_save_activity_data);
+        dialog.show();
+        // Pre-fill fields
+        if (activity.getTransportMode().equals("Cycling")) {
+            rgActivityType.check(R.id.rb_cycling);
+        } else {
+            rgActivityType.check(R.id.rb_walking);
+        }
+        etDistance.setText(String.valueOf(activity.getDistanceOrDurationOrFlightCount()));
+
+        btnSaveActivityData.setOnClickListener(view -> {
+            int selectedActivityId = rgActivityType.getCheckedRadioButtonId();
+            String activityType = selectedActivityId == R.id.rb_cycling ? "Cycling" : "Walking";
+            String distance = etDistance.getText().toString();
+
+            if (distance.isEmpty()) {
+                Toast.makeText(this, "Please enter the distance.", Toast.LENGTH_SHORT).show();
+            } else {
+                activity.setTransportMode(activityType);
+                activity.setDistanceOrDurationOrFlightCount(Double.parseDouble(distance));
+
+                new FirebaseManager().updateActivity(activity.getDate(), "Transportation", activity);
+                dialog.dismiss();
+                finish();
+            }
+        });
+    }
+    private void prefillFlightDialog(Dialog dialog, TransportationActivityElement activity) {
+        EditText etFlightNumber = dialog.findViewById(R.id.et_flight_number);
+        AutoCompleteTextView actvFlightType = dialog.findViewById(R.id.actv_flight_type);
+        Button btnSaveFlightData = dialog.findViewById(R.id.btn_save_flight_data);
+        dialog.show();
+        // Pre-fill fields
+        etFlightNumber.setText(String.valueOf(activity.getDistanceOrDurationOrFlightCount()));
+        actvFlightType.setText(activity.getAdditionalDetails(), false);
+
+        btnSaveFlightData.setOnClickListener(view -> {
+            String flightNumber = etFlightNumber.getText().toString();
+            String flightType = actvFlightType.getText().toString();
+
+            if (flightNumber.isEmpty() || flightType.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields.", Toast.LENGTH_SHORT).show();
+            } else {
+                activity.setDistanceOrDurationOrFlightCount(Double.parseDouble(flightNumber));
+                activity.setAdditionalDetails(flightType);
+
+                new FirebaseManager().updateActivity(activity.getDate(), "Transportation", activity);
+                dialog.dismiss();
+                finish();
+            }
+        });
+    }
+
+
+    private void prefillPersonalVehicleDialog(Dialog dialog, TransportationActivityElement activity) {
+        EditText etDistanceDriven = dialog.findViewById(R.id.et_distance_driven);
+        AutoCompleteTextView actvVehicleType = dialog.findViewById(R.id.actv_vehicle_type);
+        Button btnSaveVehicleData = dialog.findViewById(R.id.btn_save_vehicle_data);
+        dialog.show();
+        // Pre-fill fields
+        etDistanceDriven.setText(String.valueOf(activity.getDistanceOrDurationOrFlightCount()));
+        actvVehicleType.setText(activity.getAdditionalDetails(), false);
+
+        btnSaveVehicleData.setOnClickListener(view -> {
+            String distance = etDistanceDriven.getText().toString();
+            String vehicleType = actvVehicleType.getText().toString();
+
+            if (distance.isEmpty() || vehicleType.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields.", Toast.LENGTH_SHORT).show();
+            } else {
+                activity.setDistanceOrDurationOrFlightCount(Double.parseDouble(distance));
+                activity.setAdditionalDetails(vehicleType);
+
+                new FirebaseManager().updateActivity(activity.getDate(), "Transportation", activity);
+                dialog.dismiss();
+                finish();
+            }
+        });
+    }
+
 
 }

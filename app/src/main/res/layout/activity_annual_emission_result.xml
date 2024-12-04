@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D8DBE2"
+    android:background="@drawable/gradient_bg"
     tools:context=".AnnualEmissionResult">
 
     <!-- Header -->
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:cardBackgroundColor="#A9BCD0"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="12dp"
         app:layout_constraintTop_toBottomOf="@id/total_footprint_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -75,32 +75,40 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="24dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="16dp"
                 android:text="Breakdown by Category"
                 android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="20sp"
+            android:textStyle="bold" />
 
             <!-- Transportation Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/car"
+                android:contentDescription="Transportation Icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginStart="12dp"
                     android:text="Transportation:"
                     android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/transportation_value"
@@ -108,24 +116,32 @@
                     android:layout_height="wrap_content"
                     android:text="0.00 Tons CO2e"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <!-- Food Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/apple"
+                android:contentDescription="Food Icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginStart="12dp"
                     android:text="Food:"
                     android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/food_value"
@@ -133,24 +149,32 @@
                     android:layout_height="wrap_content"
                     android:text="0.00 Tons CO2e"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <!-- Housing Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/home"
+                android:contentDescription="Housing Icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginStart="12dp"
                     android:text="Housing:"
                     android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/housing_value"
@@ -158,23 +182,31 @@
                     android:layout_height="wrap_content"
                     android:text="0.00 Tons CO2e"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <!-- Consumption Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/shopping_cart"
+                android:contentDescription="Consumption Icon" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginStart="12dp"
                     android:text="Consumption:"
                     android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/consumption_value"
@@ -182,10 +214,11 @@
                     android:layout_height="wrap_content"
                     android:text="0.00 Tons CO2e"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
     <!-- Comparisons and Benchmarks Section -->
     <androidx.cardview.widget.CardView
@@ -228,7 +261,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="You are 15% above the global climate target."
+                android:text="You are 0% above the global climate target."
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </LinearLayout>

@@ -20,7 +20,7 @@ public class EmissionDataWrapper {
      * Retrieves the total emissions for a specific date and category.
      *
      * @param date     The date for which emissions are retrieved (e.g., "01-12-2024").
-     * @param category The category of emissions (e.g., "transportation", "shopping", "foodConsumption").
+     * @param category The category of emissions (e.g., "Transportation", "Shopping", "FoodConsumption").
      * @return The total emissions for the specified date and category.
      */
     public double getCategoryEmissions(String date, String category) {
