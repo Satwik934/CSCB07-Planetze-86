@@ -1,5 +1,6 @@
 package com.example.planetze86;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * Activity class for AnnualEmissionResult feature.
+ * Provides a breakdown by transportation, food, housing and consumption annual C02e emissions.
+ * Shows the user's Total annual C02e emissions and compare that with global and national benchmark.
+ */
 public class AnnualEmissionResult extends AppCompatActivity {
 
     // Firebase references
@@ -26,15 +32,20 @@ public class AnnualEmissionResult extends AppCompatActivity {
     private TextView totalFootprintValue, transportationValue, foodValue, housingValue, consumptionValue, comparisonText, globalComparisonText;
     private TextView labelTransportation, labelFood, labelHousing, labelConsumption;
 
+    /**
+     * Initializes the activity, binds UI components like all of them and displays everthing on the screen
+     * Also, dashboard button navigate to eco tracker main page.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_annual_emission_result);
 
-        // Initialize Firebase
+        // Initialize Firebase Authentication and get the current user
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser == null) {
+            // End activity if the user is not authenticated
             finish();
             return;
         }
@@ -52,19 +63,22 @@ public class AnnualEmissionResult extends AppCompatActivity {
         globalComparisonText = findViewById(R.id.global_comparison_text);
         LoginActivityModel model = new LoginActivityModel();
 
-
-
-        // Fetch and display the data
+        // Fetch and display the user's annual emission results
         fetchAnnualAnswers(currentUser.getUid());
         model.updateFirstLogin();
 
-        // Set dashboard button click listener
+        // Set the dashboard button click listener to navigate to the dashboard
         dashboard.setOnClickListener(v -> {
             Intent intent = new Intent(AnnualEmissionResult.this, EcoTracker.class);
             startActivity(intent);
         });
     }
 
+    /**
+     * Fetches the annual emission data for the given user and displays based on the categories.
+     *
+     * @param userId identifies the user.
+     */
     private void fetchAnnualAnswers(String userId) {
         databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -80,15 +94,12 @@ public class AnnualEmissionResult extends AppCompatActivity {
                     float consumption = (float) annualAnswers.getAnnualConsumption();
                     float totalEmission = (float) annualAnswers.getAnnualEmission();
 
-                    // Update TextViews
+                    // Update TextViews with the user's data
                     transportationValue.setText(String.format("%s Tons CO2e", transportation));
                     foodValue.setText(String.format("%s Tons CO2e", food));
                     housingValue.setText(String.format("%s Tons CO2e", housing));
                     consumptionValue.setText(String.format("%s Tons CO2e", consumption));
                     totalFootprintValue.setText(String.format("%s Tons CO2e", totalEmission));
-
-                    // Update branch labels on the static pie chart
-
 
                     // Update Comparison and Benchmark TextViews
                     comparisonText.setText(getComparisonText(annualAnswers));
@@ -103,8 +114,11 @@ public class AnnualEmissionResult extends AppCompatActivity {
         });
     }
 
-
-
+    /**
+     * Generates a comparison about how the user's footprint compares
+     * to the national average for his country.
+     */
+    @SuppressLint("DefaultLocale")
     private String getComparisonText(AnnualAnswers annualAnswers) {
         String country = annualAnswers.getCountry();
         if (annualAnswers.getAnnualCountryPercentage() > 0) {
@@ -114,6 +128,11 @@ public class AnnualEmissionResult extends AppCompatActivity {
         }
     }
 
+    /**
+     * Generates a comparison about how the user's footprint compares
+     * to the global emission reduction target.
+     */
+    @SuppressLint("DefaultLocale")
     private String getGlobalComparisonText(AnnualAnswers annualAnswers) {
         if (annualAnswers.getAnnualGlobalPercentage() > 0) {
             return String.format("Your footprint is %.2f%% above the global emission target.", annualAnswers.getAnnualGlobalPercentage());

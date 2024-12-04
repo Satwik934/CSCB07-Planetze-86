@@ -64,4 +64,9 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <string name="header_text">Annual Carbon Footprint Results</string>
+    <string name="total_footprint_label">Total Annual Carbon Footprint</string>
+    <string name="dashboard_button">GO TO DASHBOARD</string>
+
 </resources>
