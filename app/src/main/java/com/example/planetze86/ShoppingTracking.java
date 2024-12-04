@@ -1,12 +1,15 @@
 package com.example.planetze86;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -150,7 +153,15 @@ public class ShoppingTracking extends AppCompatActivity {
         Button buyElectronicsButton = findViewById(R.id.button_buy_electronics);
         Button otherPurchasesButton = findViewById(R.id.button_other_purchases);
         Button energyBillsButton = findViewById(R.id.button_energy_bills);
+        ImageButton backButton = findViewById(R.id.backButton);
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShoppingTracking.this, EcoTracker.class);
+                startActivity(intent);
+            }
+        });
         // Dialog for Buying New Clothes
         buyNewClothesButton.setOnClickListener(v -> {
             Dialog dialog = new Dialog(ShoppingTracking.this);
