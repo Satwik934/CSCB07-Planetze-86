@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#d8dbe2"
+    android:background="@drawable/gradient_1"
     tools:context=".YourActivity">
 
     <!-- Scrollable Content -->
@@ -48,13 +48,13 @@
                 android:layout_marginBottom="12dp"
                 android:visibility="visible" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/changeCountryButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Change Country"
                 android:textSize="16sp"
-                android:backgroundTint="#009999"
+                android:background= "@drawable/fancy_buttons"
                 android:layout_gravity="center_horizontal"
                 android:padding="12dp"
                 android:layout_marginBottom="16dp"
@@ -92,11 +92,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
+         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/prevButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#009999"
+            android:background = "@drawable/fancy_buttons"
             android:padding="12dp"
             android:text="Previous"
             android:textColor="#1b1b1e"
@@ -104,11 +104,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/nextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#009999"
+            android:background="@drawable/fancy_buttons"
             android:padding="12dp"
             android:text="Next"
             android:textColor="#1b1b1e"
@@ -116,5 +116,4 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

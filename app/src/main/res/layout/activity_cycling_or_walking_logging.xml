@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    >
+    android:background="@drawable/gradinet_2">
 
     <!-- Heading -->
     <TextView
@@ -17,8 +17,8 @@
         android:gravity="center"
         android:text="Track Cycling or Walking Activity"
         android:textColor="@android:color/black"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:textSize="25sp"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -91,12 +91,13 @@
     <!-- Unit Selection -->
 
     <!-- Save Button -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_save_activity_data"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="180dp"
         android:padding="12dp"
+        android:background="@drawable/fancy_buttons"
         android:text="Save Activity"
         android:textColor="@android:color/white"
         android:textSize="16sp"

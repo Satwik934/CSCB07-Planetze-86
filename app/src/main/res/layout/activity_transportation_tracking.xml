@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D8DBE2"
+    android:background="@drawable/gradient_3"
     tools:context=".TransportationTracking">
     <!-- Back Button -->
     <ImageButton
@@ -25,10 +25,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:padding="12dp"
         android:text="DAILY CARBON FOOTPRINT TRACKING"
         android:textColor="#1B1B1E"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:background="@drawable/fancy_text_background"
+        android:elevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,62 +42,65 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:padding="10dp"
         android:text="TRANSPORTATION ACTIVITIES"
         android:textColor="#1B1B1E"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="italic"
+        android:background="@drawable/fancy_text_background"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header_text" />
 
     <!-- Button: Personal Vehicle -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/fancy_buttons"
         android:id="@+id/button_personal_vehicle"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:backgroundTint="#009999"
         android:text="Personal Vehicle"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subheader_text" />
 
     <!-- Button: Public Transportation -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/fancy_buttons"
         android:id="@+id/button_public_transportation"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#009999"
         android:text="Public Transportation"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_personal_vehicle" />
 
     <!-- Button: Cycling -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/fancy_buttons"
         android:id="@+id/button_cycling"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#009999"
         android:text="Cycling &amp; Walking"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_public_transportation" />
 
     <!-- Button: Flight -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/fancy_buttons"
         android:id="@+id/button_flight"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#009999"
         android:text="Flight"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_cycling" />
