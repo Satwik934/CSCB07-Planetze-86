@@ -7,11 +7,16 @@
  */
 package com.example.planetze86;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Activity class for PlanetzeMenu feature.
@@ -22,6 +27,7 @@ public class PlanetzeMenu extends AppCompatActivity {
 
     // Declare CardView variables for all three buttons
     CardView ecoGaugeCard, ecoTrackerCard, recalculateCard;
+    Button logoutButton;
 
     /**
      * Starts initializing the PlanetzeMenu activity, setting up the UI and
@@ -29,10 +35,12 @@ public class PlanetzeMenu extends AppCompatActivity {
      *
      * @param savedInstanceState A Bundle object containing the activity's previously saved state.
      */
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planetze_menu);
+        logoutButton = findViewById(R.id.logoutButton);
 
         // Link CardViews to their XML counterparts
         ecoGaugeCard = findViewById(R.id.eco_gauge_card);
@@ -46,6 +54,19 @@ public class PlanetzeMenu extends AppCompatActivity {
                 // Redirect to the Eco Gauge page
                 Intent intent = new Intent(PlanetzeMenu.this, ecoGauge.class);
                 startActivity(intent);
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Log out the user from Firebase
+                FirebaseAuth.getInstance().signOut();
+
+                // Redirect to the login or main page
+                Intent intent = new Intent(PlanetzeMenu.this, MainActivity.class);
+                startActivity(intent);
+                finish(); // Close the current activity to prevent going back
             }
         });
 
