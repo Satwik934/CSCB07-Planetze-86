@@ -2,12 +2,12 @@ package com.example.planetze86;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,12 +38,9 @@ public class ViewEmissionActivitiesActivity extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.bringToFront();
         fetchActivities();
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewEmissionActivitiesActivity.this, EcoTracker.class);
-                startActivity(intent);
-            }
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ViewEmissionActivitiesActivity.this, EcoTracker.class);
+            startActivity(intent);
         });
     }
 
@@ -99,36 +96,25 @@ public class ViewEmissionActivitiesActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Confirm Delete")
                 .setMessage("Are you sure you want to delete this activity?")
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    firebaseManager.deleteActivity(
-                            selectedDate,
-                            selectedActivity.getType(),
-                            selectedActivity.getId(),
-                            success -> {
-                                if (success) {
-                                    Toast.makeText(this, "Activity deleted successfully!", Toast.LENGTH_SHORT).show();
-                                    fetchActivities(); // Refresh the list
-                                } else {
-                                    Toast.makeText(this, "Failed to delete activity.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                })
+                .setPositiveButton("Delete", (dialog, which) -> firebaseManager.deleteActivity(
+                        selectedDate,
+                        selectedActivity.getType(),
+                        selectedActivity.getId(),
+                        success -> {
+                            if (success) {
+                                Toast.makeText(this, "Activity deleted successfully!", Toast.LENGTH_SHORT).show();
+                                fetchActivities(); // Refresh the list
+                            } else {
+                                Toast.makeText(this, "Failed to delete activity.", Toast.LENGTH_SHORT).show();
+                            }
+                        }))
                 .setNegativeButton("Cancel", null)
                 .show();
     }
     private void editActivity(int position) {
         EmissionActivityElement selectedActivity = activityObjects.get(position);
 
-        Intent intent = null;
-
-        // Check the type of the selected activity and route to the correct tracking activity
-        if (selectedActivity instanceof TransportationActivityElement) {
-            intent = new Intent(ViewEmissionActivitiesActivity.this, TransportationTracking.class);
-        } else if (selectedActivity instanceof ShoppingActivityElement) {
-            intent = new Intent(ViewEmissionActivitiesActivity.this, ShoppingTracking.class);
-        } else if (selectedActivity instanceof FoodConsumptionActivityElement) {
-            intent = new Intent(ViewEmissionActivitiesActivity.this, FoodConsumptionTracking.class);
-        }
+        Intent intent = getIntent(selectedActivity);
 
         if (intent != null) {
             // Pass the activity ID and type to the tracking activity for editing
@@ -142,61 +128,19 @@ public class ViewEmissionActivitiesActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Retrieves transportation activities for the selected date.
-     */
-    /*public void retrieveTransportationActivities() {
-        firebaseManager.retrieveActivities("transportationActivities", selectedDate, TransportationActivityElement.class, activities -> {
-            if (!activities.isEmpty()) {
-                for (TransportationActivityElement activity : activities) {
-                    activityDetails.add(activity.getDetails());
-                }
-            } else {
-                activityDetails.add("No transportation activities logged for this date.");
-            }
-            updateListView();
-        });
+    @Nullable
+    private Intent getIntent(EmissionActivityElement selectedActivity) {
+        Intent intent = null;
+
+        // Check the type of the selected activity and route to the correct tracking activity
+        if (selectedActivity instanceof TransportationActivityElement) {
+            intent = new Intent(ViewEmissionActivitiesActivity.this, TransportationTracking.class);
+        } else if (selectedActivity instanceof ShoppingActivityElement) {
+            intent = new Intent(ViewEmissionActivitiesActivity.this, ShoppingTracking.class);
+        } else if (selectedActivity instanceof FoodConsumptionActivityElement) {
+            intent = new Intent(ViewEmissionActivitiesActivity.this, FoodConsumptionTracking.class);
+        }
+        return intent;
     }
 
-    /**
-     * Retrieves shopping activities for the selected date.
-     */
-    /*public void retrieveShoppingActivities() {
-        firebaseManager.retrieveActivities("shoppingActivities", selectedDate, ShoppingActivityElement.class, activities -> {
-            if (!activities.isEmpty()) {
-                for (ShoppingActivityElement activity : activities) {
-                    activityDetails.add("Shopping: " + activity.getType() +
-                            ", Quantity: " + activity.getQuantity());
-                }
-            } else {
-                activityDetails.add("No shopping activities logged for this date.");
-            }
-            updateListView();
-        });
-    }
-
-    /**
-     * Retrieves food consumption activities for the selected date.
-     */
-    /*public void retrieveFoodConsumptionActivities() {
-        firebaseManager.retrieveActivities("foodConsumptionActivities", selectedDate, FoodConsumptionActivityElement.class, activities -> {
-            if (!activities.isEmpty()) {
-                for (FoodConsumptionActivityElement activity : activities) {
-                    activityDetails.add("Food Consumption: " + activity.getMealType() +
-                            ", Servings: " + activity.getServings());
-                }
-            } else {
-                activityDetails.add("No food consumption activities logged for this date.");
-            }
-            updateListView();
-        });
-    }*/
-
-    /**
-     * Updates the ListView with the current activity details.
-     */
-    private void updateListView() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activityDetails);
-        listView.setAdapter(adapter);
-    }
 }
