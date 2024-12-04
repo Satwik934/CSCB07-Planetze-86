@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background = "@drawable/gradinet_2"
     >
 
     <!-- Heading -->
@@ -13,9 +14,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Food Consumption Tracker"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="25sp"
+        android:textStyle="bold|italic"
         android:gravity="center"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,6 +30,7 @@
         android:layout_height="wrap_content"
         android:text="Select Meal Type"
         android:textSize="16sp"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/tv_heading"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +46,7 @@
         android:background="@drawable/black_border_background"
         android:padding="12dp"
         android:textSize="16sp"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/tv_meal_type_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -54,6 +58,7 @@
         android:layout_height="wrap_content"
         android:text="Number of Servings"
         android:textSize="16sp"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/actv_meal_type"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,13 +72,14 @@
         android:inputType="number"
         android:background="@drawable/black_border_background"
         android:padding="12dp"
+
         android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/tv_servings_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Save Button -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_save_food_data"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -82,6 +88,7 @@
         app:layout_constraintTop_toBottomOf="@id/et_servings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@android:color/white"
+        android:textColor="#d8dbe2"
+        android:background="@drawable/buttons_3"
         android:padding="12dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

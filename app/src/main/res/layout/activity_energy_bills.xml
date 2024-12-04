@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background = "@drawable/gradinet_2"
     android:padding="16dp"
     >
 
@@ -15,6 +16,7 @@
         android:layout_height="wrap_content"
         android:text="Energy Bills Tracker"
         android:textSize="20sp"
+        android:textColor="@android:color/black"
         android:textStyle="bold"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,6 +30,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Select Bill Type"
+        android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/tv_heading"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +45,7 @@
         android:drawableRight="@drawable/ic_dropdown_arrow"
         android:background="@drawable/black_border_background"
         android:padding="12dp"
+        android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/tv_bill_type_label"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +58,7 @@
         android:layout_height="wrap_content"
         android:text="Enter Bill Amount"
         android:textSize="16sp"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/actv_bill_type"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Save Button -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_save_energy_bill"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -85,7 +90,7 @@
         android:textColor="@android:color/white"
         android:paddingHorizontal="12dp"
         android:paddingVertical="8dp"
-        android:background="@drawable/rounded_button" />
+        android:background="@drawable/buttons_3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

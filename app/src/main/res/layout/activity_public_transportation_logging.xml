@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@drawable/gradinet_2"
     >
 
     <!-- Heading -->
@@ -13,15 +14,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Public Transportation Carbon Tracker"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:textSize="25sp"
+        android:textStyle="bold|italic"
+        android:textColor="@android:color/black"
         android:textAlignment="center"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
-        android:textColor="@android:color/black" />
+         />
 
     <!-- Transportation Type Label -->
     <TextView
@@ -30,6 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Select Transportation Type"
         android:textSize="16sp"
+
         app:layout_constraintTop_toBottomOf="@id/tv_public_transportation_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +85,8 @@
         android:layout_marginTop="8dp" />
 
     <!-- Save Button -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:background = "@drawable/buttons_3"
         android:id="@+id/btn_save_transport_data"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

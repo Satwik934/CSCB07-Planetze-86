@@ -1,61 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D8DBE2">
+    android:background="@drawable/gradient_3"
+    android:padding="16dp">
 
     <!-- Header: Daily Carbon Footprint Tracking -->
     <TextView
         android:id="@+id/header_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
+        android:padding="12dp"
+        android:background="@drawable/fancy_text_background"
+        android:elevation="6dp"
         android:text="DAILY CARBON FOOTPRINT TRACKING"
         android:textColor="#1B1B1E"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Subheader: Transportation Activities -->
-
-    <!-- Button: Personal Vehicle -->
-
+    <!-- Subheader: Food Consumption Activities -->
     <TextView
         android:id="@+id/subheader_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:background="@drawable/fancy_text_background"
+        android:elevation="4dp"
         android:text="FOOD CONSUMPTION ACTIVITIES"
         android:textColor="#1B1B1E"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header_text" />
 
-    <Button
+    <!-- Button: Meal -->
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_meal"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginTop="200dp"
-        android:backgroundTint="#009999"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/fancy_buttons"
         android:text="MEAL"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
+        android:elevation="6dp"
+        android:translationZ="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subheader_text" />
-
-    <!-- Button: Public Transportation -->
-
-    <!-- Button: Cycling -->
-
-    <!-- Button: Walking -->
-
-    <!-- Button: Flight -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

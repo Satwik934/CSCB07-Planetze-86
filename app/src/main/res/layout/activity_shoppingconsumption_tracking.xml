@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D8DBE2">
+    android:background="@drawable/gradient_3">
 
     <!-- Header: Daily Carbon Footprint Tracking -->
     <TextView
@@ -12,88 +12,84 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:padding="12dp"
         android:text="DAILY CARBON FOOTPRINT TRACKING"
         android:textColor="#1B1B1E"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:background="@drawable/fancy_text_background"
+        android:elevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Subheader: Transportation Activities -->
+    <!-- Subheader: Consumption and Shopping Activities -->
     <TextView
         android:id="@+id/subheader_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:padding="10dp"
         android:text="CONSUMPTION AND SHOPPING ACTIVITIES"
         android:textColor="#1B1B1E"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="italic"
+        android:background="@drawable/fancy_text_background"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header_text" />
 
-    <!-- Button: Personal Vehicle -->
-
-    <!-- Button: Public Transportation -->
-
-    <!-- Button: Cycling -->
-
-    <!-- Button: Walking -->
-
-    <Button
+    <!-- Button: Buy New Clothes -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/fancy_buttons"
         android:id="@+id/button_buy_new_clothes"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="36dp"
-        android:backgroundTint="#009999"
         android:text="BUY NEW CLOTHES"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subheader_text" />
 
-    <Button
+    <!-- Button: Buy Electronics -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/fancy_buttons"
         android:id="@+id/button_buy_electronics"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="32dp"
-        android:backgroundTint="#009999"
         android:text="BUY ELECTRONICS"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_buy_new_clothes" />
 
-    <Button
+    <!-- Button: Other Purchases -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/fancy_buttons"
         android:id="@+id/button_other_purchases"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="28dp"
-        android:backgroundTint="#009999"
         android:text="OTHER PURCHASES"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_buy_electronics" />
+        app:layout_constraintTop_toBottomOf="@id/button_buy_electronics" />
 
-    <Button
+    <!-- Button: Energy Bills -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:background="@drawable/fancy_buttons"
         android:id="@+id/button_energy_bills"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="36dp"
-        android:backgroundTint="#009999"
         android:text="ENERGY BILLS"
-        android:textColor="#FFFFFF"
+        android:textColor="#d8dbe2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_other_purchases" />
-
-    <!-- Button: Flight -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
