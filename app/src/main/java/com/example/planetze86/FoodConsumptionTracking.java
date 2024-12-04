@@ -13,96 +13,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class FoodConsumptionTracking extends AppCompatActivity {
-    /*private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
-        String type = snapshot.child("type").getValue(String.class);
-
-        if (type == null) {
-            return null;
-        }
-
-        switch (type) {
-            case "Transportation":
-                return snapshot.getValue(TransportationActivityElement.class);
-            case "Shopping":
-                return snapshot.getValue(ShoppingActivityElement.class);
-            case "Food Consumption":
-                return snapshot.getValue(FoodConsumptionActivityElement.class);
-            default:
-                return null; // Unknown type
-        }
-    }
-
-    private void saveToFirebase(EmissionActivityElement activity, String date) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
-            DatabaseReference megaLogRef = reference.child(userId).child("EmissionActivityMegaLog");
-
-            megaLogRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String, ArrayList<EmissionActivityElement>> activityMap = new HashMap<>();
-
-                    // Retrieve existing data
-                    if (snapshot.exists()) {
-                        for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
-                            ArrayList<EmissionActivityElement> activities = new ArrayList<>();
-                            for (DataSnapshot activitySnapshot : dateSnapshot.getChildren()) {
-                                EmissionActivityElement existingActivity = deserializeActivity(activitySnapshot);
-                                if (existingActivity != null) {
-                                    activities.add(existingActivity);
-                                }
-                            }
-                            activityMap.put(dateSnapshot.getKey(), activities);
-                        }
-                    }
-
-                    // Add the new activity
-                    ArrayList<EmissionActivityElement> dateActivities = activityMap.getOrDefault(date, new ArrayList<>());
-                    dateActivities.add(activity);
-                    activityMap.put(date, dateActivities);
-
-                    // Save back to Firebase
-                    megaLogRef.setValue(activityMap)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(
-                                    FoodConsumptionTracking.this,
-                                    "Data saved successfully!",
-                                    Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(
-                                    FoodConsumptionTracking.this,
-                                    "Failed to save data: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show());
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(
-                            FoodConsumptionTracking.this,
-                            "Failed to retrieve data: " + error.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
-        }
-    }*/
 
     FirebaseManager firebaseManager = new FirebaseManager();
     private boolean isProgrammaticClick = false;

@@ -3,7 +3,6 @@ package com.example.planetze86;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.content.Intent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,26 +55,18 @@ public class EcoTracker extends AppCompatActivity {
         tvSelectedDate.setText(("Selected Date: " + selectedDateDefault));
         updateEmissions(tvEmissions,selectedDateDefault);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
         // Initialize emissions for the default selected date
         updateEmissions(tvEmissions, tvSelectedDate.getText().toString().replace("Selected Date: ", ""));
         // Redirects the button to open eco gauge.
         menuButton = findViewById(R.id.planetze_menu_button);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EcoTracker.this, PlanetzeMenu.class);
-                startActivity(intent);
-            }
+        menuButton.setOnClickListener(v -> {
+            Intent intent = new Intent(EcoTracker.this, PlanetzeMenu.class);
+            startActivity(intent);
         });
-        transportationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(EcoTracker.this, TransportationTracking.class);
-                intent.putExtra("SELECTED_DATE",tvSelectedDate.getText().toString().replace("Selected Date: ",""));
-                startActivity(intent);
-            }
+        transportationButton.setOnClickListener(v -> {
+            Intent intent = new Intent(EcoTracker.this, TransportationTracking.class);
+            intent.putExtra("SELECTED_DATE",tvSelectedDate.getText().toString().replace("Selected Date: ",""));
+            startActivity(intent);
         });
         foodConsumptionButton.setOnClickListener(v -> {
             Intent intent = new Intent(EcoTracker.this, FoodConsumptionTracking.class);
@@ -123,13 +113,10 @@ public class EcoTracker extends AppCompatActivity {
             datePickerDialog.show();
         });
 
-        viewActivitiesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EcoTracker.this, ViewEmissionActivitiesActivity.class);
-                intent.putExtra("SELECTED_DATE", tvSelectedDate.getText().toString().replace("Selected Date: ", ""));
-                startActivity(intent);
-            }
+        viewActivitiesButton.setOnClickListener(v -> {
+            Intent intent = new Intent(EcoTracker.this, ViewEmissionActivitiesActivity.class);
+            intent.putExtra("SELECTED_DATE", tvSelectedDate.getText().toString().replace("Selected Date: ", ""));
+            startActivity(intent);
         });
 
     }

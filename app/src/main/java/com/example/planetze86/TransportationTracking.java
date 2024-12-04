@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,98 +14,10 @@ import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class TransportationTracking extends AppCompatActivity {
     private boolean isProgrammaticClick = false;
-    /*private EmissionActivityElement deserializeActivity(DataSnapshot snapshot) {
-        String type = snapshot.child("type").getValue(String.class);
-
-        if (type == null) {
-            return null;
-        }
-
-        switch (type) {
-            case "Transportation":
-                return snapshot.getValue(TransportationActivityElement.class);
-            case "Shopping":
-                return snapshot.getValue(ShoppingActivityElement.class);
-            case "Food Consumption":
-                return snapshot.getValue(FoodConsumptionActivityElement.class);
-            default:
-                return null; // Unknown type
-        }
-    }
-
-    private void saveToFirebase(EmissionActivityElement activity, String date) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
-            DatabaseReference megaLogRef = reference.child(userId).child("EmissionActivityMegaLog");
-
-            megaLogRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String, ArrayList<EmissionActivityElement>> activityMap = new HashMap<>();
-
-                    // Retrieve existing data
-                    if (snapshot.exists()) {
-                        for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
-                            ArrayList<EmissionActivityElement> activities = new ArrayList<>();
-                            for (DataSnapshot activitySnapshot : dateSnapshot.getChildren()) {
-                                EmissionActivityElement existingActivity = deserializeActivity(activitySnapshot);
-                                if (existingActivity != null) {
-                                    activities.add(existingActivity);
-                                }
-                            }
-                            activityMap.put(dateSnapshot.getKey(), activities);
-                        }
-                    }
-
-                    // Add the new activity
-                    ArrayList<EmissionActivityElement> dateActivities = activityMap.getOrDefault(date, new ArrayList<>());
-                    dateActivities.add(activity);
-                    activityMap.put(date, dateActivities);
-
-                    // Save back to Firebase
-                    megaLogRef.setValue(activityMap)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(
-                                    TransportationTracking.this,
-                                    "Data saved successfully!",
-                                    Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(
-                                    TransportationTracking.this,
-                                    "Failed to save data: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show());
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(
-                            TransportationTracking.this,
-                            "Failed to retrieve data: " + error.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
-        }
-    }*/
     TransportationActivityElement toBeEdited;
 
     FirebaseManager firebaseManager = new FirebaseManager();
@@ -127,9 +38,7 @@ public class TransportationTracking extends AppCompatActivity {
                     activities -> {
                         for (TransportationActivityElement activity : activities) {
                             if (activity.getId().equals(activityId)) {
-                                Dialog dialog = new Dialog(this);
-
-                                prefillFields(dialog,activity);
+                                prefillFields(activity);
                                 break;
                             }
                         }
@@ -158,9 +67,8 @@ public class TransportationTracking extends AppCompatActivity {
                     activities -> {
                         for (TransportationActivityElement activity : activities) {
                             if (activity.getId().equals(activityId)) {
-                                Dialog dialog = new Dialog(TransportationTracking.this);
                                 // Pre-fill the fields for editing
-                                prefillFields(dialog,activity);
+                                prefillFields(activity);
                                 break;
                             }
                         }
@@ -187,12 +95,9 @@ public class TransportationTracking extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.backButton);
 
         // Back button
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TransportationTracking.this, EcoTracker.class);
-                startActivity(intent);
-            }
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(TransportationTracking.this, EcoTracker.class);
+            startActivity(intent);
         });
 
         personalVehicleButton.setOnClickListener(v -> {
@@ -236,18 +141,6 @@ public class TransportationTracking extends AppCompatActivity {
                                 vehicleType);
 
                         firebaseManager.saveActivity(selectedDate, "Transportation", activity);
-                        /*if (isProgrammaticClick) {
-                            firebaseManager.deleteActivity(selectedDateUpdate, "Transportation", activityId, w -> {
-                                if (w) {
-                                    Toast.makeText(this, "Activity edited successfully!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(TransportationTracking.this, ViewEmissionActivitiesActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(this, "Failed to edit activity.", Toast.LENGTH_SHORT).show();
-
-                                }
-                            });
-                        }*/
                         dialog.dismiss();
                     }
                 });
@@ -295,18 +188,6 @@ public class TransportationTracking extends AppCompatActivity {
                                 transportType);
 
                         firebaseManager.saveActivity(selectedDate, "Transportation", activity);
-                        /*if (isProgrammaticClick) {
-                            firebaseManager.deleteActivity(selectedDateUpdate, "Transportation", activityId, w -> {
-                                if (w) {
-                                    Toast.makeText(this, "Activity edited successfully!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(TransportationTracking.this, ViewEmissionActivitiesActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(this, "Failed to edit activity.", Toast.LENGTH_SHORT).show();
-
-                                }
-                            });
-                        }*/
                         dialog.dismiss();
                     }
                 });
@@ -345,17 +226,6 @@ public class TransportationTracking extends AppCompatActivity {
                                 activityType);
 
                         firebaseManager.saveActivity(selectedDate, "Transportation", activity);
-                        /*if (isProgrammaticClick) {
-                            firebaseManager.deleteActivity(selectedDateUpdate, "Transportation", activityId, w -> {
-                                if (w) {
-                                    Toast.makeText(this, "Activity edited successfully!", Toast.LENGTH_SHORT).show();
-
-                                } else {
-                                    Toast.makeText(this, "Failed to edit activity.", Toast.LENGTH_SHORT).show();
-
-                                }
-                            });
-                        }*/
                         dialog.dismiss();
                     }
                 });
@@ -398,18 +268,6 @@ public class TransportationTracking extends AppCompatActivity {
                                 flightType);
 
                         firebaseManager.saveActivity(selectedDate,"Transportation",activity);
-                        /*if(isProgrammaticClick){
-                            firebaseManager.deleteActivity(selectedDateUpdate,"Transportation",activityId,w->{
-                                if(w){
-                                    Toast.makeText(this, "Activity edited successfully!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(TransportationTracking.this, ViewEmissionActivitiesActivity.class);
-                                    startActivity(intent);
-                                }else{
-                                    Toast.makeText(this, "Failed to edit activity.", Toast.LENGTH_SHORT).show();
-
-                                }
-                            });
-                        }*/
                         dialog.dismiss();
                     }
                 });
@@ -418,7 +276,7 @@ public class TransportationTracking extends AppCompatActivity {
             }
         });
     }
-    private void prefillFields(Dialog dialog, TransportationActivityElement activity) {
+    private void prefillFields(TransportationActivityElement activity) {
         View view;
         toBeEdited = activity;
         switch (activity.getTransportMode()) {
@@ -453,7 +311,6 @@ public class TransportationTracking extends AppCompatActivity {
 
             default:
                 Toast.makeText(this, "Unsupported transport mode for pre-fill.", Toast.LENGTH_SHORT).show();
-                return;
         }
 
 
